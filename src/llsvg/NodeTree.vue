@@ -1,14 +1,47 @@
 <template>
   <div class="full">
     <!-- preserveAspectRatio="preserveAspectRatio" -->
-    <svg :height="win.height" :width="win.width" :viewBox="viewBox">
+    <svg ref="svg" :height="win.height" :width="win.width" :viewBox="viewBox">
       <defs>
+        <radialGradient :id="`${uniq}rainbow-gradient`" cx="50%" cy="50%" fx="50%" fy="50%" r="70.7106781%">
+            <stop stop-color="#E2B5B5" offset="0%">
+            </stop>
+            <stop stop-color="#CC93DD" offset="25%">
+            </stop>
+            <stop stop-color="#2EE0EB" offset="50%">
+            </stop>
+            <stop stop-color="#36D051" offset="75%">
+            </stop>
+            <stop stop-color="#CF2323" offset="100%">
+            </stop>
+
+        </radialGradient>
+
+        <radialGradient :id="`${uniq}rainbow-gradient-movin`" cx="50%" cy="50%" fx="50%" fy="50%" r="70.7106781%">
+            <stop stop-color="#ffffff" offset="0%">
+              <animate attributeName="stop-color" values="#E2B5B5; #CF2325; #36D051; #2EE0EB; #CC93DD; #E2B5B5;" dur="5s" repeatCount="indefinite"></animate>
+            </stop>
+            <stop stop-color="#ffffff" offset="25%">
+              <animate attributeName="stop-color" values="#CC93DD; #E2B5B5; #CF2325; #36D051; #2EE0EB;  #CC93DD;" dur="5s" repeatCount="indefinite"></animate>
+            </stop>
+            <stop stop-color="#ffffff" offset="50%">
+              <animate attributeName="stop-color" values="#2EE0EB; #CC93DD; #E2B5B5; #CF2325; #36D051;  #2EE0EB;" dur="5s" repeatCount="indefinite"></animate>
+            </stop>
+            <stop stop-color="#ffffff" offset="75%">
+              <animate attributeName="stop-color" values="#36D051; #2EE0EB; #CC93DD; #E2B5B5; #CF2325;  #36D051;" dur="5s" repeatCount="indefinite"></animate>
+            </stop>
+            <stop stop-color="#ffffff" offset="100%">
+              <animate attributeName="stop-color" values="#CF2323; #36D051; #2EE0EB; #CC93DD; #E2B5B5;  #CF2323;" dur="5s" repeatCount="indefinite"></animate>
+            </stop>
+
+        </radialGradient>
+
         <marker :id="`${uniq}circle-ok`" style="overflow:visible; cursor: pointer;">
           <circle r="3" :fill="'lime'" />
         </marker>
         <marker :id="`${uniq}circle-ready`" style="overflow:visible; cursor: pointer;">
           <!-- <circle r="3" :fill="`url(#${uniq}kale-salad)`" /> -->
-          <circle r="3" :stroke="`rgba(255,0,255,1.0)`" :fill="`rgba(255,0,255,1.0)`" />
+          <circle r="3" :stroke="`#ffffff`" :fill="`#ffffff`" />
         </marker>
           <marker :id="`${uniq}circle-error`" style="overflow:visible; cursor: pointer;">
           <circle r="3" :fill="'red'" />
@@ -44,21 +77,22 @@
         </linearGradient>
 
       </defs>
-      <ScreenPanner @move="onMove" :win="win"></ScreenPanner>
+
+      <ScreenPanner :zoom="zoom" :view="view" @move="onMove" :win="win"></ScreenPanner>
 
       <!-- HUD UIs -->
-      <NodeButton :pos="{ x: win.width - 60, y: 0 }" @click="goHome">
-        <text x="0" y="0" slot="desc">GoHome</text>
-      </NodeButton>
-      <NodeButton :pos="{ x: win.width - 60, y: win.height - 60 }" @click="doLayout">
-        <text x="0" y="0" slot="desc">doLayout</text>
-      </NodeButton>
+      <!-- <NodeButton v-if="(view.x + view.y) !== 0" :pos="{ x: win.width - 60, y: 0 }" @click="goHome">
+        <text x="-20" y="20" slot="desc">GoHome</text>
+      </NodeButton> -->
+      <!-- <NodeButton :pos="{ x: win.width - 60, y: win.height - 60 }" @click="cleanLayout({ instant: false, goHome: true })">
+        <text x="0" y="20" slot="desc">Home</text>
+      </NodeButton> -->
 
       <!-- Move the scene -->
       <g :style="mover">
 
-        <g :key="node._id + node.to + ii" v-for="(node, ii) in nodes">
-          <Node @move="(ev) => { onModeNodes(ev, node, nodes) }" :pos="node.pos"></Node>
+        <g :key="node._id + node.to + ii" v-for="(node, ii) in nodes" x>
+          <Node :title="node.title" :isRoot="node.to === null" @click="onClick({ node, nodes })" :uniq="uniq" :isActive="node.isActive" @move="(ev) => { onModeNodes(ev, node, nodes) }" :pos="node.pos" :type="'circle'"></Node>
         </g>
 
         <g :key="link.from + link.to + ii" v-for="(link, ii) in links">
@@ -73,22 +107,26 @@
 
 <script>
 import TWEEN from '@tweenjs/tween.js'
+import { setTimeout, clearTimeout } from 'timers'
 
 var dagre = require('dagre')
 export default {
-  dagre,
+  props: {
+    nodes: {
+      required: true
+    },
+    size: {
+      default: false
+    }
+  },
   components: {
     Node: require('./Node.vue').default,
     NodePath: require('./NodePath.vue').default,
-    NodeButton: require('./NodeButton.vue').default,
+    // NodeButton: require('./NodeButton.vue').default,
     // LLPath: require('./LLPath.vue').default,
     ScreenPanner: require('./ScreenPanner.vue').default
   },
   data () {
-    let win = {
-      width: window.innerWidth,
-      height: window.innerHeight
-    }
     let view = {
       x: 0,
       y: 0,
@@ -96,34 +134,52 @@ export default {
     }
     return {
       links: [],
-      nodes: require('./nodes.json'),
-      rect: { ...win },
       uniq: `u_${Number(Math.random() * 1000000).toFixed(0)}`,
-      running: true,
-      // xMinYMax slice
-      // xMinYMid slice
       mover: {
       },
+
+      // xMinYMax slice
+      // xMinYMid slice
       // preserveAspectRatio: `xMinYMax slice`,
-      viewBox: `0 0 ${win.width} ${win.height}`,
+      zoom: 1,
+      viewBox: `0 0 500 500`,
       view,
-      win
+      rect: {
+        width: 500,
+        height: 500,
+        top: 0,
+        left: 0
+      },
+      win: {
+        width: 500,
+        height: 500
+      }
     }
   },
+  created () {
+    this.$on('do', (evt) => {
+      this[evt.action](evt.args)
+    })
+  },
   mounted () {
-    window.addEventListener('resize', () => {
+    let resizer = () => {
+      if (this.size) {
+        this.win.width = this.size.width
+        this.win.height = this.size.height
+      }
       this.rect = this.$el.getBoundingClientRect()
-      this.resolveItem()
-    })
-    this.rect = this.$el.getBoundingClientRect()
-    this.resolveItem()
+      this.win = {
+        width: this.rect.width,
+        height: this.rect.height
+      }
+      this.computeLayout()
+      this.$forceUpdate()
+      this.okay = true
+    }
+    window.addEventListener('resize', resizer)
+    resizer()
 
-    this.nodes.forEach(n => {
-      n.pos.x = this.win.width / 2
-      n.pos.y = this.win.height / 2
-    })
-
-    this.doLayout({ instnat: true })
+    this.init()
 
     // let self = this
     function animate (time) {
@@ -136,12 +192,45 @@ export default {
     view: {
       deep: true,
       handler () {
-        this.resolveItem()
+        this.computeLayout()
       }
+    },
+    nodes () {
+      this.computeLayout()
+      this.nodes.forEach(n => {
+        n.pos = n.pos || { x: 0, y: 0 }
+        n.size = n.size || { width: 60, height: 60 }
+        n.size.width = 60
+        n.size.height = 60
+      })
+      this.cleanLayout({ instnat: true, goHome: false, resetZoom: false })
+      this.$forceUpdate()
     }
   },
   methods: {
-    doLayout ({ instnat } = {}) {
+    onClick ({ node, nodes }) {
+      nodes.forEach(m => {
+        m.isActive = false
+      })
+      node.isActive = true
+      this.$forceUpdate()
+
+      this.$emit('click-node', { node, nodes })
+    },
+    init () {
+      this.computeLayout()
+      this.nodes.forEach(n => {
+        n.pos = n.pos || {}
+        n.pos.x = 0
+        n.pos.y = 0
+        n.size = n.size || {}
+        n.size.width = 60
+        n.size.height = 60
+      })
+      this.cleanLayout({ instnat: true, goHome: false, resetZoom: false })
+      this.$forceUpdate()
+    },
+    cleanLayout ({ instnat, goHome, resetZoom } = {}) {
       let g = new dagre.graphlib.Graph()
       /* eslint-disable */
       // Set an object for the graph label
@@ -159,11 +248,7 @@ export default {
       // our nodes.
 
       this.nodes.forEach((node) => {
-        let size = 60
-        if (node.to === null) {
-          size = 60
-        }
-        g.setNode(node._id, { label: node._id, x: 0, y: 0, width: size, height: size });
+        g.setNode(node._id, { label: node._id, x: 0, y: 0, width: node.size.width, height: node.size.height });
       })
 
       this.links = this.getLinks(this.nodes)
@@ -195,7 +280,7 @@ export default {
           this.$nextTick(() => {
             node.pos.x = neWNodePos.x
             node.pos.y = neWNodePos.y
-            this.resolveItem()
+            this.computeLayout()
           })
         } else {
           this.tweenNode(node, neWNodePos)
@@ -203,10 +288,34 @@ export default {
         //
       });
 
+      if (!instnat) {
+        this.links.forEach((link) => {
+          link.running = false
+          link.dashed = false
+        })
+        setTimeout(() => {
+          this.links.forEach((link) => {
+            link.running = true
+            link.dashed = true
+          })
+        }, 1000)
+      }
+
+      if (resetZoom) {
+        this.zoomBa({ to: 1.1 })
+        setTimeout(() => {
+          this.zoomBa({ to: 1 })
+        }, 100)
+      }
+      if (goHome) {
+        this.goHome()
+      }
+
+
+
       // g.edges().forEach(function(e) {
       //   console.log("Edge " + e.v + " -> " + e.w + ": " + JSON.stringify(g.edge(e)));
       // });
-
       /* eslint-enable */
     },
     onModeNodes (v, node, nodes) {
@@ -224,25 +333,33 @@ export default {
     },
     onMoveAll (nodes, v) {
       nodes.forEach((node) => {
-        node.pos.x += v.dx
-        node.pos.y += v.dy
+        node.pos.x += v.dx * this.zoom
+        node.pos.y += v.dy * this.zoom
       })
+      this.tempDisableDash()
       // this.$forceUpdate(0)
     },
     moveNode (node, v) {
-      node.pos.x += v.dx
-      node.pos.y += v.dy
+      node.pos.x += v.dx * this.zoom
+      node.pos.y += v.dy * this.zoom
+
+      this.tempDisableDash()
       // this.$forceUpdate()
     },
     tweenNode (node, toPos) {
-      new TWEEN.Tween(node.pos) // Create a new tween that modifies 'coords'.
-        .to(toPos, 2500) // Move to (300, 200) in 1 second.
-        .easing(TWEEN.Easing.Elastic.Out) // Use an easing function to make the animation smooth.
-        .onUpdate(() => { // Called after tween.js updates 'coords'.
-          // Move 'box' to the position described by 'coords' with a CSS translation.
-          this.resolveItem()
-        })
-        .start()
+      return new Promise((resolve) => {
+        new TWEEN.Tween(node.pos) // Create a new tween that modifies 'coords'.
+          .to(toPos, 1500) // Move to (300, 200) in 1 second.
+          .easing(TWEEN.Easing.Elastic.Out) // Use an easing function to make the animation smooth.
+          .onUpdate(() => { // Called after tween.js updates 'coords'.
+            // Move 'box' to the position described by 'coords' with a CSS translation.
+            this.computeLayout()
+          })
+          .onComplete(() => {
+            resolve()
+          })
+          .start()
+      })
     },
     goHome () {
       new TWEEN.Tween(this.view) // Create a new tween that modifies 'coords'.
@@ -250,7 +367,7 @@ export default {
         .easing(TWEEN.Easing.Elastic.Out) // Use an easing function to make the animation smooth.
         .onUpdate(() => { // Called after tween.js updates 'coords'.
           // Move 'box' to the position described by 'coords' with a CSS translation.
-          this.resolveItem()
+          this.computeLayout()
         })
         .start()
     },
@@ -265,29 +382,51 @@ export default {
         if (toNode && item.to !== null) {
           arr.push({
             _id: ii,
+            dashed: true,
+            running: true,
             toPos: toNode.pos,
             fromPos: item.pos,
             from: item._id,
             to: item.to
           })
+          // arr.push({
+          //   _id: ii,
+
+          //   dashed: true,
+          //   running: true,
+
+          //   // this item = from
+          //   from: item._id,
+          //   // parent item = to
+          //   to: toNode._id,
+
+          //   get toPos () {
+          //     return toNode.pos
+          //   },
+          //   get fromPos () {
+          //     return item.pos
+          //   }
+          // })
         }
         return arr
       }, [])
     },
-    resolveItem () {
+    zoomBa ({ to }) {
+      new TWEEN.Tween(this) // Create a new tween that modifies 'coords'.
+        .to({ zoom: to }, 250) // Move to (300, 200) in 1 second.
+        .easing(TWEEN.Easing.Quadratic.InOut) // Use an easing function to make the animation smooth.
+        .onUpdate(() => { // Called after tween.js updates 'coords'.
+          // Move 'box' to the position described by 'coords' with a CSS translation.
+          this.computeLayout()
+        })
+        .start()
+    },
+    computeLayout () {
       this.win.width = this.rect.width
       this.win.height = this.rect.height
-      this.viewBox = `0 0 ${this.win.width} ${this.win.height}`
-      this.links = this.getLinks(this.nodes)
 
-      // let minx = Math.min(...this.nodes.map(b => b.pos.x))
-      // let miny = Math.min(...this.nodes.map(b => b.pos.y))
-
-      // let maxx = Math.max(...this.nodes.map(b => b.pos.x))
-      // let maxy = Math.max(...this.nodes.map(b => b.pos.y))
-
-      // let ydiff = maxy// - miny
-      // let xdiff = maxx// - minx
+      this.viewBox = `0 0 ${this.win.width * this.zoom} ${this.win.height * this.zoom}`
+      // this.links = this.getLinks(this.nodes)
 
       this.mover = {
         transform: `translate3d(${this.view.x}px, ${this.view.y}px, 1px)`
@@ -295,8 +434,22 @@ export default {
       // this.viewBox = `${-this.view.x} ${-this.view.y} ${this.width - this.view.x} ${this.height - this.view.y}`
     },
     onMove (v) {
-      this.view.x += v.dx
-      this.view.y += v.dy
+      this.view.x += v.dx * this.zoom
+      this.view.y += v.dy * this.zoom
+      this.tempDisableDash()
+    },
+    tempDisableDash () {
+      this.links.forEach((link) => {
+        link.running = false
+        link.dashed = false
+      })
+      clearTimeout(this.dashTimer)
+      this.dashTimer = setTimeout(() => {
+        this.links.forEach((link) => {
+          link.running = true
+          link.dashed = true
+        })
+      }, 350)
     }
   }
 }

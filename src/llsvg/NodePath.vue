@@ -11,15 +11,15 @@ export default {
   data () {
     return {
       running: true,
+      dashed: true,
+      stroke: '#ff0000',
       a: {
         voltage: 10,
         rect: {
           x: 0,
           y: 0,
           w: 60,
-          h: 60,
-          stroke: ``,
-          fill: `lime`
+          h: 60
         },
         marker: {
           stroke: ``,
@@ -32,9 +32,7 @@ export default {
           x: 100,
           y: 100,
           w: 60,
-          h: 60,
-          stroke: ``,
-          fill: `lime`
+          h: 60
         },
         marker: {
           stroke: ``,
@@ -47,6 +45,15 @@ export default {
     link: {
       deep: true,
       handler () {
+        this.running = this.link.running
+        this.dashed = this.link.dashed
+
+        if (!this.dashed) {
+          this.stroke = 'rgba(0,0,0,0.15)'
+        } else {
+          this.stroke = `url(#${this.uniq}rainbow-gradient)`
+        }
+
         this.a.rect.x = this.link.fromPos.x
         this.a.rect.y = this.link.fromPos.y
 
@@ -59,8 +66,8 @@ export default {
   methods: {
     getStyle () {
       return {
-        'stroke': '#ff0000', // `url(#${this.uniq}kale-salad)`,
-        'stroke-dasharray': this.running ? '2px' : '0px',
+        'stroke': this.stroke, // `url(#${this.uniq}kale-salad)`,
+        'stroke-dasharray': this.dashed ? '2px' : '0px',
         'animation-play-state': this.running ? 'running' : 'paused',
         'animation-direction': this.a.voltage > this.b.voltage ? `normal` : `reverse`
       }

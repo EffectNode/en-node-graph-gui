@@ -3,8 +3,8 @@
     <rect ref="rect" class="node" @click="$emit('click')" :width="60" :height="60" fill="#bababa" stroke="none">
     </rect>
 
-    <g :style="`transform: translate(-20px, 20px); cursor: pointer;`">
-    <slot name="desc"></slot>
+    <g :style="`cursor: pointer;`">
+      <slot name="desc"></slot>
     </g>
   </g>
 </template>
@@ -54,11 +54,11 @@ export default {
         }, 350)
       },
       onMM: (evt) => {
-        this.int = 1
-        clearTimeout(tap)
-        tap = setTimeout(() => {
-          this.int = -1
-        }, 350)
+        // this.int = 1
+        // clearTimeout(tap)
+        // tap = setTimeout(() => {
+        //   this.int = -1
+        // }, 350)
 
         if (evt.touches && evt.touches[0]) {
           evt.preventDefault()

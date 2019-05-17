@@ -1,0 +1,38 @@
+[
+	{
+		"_id": "homepage",
+		"title": "Home Page",
+		"to": "root",
+		"pos": {
+			"x": 217,
+			"y": 240
+		}
+  },
+  {
+		"_id": "contactus",
+		"title": "Contact Us",
+		"to": "root",
+		"pos": {
+			"x": 72,
+			"y": 249
+		}
+	},
+	{
+		"_id": "aboutpage",
+		"title": "About Page",
+		"to": "root",
+		"pos": {
+			"x": 72,
+			"y": 249
+		}
+	},
+	{
+		"_id": "newspage",
+		"title": "News Page",
+		"to": "root",
+		"pos": {
+			"x": 72,
+			"y": 249
+		}
+	}
+]

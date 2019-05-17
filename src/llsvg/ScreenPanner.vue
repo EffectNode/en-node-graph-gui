@@ -1,13 +1,14 @@
 <template>
-  <rect :width="win.width" :height="win.height" fill="transparent" stroke="none">
+  <rect :width="zoom * win.width" :height="zoom * win.height" dfill="#bebebe" fill="transparent" stroke="none">
   </rect>
 </template>
 
 <script>
 export default {
   props: {
+    zoom: {},
     win: {},
-    svg: {}
+    view: {}
   },
   data () {
     return {

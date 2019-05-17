@@ -1,12 +1,14 @@
 <template>
   <g :style="mover">
-    <rect v-if="type === 'rect'" ref="node" class="node" @click="$emit('click')" :width="60" :height="60" fill="#bababa" stroke="none">
+    <rect v-if="type === 'box'" ref="node" class="node" @click="$emit('click')" :width="60" :height="60" :fill="fill" fill-opacity="0.5"  stroke="none" >
     </rect>
 
-    <g v-if="type === 'circle'"  :style="`transform: translate(30px, 30px)`">
-      <circle ref="node" class="node" @click="$emit('click')" :r="30" fill="#bababa" stroke="none">
+    <g v-if="type === 'circle'"  :style="`transform: translate(${size / 2}px, ${size / 2}px)`">
+      <circle ref="node" class="node" @click="$emit('click')" :r="size / 2" :fill="fill" fill-opacity="0.5" stroke="none">
       </circle>
     </g>
+
+    <text style="user-select: none;" :x="size / 2" y="-5" text-anchor="middle">{{ title }}</text>
   </g>
 </template>
 
@@ -14,8 +16,23 @@
 import { setTimeout, clearTimeout } from 'timers'
 export default {
   props: {
+    uniq: {},
+    isRoot: {
+      default: false
+    },
+    isActive: {
+      default: false
+    },
+    title: {
+      default () {
+        return ''
+      }
+    },
     type: {
       default: 'rect'
+    },
+    size: {
+      default: 60
     },
     pos: {
       default () {
@@ -28,21 +45,27 @@ export default {
   },
   data () {
     return {
+      fill: this.isActive ? `url(#${this.uniq}rainbow-gradient-movin)` : `url(#${this.uniq}rainbow-gradient)`,
+      showTitle: false || this.isRoot,
       int: 0,
       mover: {},
       isDown: false
     }
   },
   watch: {
+    isActive () {
+      this.fill = this.isActive ? `url(#${this.uniq}rainbow-gradient-movin)` : `url(#${this.uniq}rainbow-gradient)`
+    },
     pos: {
       deep: true,
       handler () {
-        this.resolve()
+        this.doLayout()
       }
     }
   },
   mounted () {
     let tap = 0
+    let inttt = 0
     let h = {
       onMD: (evt) => {
         if (evt.touches && evt.touches[0]) {
@@ -51,18 +74,18 @@ export default {
           h.tsy = evt.touches[0].pageY
         }
         this.isDown = true
-        this.int = 1
+        inttt = 1
         clearTimeout(tap)
         tap = setTimeout(() => {
-          this.int = -1
+          inttt = -1
         }, 350)
       },
       onMM: (evt) => {
-        this.int = 1
-        clearTimeout(tap)
-        tap = setTimeout(() => {
-          this.int = -1
-        }, 350)
+        inttt = -1
+        // clearTimeout(tap)
+        // tap = setTimeout(() => {
+        //   inttt = -1
+        // }, 350)
 
         if (evt.touches && evt.touches[0]) {
           evt.preventDefault()
@@ -86,11 +109,13 @@ export default {
           // console.log(evt)
         }
       },
+      onMUClick: () => {
+      },
       onMU: (evt) => {
-        if (this.int === 1) {
+        this.isDown = false
+        if (inttt === 1) {
           this.$emit('click')
         }
-        this.isDown = false
       }
     }
     // console.log(this)
@@ -103,15 +128,17 @@ export default {
     window.addEventListener('mouseup', h.onMU, false)
     window.addEventListener('mousemove', h.onMM, false)
     window.addEventListener('mouseleave', h.onMU, false)
+    this.$refs['node'].addEventListener('mouseleave', h.onMUClick, false)
     this.clean = () => {
       this.$refs['node'].removeEventListener('mousedown', h.onMD)
       window.removeEventListener('mouseup', h.onMU)
       window.removeEventListener('mousemove', h.onMM)
       window.removeEventListener('mouseleave', h.onMU)
+      this.$refs['node'].removeEventListener('mouseleave', h.onMUClick)
     }
   },
   methods: {
-    resolve () {
+    doLayout () {
       this.mover = {
         transform: `translate3d(${this.pos.x}px, ${this.pos.y}px, 1px)`
       }
