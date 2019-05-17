@@ -1,10 +1,7 @@
 <template>
   <div class="corner-layer">
-    <div class="uit-icon" @click="$parent.$refs['editor'].goHome()">
-      <img src="../icons/home.svg" title="home" alt="home">
-    </div>
-    <div class="uit-icon" @click="$parent.$refs['editor'].cleanLayout({ instant: false, goHome: false, resetZoom: true })">
-      <img src="../icons/tree.svg" title="oraganise" alt="oraganise">
+    <div class="uit-icon" @click="$parent.$refs['editor'].cleanLayout({ instant: false, goHome: true, resetZoom: true })">
+      <img src="../icons/home.svg" title="oraganise" alt="oraganise">
     </div>
     <div class="uit-icon" @click="$parent.$refs['editor'].toggleZoom()">
       <img src="../icons/magnify.svg" title="map view" alt="map view">
@@ -30,8 +27,8 @@ export default {
 .corner-layer{
   position: absolute;
   top: 0px;
-  right: 0px;
-  width: calc(60px * 3);
+  left: 0px;
+  width: calc(60px * 2);
   display: flex;
 }
 .uit-icon{

@@ -248,7 +248,7 @@ export default {
         // working
         // rankdir: 'BT',
         nodesep: 40,
-        ranksep: 100,
+        ranksep: 120,
         rankdir: 'RL',
         // https://github.com/dagrejs/dagre/wiki#using-dagre
         // align: 'UL'

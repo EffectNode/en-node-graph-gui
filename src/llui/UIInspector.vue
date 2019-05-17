@@ -28,7 +28,7 @@ export default {
         // 10 = margin edge for preview box
         // 10 = margin for ui inspectpor
         x: 10 + 10 + 0 + 300,
-        y: 10 + 60
+        y: 10 + 0
       },
       boxStyle: {},
       titleStyle: {},

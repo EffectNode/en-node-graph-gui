@@ -66,105 +66,7 @@ export default {
           'y': 249
         }
       }
-      // {
-      //   '_id': 'mat',
-      //   'title': 'Materials',
-      //   'to': 'root',
-      //   'pos': {
-      //     'x': 152,
-      //     'y': 61
-      //   }
-      // },
-      // {
-      //   '_id': 'engine',
-      //   'title': 'Engine',
-      //   'to': 'root',
-      //   'pos': {
-      //     'x': 152,
-      //     'y': 61
-      //   }
-      // },
-
-      // {
-      //   '_id': 'shared',
-      //   'title': 'Shared Items',
-      //   'to': 'root',
-      //   'pos': {
-      //     'x': 152,
-      //     'y': 61
-      //   }
-      // },
-      // {
-      //   '_id': 'scene',
-      //   'title': 'Scenes',
-      //   'to': 'root',
-      //   'pos': {
-      //     'x': 152,
-      //     'y': 61
-      //   }
-      // }
     ]
-    // let materials = [
-    //   {
-    //     '_id': 'mat.simple',
-    //     'title': 'Simple Material',
-    //     'to': 'mat',
-    //     'pos': {
-    //       'x': 72,
-    //       'y': 249
-    //     }
-    //   }
-    // ]
-    // let shared = [
-    //   {
-    //     '_id': 'home.nagigation',
-    //     'title': 'NavBar',
-    //     'to': 'shared',
-    //     'pos': {
-    //       'x': 72,
-    //       'y': 249
-    //     }
-    //   },
-    //   {
-    //     '_id': 'nav.logo',
-    //     'title': 'Logo',
-    //     'to': 'home.nagigation',
-    //     'pos': {
-    //       'x': 72,
-    //       'y': 249
-    //     }
-    //   },
-    //   {
-    //     '_id': 'home.menu',
-    //     'title': 'Menu',
-    //     'to': 'shared',
-    //     'pos': {
-    //       'x': 72,
-    //       'y': 249
-    //     }
-    //   }
-    // ]
-    // let engineItems = [
-    //   {
-    //     '_id': 'webgl.renderer',
-    //     'title': 'Renderer',
-    //     'to': 'engine',
-    //     'pos': {
-    //       'x': 72,
-    //       'y': 249
-    //     }
-    //   },
-
-    //   {
-    //     '_id': 'webgl.effect',
-    //     'title': 'Effect Composer',
-    //     'to': 'engine',
-    //     'pos': {
-    //       'x': 72,
-    //       'y': 249
-    //     }
-    //   }
-    // ]
     let nodesForHome = require('../llsvg/nodes.json')
     let pages = require('../llsvg/pages.json')
     setTimeout(() => {
@@ -172,9 +74,6 @@ export default {
         ...root,
         ...pages,
         ...nodesForHome
-        // ...shared,
-        // ...engineItems,
-        // ...materials
       ]
         .filter(n => !n.trashed)
         .filter(n => !n.hidden)
@@ -203,11 +102,6 @@ export default {
       console.log(node, nodes)
       this.node = node
       this.open.inspector = true
-    },
-    zoomBa (args) {
-      [
-        this.$refs.editor
-      ].$emit('do', { action: 'zoomBa', args })
     }
   }
 }

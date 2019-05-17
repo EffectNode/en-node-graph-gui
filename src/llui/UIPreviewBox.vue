@@ -22,7 +22,7 @@ export default {
     return {
       anchor: {
         x: 10 + 0,
-        y: 10 + 60
+        y: 10 + 0
       },
       boxStyle: {},
       titleStyle: {},
