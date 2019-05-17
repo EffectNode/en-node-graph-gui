@@ -1,8 +1,8 @@
 [
 	{
 		"_id": "homepage",
-		"title": "Home Page",
-		"to": "root",
+		"title": "Home",
+		"to": "pages",
 		"pos": {
 			"x": 217,
 			"y": 240
@@ -11,25 +11,25 @@
   {
 		"_id": "contactus",
 		"title": "Contact Us",
-		"to": "root",
+		"to": "pages",
 		"pos": {
 			"x": 72,
 			"y": 249
 		}
 	},
 	{
-		"_id": "aboutpage",
-		"title": "About Page",
-		"to": "root",
+		"_id": "about",
+		"title": "About",
+		"to": "pages",
 		"pos": {
 			"x": 72,
 			"y": 249
 		}
 	},
 	{
-		"_id": "newspage",
-		"title": "News Page",
-		"to": "root",
+		"_id": "news",
+		"title": "News",
+		"to": "pages",
 		"pos": {
 			"x": 72,
 			"y": 249

@@ -47,6 +47,103 @@ export default {
           'x': 152,
           'y': 61
         }
+      },
+      {
+        '_id': 'materials',
+        'title': 'Material',
+        'to': 'root',
+        'pos': {
+          'x': 152,
+          'y': 61
+        }
+      },
+      {
+        '_id': 'engine',
+        'title': 'Engine',
+        'to': 'root',
+        'pos': {
+          'x': 152,
+          'y': 61
+        }
+      },
+
+      {
+        '_id': 'shared',
+        'title': 'Shared Items',
+        'to': 'root',
+        'pos': {
+          'x': 152,
+          'y': 61
+        }
+      },
+      {
+        '_id': 'pages',
+        'title': 'Scenes',
+        'to': 'root',
+        'pos': {
+          'x': 152,
+          'y': 61
+        }
+      }
+    ]
+    let shared = [
+      {
+        '_id': 'home.nagigation',
+        'title': 'NavBar',
+        'to': 'shared',
+        'pos': {
+          'x': 72,
+          'y': 249
+        }
+      },
+      {
+        '_id': 'nav.logo',
+        'title': 'Logo',
+        'to': 'home.nagigation',
+        'pos': {
+          'x': 72,
+          'y': 249
+        }
+      },
+      {
+        '_id': 'home.menu',
+        'title': 'Menu',
+        'to': 'shared',
+        'pos': {
+          'x': 72,
+          'y': 249
+        }
+      }
+    ]
+    let engineItems = [
+      {
+        '_id': 'webgl.renderer',
+        'title': 'Renderer',
+        'to': 'engine',
+        'pos': {
+          'x': 72,
+          'y': 249
+        }
+      },
+      {
+        '_id': 'webgl.camera',
+        'action': '',
+        'args': '',
+        'title': 'Camera',
+        'to': 'engine',
+        'pos': {
+          'x': 72,
+          'y': 249
+        }
+      },
+      {
+        '_id': 'webgl.effect',
+        'title': 'Effect Composer',
+        'to': 'engine',
+        'pos': {
+          'x': 72,
+          'y': 249
+        }
       }
     ]
     let nodesForHome = require('../llsvg/nodes.json')
@@ -55,7 +152,9 @@ export default {
       this.nodes = [
         ...root,
         ...pages,
-        ...nodesForHome
+        ...shared,
+        ...nodesForHome,
+        ...engineItems
       ]
     }, 150)
 

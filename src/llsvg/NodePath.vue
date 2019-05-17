@@ -82,8 +82,8 @@ export default {
     },
     getFromCenter (a, b) {
       // console.log(a, b)
-      let ax = a.rect.x + a.rect.w / 2
-      let ay = a.rect.y + a.rect.h / 2
+      let ax = a.rect.x + a.rect.w / 2 + 0.01
+      let ay = a.rect.y + a.rect.h / 2 + 0.01
       let bx = b.rect.x + b.rect.w / 2
       let by = b.rect.y + b.rect.h / 2
 
