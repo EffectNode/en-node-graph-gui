@@ -3,37 +3,23 @@
     <!-- preserveAspectRatio="preserveAspectRatio" -->
     <svg ref="svg" :height="win.height" :width="win.width" :viewBox="viewBox">
       <defs>
-        <radialGradient :id="`${uniq}rainbow-gradient`" cx="50%" cy="50%" fx="50%" fy="50%" r="70.7106781%">
-            <stop stop-color="#E2B5B5" offset="0%">
+        <radialGradient :id="`${uniq}rainbow-gradient`" cx="50%" cy="50%" fx="50%" fy="50%" r="100%">
+            <stop stop-color="#00ffff" offset="0%">
             </stop>
-            <stop stop-color="#CC93DD" offset="25%">
+            <stop stop-color="#ff00ff" offset="100%">
             </stop>
-            <stop stop-color="#2EE0EB" offset="50%">
-            </stop>
-            <stop stop-color="#36D051" offset="75%">
-            </stop>
-            <stop stop-color="#CF2323" offset="100%">
-            </stop>
-
         </radialGradient>
 
-        <radialGradient :id="`${uniq}rainbow-gradient-movin`" cx="50%" cy="50%" fx="50%" fy="50%" r="70.7106781%">
-            <stop stop-color="#ffffff" offset="0%">
-              <animate attributeName="stop-color" values="#E2B5B5; #CF2325; #36D051; #2EE0EB; #CC93DD; #E2B5B5;" dur="5s" repeatCount="indefinite"></animate>
+        <radialGradient :id="`${uniq}rainbow-gradient-movin`" cx="50%" cy="50%" fx="50%" fy="50%" r="100%">
+            <stop stop-color="#00E0FF" offset="0%">
+              <animate attributeName="stop-color" values="#00E0FF; #ff00ff; #00E0FF;" dur="2s" repeatCount="indefinite"></animate>
+`          </stop>
+            <stop stop-color="#ff00ff" offset="50%">
+              <animate attributeName="stop-color" values="#ff00ff; #00E0FF; #ff00ff;" dur="2s" repeatCount="indefinite"></animate>
             </stop>
-            <stop stop-color="#ffffff" offset="25%">
-              <animate attributeName="stop-color" values="#CC93DD; #E2B5B5; #CF2325; #36D051; #2EE0EB;  #CC93DD;" dur="5s" repeatCount="indefinite"></animate>
+            <stop stop-color="#00E0FF" offset="100%">
+              <animate attributeName="stop-color" values="#00E0FF; #ff00ff; #00E0FF;" dur="2s" repeatCount="indefinite"></animate>
             </stop>
-            <stop stop-color="#ffffff" offset="50%">
-              <animate attributeName="stop-color" values="#2EE0EB; #CC93DD; #E2B5B5; #CF2325; #36D051;  #2EE0EB;" dur="5s" repeatCount="indefinite"></animate>
-            </stop>
-            <stop stop-color="#ffffff" offset="75%">
-              <animate attributeName="stop-color" values="#36D051; #2EE0EB; #CC93DD; #E2B5B5; #CF2325;  #36D051;" dur="5s" repeatCount="indefinite"></animate>
-            </stop>
-            <stop stop-color="#ffffff" offset="100%">
-              <animate attributeName="stop-color" values="#CF2323; #36D051; #2EE0EB; #CC93DD; #E2B5B5;  #CF2323;" dur="5s" repeatCount="indefinite"></animate>
-            </stop>
-
         </radialGradient>
 
         <marker :id="`${uniq}circle-ok`" style="overflow:visible; cursor: pointer;">
@@ -41,7 +27,7 @@
         </marker>
         <marker :id="`${uniq}circle-ready`" style="overflow:visible; cursor: pointer;">
           <!-- <circle r="3" :fill="`url(#${uniq}kale-salad)`" /> -->
-          <circle r="3" :stroke="`#ffffff`" :fill="`#ffffff`" />
+          <circle r="3" :stroke="`#transparent`" :fill="`transparent`" />
         </marker>
           <marker :id="`${uniq}circle-error`" style="overflow:visible; cursor: pointer;">
           <circle r="3" :fill="'red'" />
@@ -108,6 +94,7 @@
 <script>
 import TWEEN from '@tweenjs/tween.js'
 import { setTimeout, clearTimeout } from 'timers'
+import * as Node from './node.js'
 
 var dagre = require('dagre')
 export default {
@@ -235,6 +222,8 @@ export default {
       /* eslint-disable */
       // Set an object for the graph label
       g.setGraph({
+        marginx: 30,
+        marginy: 30,
         rankdir: 'BT',
         // https://github.com/dagrejs/dagre/wiki#using-dagre
         // align: 'UL'
@@ -302,7 +291,9 @@ export default {
       }
 
       if (resetZoom) {
-        this.zoomBa({ to: 1.1 })
+        if (this.zoom === 1) {
+          this.zoomBa({ to: 1.1 })
+        }
         setTimeout(() => {
           this.zoomBa({ to: 1 })
         }, 100)
@@ -372,44 +363,46 @@ export default {
         .start()
     },
     getChildren (node) {
-      return this.links.filter(c => c.to === node._id).map((c) => {
-        return this.nodes.find(n => n._id === c.from)
-      })
+      return Node.get1LevelKids({ node, nodes: this.nodes, links: this.links })
+      // return this.links.filter(c => c.to === node._id).map((c) => {
+      //   return this.nodes.find(n => n._id === c.from)
+      // })
     },
     getLinks (nodes) {
-      return nodes.reduce((arr, item, ii) => {
-        let toNode = nodes.find(n => n._id === item.to)
-        if (toNode && item.to !== null) {
-          arr.push({
-            _id: ii,
-            dashed: true,
-            running: true,
-            toPos: toNode.pos,
-            fromPos: item.pos,
-            from: item._id,
-            to: item.to
-          })
-          // arr.push({
-          //   _id: ii,
+      return Node.getLinks({ nodes })
+      // return nodes.reduce((arr, item, ii) => {
+      //   let toNode = nodes.find(n => n._id === item.to)
+      //   if (toNode && item.to !== null) {
+      //     arr.push({
+      //       _id: ii,
+      //       dashed: true,
+      //       running: true,
+      //       toPos: toNode.pos,
+      //       fromPos: item.pos,
+      //       from: item._id,
+      //       to: item.to
+      //     })
+      //     // arr.push({
+      //     //   _id: ii,
 
-          //   dashed: true,
-          //   running: true,
+      //     //   dashed: true,
+      //     //   running: true,
 
-          //   // this item = from
-          //   from: item._id,
-          //   // parent item = to
-          //   to: toNode._id,
+      //     //   // this item = from
+      //     //   from: item._id,
+      //     //   // parent item = to
+      //     //   to: toNode._id,
 
-          //   get toPos () {
-          //     return toNode.pos
-          //   },
-          //   get fromPos () {
-          //     return item.pos
-          //   }
-          // })
-        }
-        return arr
-      }, [])
+      //     //   get toPos () {
+      //     //     return toNode.pos
+      //     //   },
+      //     //   get fromPos () {
+      //     //     return item.pos
+      //     //   }
+      //     // })
+      //   }
+      //   return arr
+      // }, [])
     },
     zoomBa ({ to }) {
       new TWEEN.Tween(this) // Create a new tween that modifies 'coords'.

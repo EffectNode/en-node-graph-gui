@@ -2,7 +2,7 @@
 	{
 		"_id": "homepage",
 		"title": "Home",
-		"to": "pages",
+		"to": "scene",
 		"pos": {
 			"x": 217,
 			"y": 240
@@ -11,7 +11,7 @@
   {
 		"_id": "contactus",
 		"title": "Contact Us",
-		"to": "pages",
+		"to": "scene",
 		"pos": {
 			"x": 72,
 			"y": 249
@@ -20,7 +20,7 @@
 	{
 		"_id": "about",
 		"title": "About",
-		"to": "pages",
+		"to": "scene",
 		"pos": {
 			"x": 72,
 			"y": 249
@@ -29,7 +29,7 @@
 	{
 		"_id": "news",
 		"title": "News",
-		"to": "pages",
+		"to": "scene",
 		"pos": {
 			"x": 72,
 			"y": 249

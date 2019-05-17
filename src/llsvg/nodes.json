@@ -16,5 +16,14 @@
 			"x": 72,
 			"y": 249
 		}
+	},
+	{
+		"_id": "home.page.hero2",
+		"title": "Hero Item 2",
+		"to": "home.page.hero",
+		"pos": {
+			"x": 72,
+			"y": 249
+		}
 	}
 ]

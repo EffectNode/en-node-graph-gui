@@ -8,11 +8,14 @@
     <NodeTree v-if="nodes" @view="(v) => { view = v }" :nodes="nodes" class="full svg-box" ref="editor">
     </NodeTree>
 
+    <UIPanel></UIPanel>
+
     <PreviewBox></PreviewBox>
 
     <div class="corner-layer">
-      <button @click="$refs['editor'].cleanLayout({ instant: false, goHome: true, resetZoom: true })">Reset Layout</button>
-      <button @click="$refs['editor'].zoomBa({ to: 2.5 })">Map View</button>
+      <button @click="$refs['editor'].cleanLayout({ instant: false, goHome: true, resetZoom: true })">Home</button>
+      <button @click="$refs['editor'].cleanLayout({ instant: false, goHome: false, resetZoom: true })">Organise</button>
+      <button @click="$refs['editor'].zoomBa({ to: 4 })">Map View</button>
       <button @click="$refs['editor'].zoomBa({ to: 1 })">Normal</button>
     </div>
 
@@ -26,7 +29,8 @@ export default {
   name: 'home',
   components: {
     NodeTree: require('../llsvg/NodeTree.vue').default,
-    PreviewBox: require('../llui/PreviewBox.vue').default
+    PreviewBox: require('../llui/PreviewBox.vue').default,
+    UIPanel: require('../llui/UIPanel.vue').default
   },
   data () {
     return {
@@ -42,6 +46,7 @@ export default {
       {
         '_id': 'root',
         'title': 'Your 3D App',
+        'protected': true,
         'to': null,
         'pos': {
           'x': 152,
@@ -49,8 +54,8 @@ export default {
         }
       },
       {
-        '_id': 'materials',
-        'title': 'Material',
+        '_id': 'mat',
+        'title': 'Materials',
         'to': 'root',
         'pos': {
           'x': 152,
@@ -77,12 +82,23 @@ export default {
         }
       },
       {
-        '_id': 'pages',
+        '_id': 'scene',
         'title': 'Scenes',
         'to': 'root',
         'pos': {
           'x': 152,
           'y': 61
+        }
+      }
+    ]
+    let materials = [
+      {
+        '_id': 'mat.simple',
+        'title': 'Simple Material',
+        'to': 'mat',
+        'pos': {
+          'x': 72,
+          'y': 249
         }
       }
     ]
@@ -154,8 +170,11 @@ export default {
         ...pages,
         ...shared,
         ...nodesForHome,
-        ...engineItems
+        ...engineItems,
+        ...materials
       ]
+        .filter(n => !n.trashed)
+        .filter(n => !n.hidden)
     }, 150)
 
     let i = 0
@@ -212,18 +231,19 @@ export default {
   top: 0px;
   right: 0px;
 }
+
 .svg-box{
   position: absolute;
   top: 0px;
   left: 0px;
   width: 100%;
-  height: 50%;
+  height: 60%;
 }
 
 @media screen and (min-width: 767px) {
   .svg-box{
     height: 100%;
-    width: calc(100%);
+    width: 100%;
   }
 }
 </style>
