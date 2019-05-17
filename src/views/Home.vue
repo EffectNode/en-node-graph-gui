@@ -5,19 +5,16 @@
       <router-link to="/about">About</router-link> |
     </div> -->
 
-    <NodeTree v-if="nodes" @view="(v) => { view = v }" :nodes="nodes" class="full svg-box" ref="editor">
+    <NodeTree v-if="nodes" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="nodes" class="full svg-box" ref="editor">
     </NodeTree>
 
+    <UITools></UITools>
     <UIPanel></UIPanel>
-
-    <PreviewBox></PreviewBox>
-
-    <div class="corner-layer">
-      <button @click="$refs['editor'].cleanLayout({ instant: false, goHome: true, resetZoom: true })">Home</button>
-      <button @click="$refs['editor'].cleanLayout({ instant: false, goHome: false, resetZoom: true })">Organise</button>
-      <button @click="$refs['editor'].zoomBa({ to: 4 })">Map View</button>
-      <button @click="$refs['editor'].zoomBa({ to: 1 })">Normal</button>
-    </div>
+    <UIPreviewBox>
+    </UIPreviewBox>
+    <UIInspector v-if="open.inspector" @close="open.inspector = false">
+      <UIControls :nodes="nodes" :node="node"></UIControls>
+    </UIInspector>
 
   </div>
 </template>
@@ -29,15 +26,22 @@ export default {
   name: 'home',
   components: {
     NodeTree: require('../llsvg/NodeTree.vue').default,
-    PreviewBox: require('../llui/PreviewBox.vue').default,
-    UIPanel: require('../llui/UIPanel.vue').default
+    UIPreviewBox: require('../llui/UIPreviewBox.vue').default,
+    UIControls: require('../llui/UIControls.vue').default,
+    UIInspector: require('../llui/UIInspector.vue').default,
+    UIPanel: require('../llui/UIPanel.vue').default,
+    UITools: require('../llui/UITools.vue').default
   },
   data () {
     return {
+      open: {
+        inspector: false
+      },
       view: {
         x: 0,
         y: 0
       },
+      node: false,
       nodes: false
     }
   },
@@ -54,149 +58,152 @@ export default {
         }
       },
       {
-        '_id': 'mat',
-        'title': 'Materials',
-        'to': 'root',
-        'pos': {
-          'x': 152,
-          'y': 61
-        }
-      },
-      {
-        '_id': 'engine',
-        'title': 'Engine',
-        'to': 'root',
-        'pos': {
-          'x': 152,
-          'y': 61
-        }
-      },
-
-      {
-        '_id': 'shared',
-        'title': 'Shared Items',
-        'to': 'root',
-        'pos': {
-          'x': 152,
-          'y': 61
-        }
-      },
-      {
-        '_id': 'scene',
-        'title': 'Scenes',
-        'to': 'root',
-        'pos': {
-          'x': 152,
-          'y': 61
-        }
-      }
-    ]
-    let materials = [
-      {
-        '_id': 'mat.simple',
-        'title': 'Simple Material',
-        'to': 'mat',
-        'pos': {
-          'x': 72,
-          'y': 249
-        }
-      }
-    ]
-    let shared = [
-      {
-        '_id': 'home.nagigation',
-        'title': 'NavBar',
-        'to': 'shared',
-        'pos': {
-          'x': 72,
-          'y': 249
-        }
-      },
-      {
-        '_id': 'nav.logo',
-        'title': 'Logo',
-        'to': 'home.nagigation',
-        'pos': {
-          'x': 72,
-          'y': 249
-        }
-      },
-      {
-        '_id': 'home.menu',
-        'title': 'Menu',
-        'to': 'shared',
-        'pos': {
-          'x': 72,
-          'y': 249
-        }
-      }
-    ]
-    let engineItems = [
-      {
-        '_id': 'webgl.renderer',
-        'title': 'Renderer',
-        'to': 'engine',
-        'pos': {
-          'x': 72,
-          'y': 249
-        }
-      },
-      {
-        '_id': 'webgl.camera',
-        'action': '',
-        'args': '',
+        '_id': 'camera',
         'title': 'Camera',
-        'to': 'engine',
-        'pos': {
-          'x': 72,
-          'y': 249
-        }
-      },
-      {
-        '_id': 'webgl.effect',
-        'title': 'Effect Composer',
-        'to': 'engine',
+        'to': 'homepage',
         'pos': {
           'x': 72,
           'y': 249
         }
       }
+      // {
+      //   '_id': 'mat',
+      //   'title': 'Materials',
+      //   'to': 'root',
+      //   'pos': {
+      //     'x': 152,
+      //     'y': 61
+      //   }
+      // },
+      // {
+      //   '_id': 'engine',
+      //   'title': 'Engine',
+      //   'to': 'root',
+      //   'pos': {
+      //     'x': 152,
+      //     'y': 61
+      //   }
+      // },
+
+      // {
+      //   '_id': 'shared',
+      //   'title': 'Shared Items',
+      //   'to': 'root',
+      //   'pos': {
+      //     'x': 152,
+      //     'y': 61
+      //   }
+      // },
+      // {
+      //   '_id': 'scene',
+      //   'title': 'Scenes',
+      //   'to': 'root',
+      //   'pos': {
+      //     'x': 152,
+      //     'y': 61
+      //   }
+      // }
     ]
+    // let materials = [
+    //   {
+    //     '_id': 'mat.simple',
+    //     'title': 'Simple Material',
+    //     'to': 'mat',
+    //     'pos': {
+    //       'x': 72,
+    //       'y': 249
+    //     }
+    //   }
+    // ]
+    // let shared = [
+    //   {
+    //     '_id': 'home.nagigation',
+    //     'title': 'NavBar',
+    //     'to': 'shared',
+    //     'pos': {
+    //       'x': 72,
+    //       'y': 249
+    //     }
+    //   },
+    //   {
+    //     '_id': 'nav.logo',
+    //     'title': 'Logo',
+    //     'to': 'home.nagigation',
+    //     'pos': {
+    //       'x': 72,
+    //       'y': 249
+    //     }
+    //   },
+    //   {
+    //     '_id': 'home.menu',
+    //     'title': 'Menu',
+    //     'to': 'shared',
+    //     'pos': {
+    //       'x': 72,
+    //       'y': 249
+    //     }
+    //   }
+    // ]
+    // let engineItems = [
+    //   {
+    //     '_id': 'webgl.renderer',
+    //     'title': 'Renderer',
+    //     'to': 'engine',
+    //     'pos': {
+    //       'x': 72,
+    //       'y': 249
+    //     }
+    //   },
+
+    //   {
+    //     '_id': 'webgl.effect',
+    //     'title': 'Effect Composer',
+    //     'to': 'engine',
+    //     'pos': {
+    //       'x': 72,
+    //       'y': 249
+    //     }
+    //   }
+    // ]
     let nodesForHome = require('../llsvg/nodes.json')
     let pages = require('../llsvg/pages.json')
     setTimeout(() => {
       this.nodes = [
         ...root,
         ...pages,
-        ...shared,
-        ...nodesForHome,
-        ...engineItems,
-        ...materials
+        ...nodesForHome
+        // ...shared,
+        // ...engineItems,
+        // ...materials
       ]
         .filter(n => !n.trashed)
         .filter(n => !n.hidden)
     }, 150)
 
-    let i = 0
+    // let i = 0
+    // setInterval(() => {
+    //   i = i + 1
 
-    setInterval(() => {
-      i = i + 1
+    //   // let newItem = {
+    //   //   '_id': i + 'FunPage',
+    //   //   'title': 'Fun Page',
+    //   //   'to': pages[i % pages.length]._id,
+    //   //   pos: { x: 0, y: 0 },
+    //   //   size: { x: 1, y: 1 }
+    //   // }
+    //   // this.nodes.push(newItem)
 
-      // let newItem = {
-      //   '_id': i + 'FunPage',
-      //   'title': 'Fun Page',
-      //   'to': pages[i % pages.length]._id,
-      //   pos: { x: 0, y: 0 },
-      //   size: { x: 1, y: 1 }
-      // }
-      // this.nodes.push(newItem)
-
-      // this.$nextTick(() => {
-      //   this.$refs['editor'].cleanLayout({ instant: true, goHome: false, resetZoom: false })
-      // })
-    }, 1500)
+    //   // this.$nextTick(() => {
+    //   //   this.$refs['editor'].cleanLayout({ instant: true, goHome: false, resetZoom: false })
+    //   // })
+    // }, 1500)
   },
   methods: {
+    onNodeClick ({ node, nodes }) {
+      console.log(node, nodes)
+      this.node = node
+      this.open.inspector = true
+    },
     zoomBa (args) {
       [
         this.$refs.editor
@@ -225,12 +232,6 @@ export default {
 #nav a.router-link-exact-active {
   color: #42b983;
 } */
-
-.corner-layer{
-  position: absolute;
-  top: 0px;
-  right: 0px;
-}
 
 .svg-box{
   position: absolute;

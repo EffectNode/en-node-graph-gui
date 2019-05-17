@@ -78,7 +78,7 @@
       <g :style="mover">
 
         <g :key="node._id + node.to + ii" v-for="(node, ii) in nodes" x>
-          <Node :title="node.title" :isRoot="node.to === null" @click="onClick({ node, nodes })" :uniq="uniq" :isActive="node.isActive" @move="(ev) => { onModeNodes(ev, node, nodes) }" :pos="node.pos" :type="'circle'"></Node>
+          <Node :title="node.title" :isRoot="node.to === null" @click="onClick({ node, nodes, ...$event })" :uniq="uniq" :isActive="node.isActive" @move="(ev) => { onModeNodes(ev, node, nodes) }" :pos="node.pos" :type="'circle'"></Node>
         </g>
 
         <g :key="link.from + link.to + ii" v-for="(link, ii) in links">
@@ -195,14 +195,35 @@ export default {
     }
   },
   methods: {
-    onClick ({ node, nodes }) {
+    onClick ({ node, nodes, rect }) {
       nodes.forEach(m => {
         m.isActive = false
       })
       node.isActive = true
       this.$forceUpdate()
 
-      this.$emit('click-node', { node, nodes })
+      this.panToCenter({ rect })
+      this.$emit('onNodeClick', { node, nodes })
+    },
+    panToCenter ({ rect }) {
+      let view2 = {}
+      view2.x = this.view.x - rect.left
+      view2.x += (window.innerWidth - 300 - 400 - 10 - 10) * 0.5
+
+      view2.y = this.view.y - rect.top
+      view2.y += window.innerHeight * 0.35
+
+      // this.computeLayout()
+      // this.$forceUpdate()
+
+      new TWEEN.Tween(this.view) // Create a new tween that modifies 'coords'.
+        .to(view2, 750) // Move to (300, 200) in 1 second.
+        .easing(TWEEN.Easing.Circular.Out) // Use an easing function to make the animation smooth.
+        .onUpdate(() => { // Called after tween.js updates 'coords'.
+          // Move 'box' to the position described by 'coords' with a CSS translation.
+          this.computeLayout()
+        })
+        .start()
     },
     init () {
       this.computeLayout()
@@ -224,7 +245,11 @@ export default {
       g.setGraph({
         marginx: 30,
         marginy: 30,
-        rankdir: 'BT',
+        // working
+        // rankdir: 'BT',
+        nodesep: 40,
+        ranksep: 100,
+        rankdir: 'RL',
         // https://github.com/dagrejs/dagre/wiki#using-dagre
         // align: 'UL'
       });
@@ -336,6 +361,13 @@ export default {
 
       this.tempDisableDash()
       // this.$forceUpdate()
+    },
+    toggleZoom () {
+      if (this.zoom === 4) {
+        this.zoomBa({ to: 1 })
+      } else {
+        this.zoomBa({ to: 4 })
+      }
     },
     tweenNode (node, toPos) {
       return new Promise((resolve) => {

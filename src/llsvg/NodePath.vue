@@ -73,27 +73,61 @@ export default {
       }
     },
     getFromNode (a, b) {
-      return this.getFromCenter(a, b)
+      // return this.getFromCenter(a, b)
+      return this.getFromLeftToRight(a, b)
       // if (a.x < b.x) {
       //   return this.getFromNodeLeftToRight(a, b)
       // } else if (a.y < b.y) {
       //   return this.getFromNodeUpToDown(a, b)
       // }
     },
-    getFromCenter (a, b) {
+    getFromLeftToRight (a, b) {
       // console.log(a, b)
-      let ax = a.rect.x + a.rect.w / 2 + 0.01
+      // let ax = a.rect.x + a.rect.w / 2 + 0.01
+      // let ay = a.rect.y + a.rect.h / 2 + 0.01
+      // let bx = b.rect.x + b.rect.w / 2
+      // let by = b.rect.y + b.rect.h / 2
+
+      let ax = a.rect.x // + a.rect.w / 2 + 0.01
       let ay = a.rect.y + a.rect.h / 2 + 0.01
-      let bx = b.rect.x + b.rect.w / 2
+      let bx = b.rect.x + b.rect.w // / 2
       let by = b.rect.y + b.rect.h / 2
 
       return `
         M ${ax},${ay}
-        C ${ax},${(ay + by) / 2}
-          ${bx},${(ay + by) / 2}
+        C ${(ax + bx) / 2},${ay}
+          ${(ax + bx) / 2},${by}
           ${bx},${by}
       `
     }
+    // getFromTopToDown (a, b) {
+    //   // console.log(a, b)
+    //   let ax = a.rect.x + a.rect.w / 2 + 0.01
+    //   let ay = a.rect.y + a.rect.h / 2 + 0.01
+    //   let bx = b.rect.x + b.rect.w / 2
+    //   let by = b.rect.y + b.rect.h / 2
+
+    //   return `
+    //     M ${ax},${ay}
+    //     C ${ax},${(ay + by) / 2}
+    //       ${bx},${(ay + by) / 2}
+    //       ${bx},${by}
+    //   `
+    // },
+    // getFromNodeLeftToRight (a, b) {
+    //   let ax = a.rect.x + a.rect.w + 0.01
+    //   let ay = a.rect.y + a.rect.h / 2 + 0.01
+
+    //   let bx = b.rect.x // + b.rect.w / 2
+    //   let by = b.rect.y + b.rect.h / 2
+
+    //   return `
+    //     M ${ax},${ay}
+    //     C ${ax},${(ay + by) / 2}
+    //       ${bx},${(ay + by) / 2}
+    //       ${bx},${by}
+    //   `
+    // }
   }
 }
 </script>

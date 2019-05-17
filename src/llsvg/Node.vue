@@ -1,10 +1,10 @@
 <template>
   <g :style="mover">
-    <rect v-if="type === 'box'" ref="node" class="node" @click="$emit('click')" :width="60" :height="60" :fill="fill" fill-opacity="0.5"  stroke="none" >
+    <rect v-if="type === 'box'" ref="node" class="node" :width="60" :height="60" :fill="fill" fill-opacity="0.5"  stroke="none" >
     </rect>
 
     <g v-if="type === 'circle'"  :style="`transform: translate(${size / 2}px, ${size / 2}px)`">
-      <circle ref="node" class="node" @click="$emit('click')" :r="size / 2" :fill="fill" fill-opacity="0.5" stroke="none">
+      <circle ref="node" class="node" :r="size / 2" :fill="fill" fill-opacity="0.5" stroke="none">
       </circle>
     </g>
 
@@ -78,14 +78,13 @@ export default {
         clearTimeout(tap)
         tap = setTimeout(() => {
           inttt = -1
-        }, 350)
+        }, 150)
       },
       onMM: (evt) => {
-        inttt = -1
-        // clearTimeout(tap)
-        // tap = setTimeout(() => {
-        //   inttt = -1
-        // }, 350)
+        clearTimeout(tap)
+        tap = setTimeout(() => {
+          inttt = -1
+        }, 150)
 
         if (evt.touches && evt.touches[0]) {
           evt.preventDefault()
@@ -114,7 +113,8 @@ export default {
       onMU: (evt) => {
         this.isDown = false
         if (inttt === 1) {
-          this.$emit('click')
+          let rect = this.$refs['node'].getBoundingClientRect()
+          this.$emit('click', { rect })
         }
       }
     }
