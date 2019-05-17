@@ -7,7 +7,7 @@
     "deploy-old": "npm run deploy-web; npm run deploy-lib;",
     "deploy-web": "npm run build; npm run netlify; npm run github;",
     "github": "git add .; git commit -am \"front-end-deploy\"; git push -u origin master;",
-    "netlify-lib": "netlify deploy -s bd089ff0-d48b-4596-9111-591b7abd07bf --dir=dist --prod",
+    "netlify-lib": "netlify deploy -s LIBUUID --dir=dist --prod",
     "deploy-lib": "vue-cli-service build --target lib --name canvas161 ./src/oso-public/oso-viewer.vue; npm run netlify-lib",
     "netlify": "netlify deploy --dir=\"./dist\" --prod",
     "dev": "vue-cli-service serve",
