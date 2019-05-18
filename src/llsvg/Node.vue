@@ -70,8 +70,6 @@ export default {
     }
   },
   mounted () {
-    this.$refs['node'].node = this.node
-    this.$refs['node'].nodes = this.nodes
     this.composMap[this.node._id] = this
 
     let tap = 0
@@ -192,6 +190,7 @@ export default {
         }, 500)
       },
       onMUMe: (evt) => {
+        this.$parent.cleanLayout({ instant: false, goHome: false, resetZoom: false, goNode: false })
       }
     }
     // console.log(this)
