@@ -1,31 +1,40 @@
 // import * as Node from '../llsvg/node.js'
 
-export const codeBuilder = ({ nodes }) => {
+export const injector = ({ water = {}, compos = {} }) => {
+  const EGRAPH_ID = `_APP_${Number(Math.random() * 100000).toFixed(0)}`
+  const APPID_REPLACER = `____APPID____`
+  const ENGRAPH_WATER_REPLACER = `____ENGRAPH_WATER____`
 
-  /*
+  // eslint-disable-next-line import/no-webpack-loader-syntax
+  let head = require('raw-loader!../../public/head.fragment.html').default
+  // eslint-disable-next-line import/no-webpack-loader-syntax
+  let app = require('raw-loader!../../public/app.fragment.html').default
+  // eslint-disable-next-line import/no-webpack-loader-syntax
+  let body = require('raw-loader!../../public/body.fragment.html').default
+  // eslint-disable-next-line import/no-webpack-loader-syntax
+  // eslint-disable-next-line import/no-webpack-loader-syntax
 
-    add
+  body = body.replace(APPID_REPLACER, EGRAPH_ID)
+  body = body.replace(ENGRAPH_WATER_REPLACER, JSON.stringify(water))
 
-    sendToParent
+  app = app.replace(APPID_REPLACER, EGRAPH_ID)
 
-    -> parent handle add
+  // eslint-disable-next-line import/no-webpack-loader-syntax
+  let html = require('raw-loader!../../public/enigma.html').default
+  html = html.replace(`<!--HEAD-->`, head)
+  html = html.replace(`<!--APP-->`, app)
+  html = html.replace(`<!--BODY-->`, body)
 
-    <Node1 :ref="_node + node._id" @add="$bus.onAdd({ node, nodes, $event })"></Node1>
-  */
-
-  // let links = Node.getLinks({ nodes })
-
-  // let root = nodes.find(r => r.type === 'root')
-  // let rootKids = Node.get1LevelKids({ node: root, nodes, links })
-
-  // return nodes
+  return html
 }
 
 export const nodeToCode = ({ nodes }) => {
-  let html = ''
-  let js = `
+  let water = {
+    nodes
+  }
+  return injector({ water })
+}
 
-  `
-
-  return html + js
+export const codeToBlobURL = ({ code }) => {
+  return URL.createObjectURL(new Blob([code], { type: 'text/html' }))
 }

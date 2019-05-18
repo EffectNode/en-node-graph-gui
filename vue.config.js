@@ -1,4 +1,5 @@
 module.exports = {
+  runtimeCompiler: true,
   chainWebpack: config => {
     config.module
       .rule('vue')

@@ -185,7 +185,7 @@ export default {
   height: 24px;
 }
 .preview-box-content{
-  height: 100%;
+  height: calc(100% - 60px);
   overflow: hidden;
 }
 </style>

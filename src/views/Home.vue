@@ -10,6 +10,7 @@
 
     <UIBtnTools v-if="nodes" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
     <UIPreviewBox>
+      <EXEC v-if="nodes" mode="preview" :nodes="nodes"></EXEC>
     </UIPreviewBox>
     <UIInspector v-if="open.inspector" @close="open.inspector = false">
       <UIControls :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
@@ -24,6 +25,8 @@ import { setTimeout } from 'timers'
 export default {
   name: 'home',
   components: {
+    EXEC: require('../llexec/EXEC.vue').default,
+
     NodeTree: require('../llsvg/NodeTree.vue').default,
     UIPreviewBox: require('../llui/UIPreviewBox.vue').default,
     UIControls: require('../llui/UIControls.vue').default,
