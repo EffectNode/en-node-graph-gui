@@ -94,8 +94,6 @@ export default {
           inttt = -1
         }, 150)
 
-        let sendMovement = false
-
         if (this.isDown) {
           this.nodes.forEach((n) => {
             n.isOverlapping = false
@@ -137,16 +135,10 @@ export default {
             // console.log(evt.target.node.title)
             console.log(stat.title, JSON.stringify(stat))
           }
-
-          sendMovement = 'desktop'
-          if (sendMovement === 'desktop') {
-            this.$emit('move', {
-              dx: evt.movementX,
-              dy: evt.movementY
-            })
-          }
           // console.log(evt)
         }
+
+        let sendMovement = 'desktop'
 
         if (evt.touches && evt.touches[0]) {
           evt.preventDefault()
@@ -155,15 +147,22 @@ export default {
           h.tsx = evt.touches[0].pageX
           h.tsy = evt.touches[0].pageY
           if (this.isDown) {
-            sendMovement = 'mobile'
+            this.$emit('move', {
+              dx: h.dx,
+              dy: h.dy
+            })
           }
+          return
         }
-        if (sendMovement === 'mobile') {
+
+        if (sendMovement === 'desktop') {
           this.$emit('move', {
-            dx: h.dx,
-            dy: h.dy
+            dx: evt.movementX,
+            dy: evt.movementY
           })
         }
+
+
       },
       onMUClick: () => {
       },
