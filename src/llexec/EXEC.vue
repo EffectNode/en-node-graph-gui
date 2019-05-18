@@ -1,6 +1,6 @@
 <template>
   <div class="full">
-    <iframe class="full" :width="iframe.width" :height="iframe.height" frameborder="0" :src="src"></iframe>
+    <iframe class="full" :width="iframe.width" :height="iframe.height" frameborder="0" :srcdoc="srcdoc"></iframe>
   </div>
 </template>
 
@@ -49,7 +49,7 @@ export default {
   methods: {
     restartUI () {
       let code = ENV.nodeToCode({ nodes: this.nodes })
-      this.src = ENV.codeToBlobURL({ code })
+      this.srcdoc = code
     }
   }
 }
