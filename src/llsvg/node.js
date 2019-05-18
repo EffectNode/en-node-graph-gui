@@ -1,3 +1,5 @@
+import _ from 'lodash'
+
 export const getAllChildren = ({ node, nodes, links }) => {
   let bucket = []
   bucket.push(node)
@@ -11,16 +13,18 @@ export const getAllChildren = ({ node, nodes, links }) => {
   }
   mover(node)
 
-  return bucket
+  return _.uniqBy(bucket, '_id')
 }
 
 export const getID = () => {
   return `_${Number(Math.random() * 1000000).toFixed(0)}`
 }
 export const get1LevelKids = ({ node, nodes, links }) => {
-  return links.filter(c => c.to === node._id).map((c) => {
+  let ans = links.filter(c => c.to === node._id).map((c) => {
     return nodes.find(n => n._id === c.from)
   })
+
+  return _.uniqBy(ans, '_id')
 }
 
 export const getLinks = ({ nodes }) => {
@@ -28,7 +32,7 @@ export const getLinks = ({ nodes }) => {
     let toNode = nodes.find(n => n._id === item.to)
     if (toNode && item.to !== null) {
       arr.push({
-        _id: item.to + item._id + ii,
+        _id: item.to + item._id,
         dashed: true,
         running: true,
         toPos: toNode.pos || { x: 0, y: 0 },

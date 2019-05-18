@@ -15,6 +15,8 @@
     </p>
     <input type="text" v-model="node.to"  @input="$emit('onInputAnimate', { node })"> -->
 
+    <input type="text" v-model="node.title">
+
     <button v-if="!node.trashed" @click="addChildTo({ node, nodes })">Add Child</button>
     <div v-if="!node.protected">
       <br />
@@ -74,8 +76,6 @@ export default {
       allChd.forEach((n) => {
         trashNode(n)
       })
-
-      this.$emit('nodes', [...this.nodes])
 
       // this node
       this.$forceUpdate()

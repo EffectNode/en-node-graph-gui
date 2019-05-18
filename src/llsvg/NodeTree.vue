@@ -404,16 +404,19 @@ export default {
       })
     },
     onModeNodes (v, node, nodes) {
-      this.moveNode(node, v)
-      let mover = (node) => {
-        let kids = this.getChildren(node)
-        this.onMoveAll(kids, v)
+      let kids = Node.getAllChildren({ node, nodes, links: this.links })
 
-        kids.forEach((k) => {
-          mover(k)
-        })
-      }
-      mover(node)
+      this.onMoveAll(kids, v)
+      // this.moveNode(node, v)
+      // let mover = (node) => {
+      //   this.moveNode(node, v)
+
+      //   let kids = this.getChildren(node)
+      //   kids.forEach((k) => {
+      //     mover(k)
+      //   })
+      // }
+      // mover(node)
       // node.to ? this.moveNode(node, v) : this.onMoveAll(nodes, v)
     },
     onMoveAll (nodes, v) {
@@ -466,7 +469,7 @@ export default {
     //     .start()
     // },
     getChildren (node) {
-      return Node.get1LevelKids({ node, nodes: this.nodes, links: this.links })
+      return Node.getAllChildren({ node, nodes: this.nodes, links: this.links })
       // return this.links.filter(c => c.to === node._id).map((c) => {
       //   return this.nodes.find(n => n._id === c.from)
       // })
@@ -510,7 +513,7 @@ export default {
     zoomBa ({ to }) {
       return new Promise((resolve, reject) => {
         new TWEEN.Tween(this) // Create a new tween that modifies 'coords'.
-          .to({ zoom: to }, 500) // Move to (300, 200) in 1 second.
+          .to({ zoom: to }, 0) // Move to (300, 200) in 1 second.
           .easing(TWEEN.Easing.Quadratic.Out) // Use an easing function to make the animation smooth.
           .onUpdate(() => { // Called after tween.js updates 'coords'.
             // Move 'box' to the position described by 'coords' with a CSS translation.

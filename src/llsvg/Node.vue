@@ -105,7 +105,7 @@ export default {
           // this.$refs['node'].style.transform = `translateZ(10px)`
 
           // if (evt.target.node)
-          if (!this.node.protected) {
+          if (!this.node.cannotDrop) {
             let cNode = this.node
             let stat = this.nodes.filter(n => n._id !== cNode._id).reduce((info, n) => {
               let x1 = n.pos.x

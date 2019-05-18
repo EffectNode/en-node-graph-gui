@@ -69,6 +69,8 @@ export default {
         '_id': 'root',
         'title': 'Your 3D App',
         'protected': true,
+        'cannotDrop': true,
+        'acceptDrop': ['pages'],
         'isRoot': true,
         'type': 'root',
         'to': null,
@@ -86,6 +88,7 @@ export default {
         ...pages,
         ...nodesForHome
       ]
+      this.nodes = require('../llui/versions/diamond-05.json')
     }, 150)
   },
   created () {
