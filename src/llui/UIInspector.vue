@@ -150,7 +150,7 @@ export default {
 
 <style scoped>
 .box{
-  border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2);
+  /* border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2); */
   width: 400px;
   height: calc(100% - 140px);
   border: #dadada solid 1px;
@@ -159,7 +159,7 @@ export default {
   box-shadow: 0px 5px 30px 0px #c7c7c7;
 }
 .inspector-box-title{
-  border-radius: calc(60px / 2) calc(60px / 2) 0px 0px;
+  /* border-radius: calc(60px / 2) calc(60px / 2) 0px 0px; */
   position: relative;
   height: 60px;
   background-color: #e7e7e7;
