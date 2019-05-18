@@ -174,6 +174,7 @@ export default {
     resizer()
 
     this.init()
+    this.onInit()
 
     // let self = this
     function animate (time) {
@@ -209,7 +210,7 @@ export default {
         n.isOverlapping = false
         n.isOverlappingWith = false
       })
-      this.cleanLayout({ instant: true, goHome: false, resetZoom: false })
+      this.cleanLayout({ instant: true, goHome: false, resetZoom: true })
       this.$forceUpdate()
     },
     onClick ({ node, nodes, rect }) {
@@ -241,7 +242,7 @@ export default {
 
       return new Promise((resolve) => {
         new TWEEN.Tween(this.view) // Create a new tween that modifies 'coords'.
-          .to(view2, 750) // Move to (300, 200) in 1 second.
+          .to(view2, 250) // Move to (300, 200) in 1 second.
           .easing(TWEEN.Easing.Circular.Out) // Use an easing function to make the animation smooth.
           .onUpdate(() => { // Called after tween.js updates 'coords'.
             // Move 'box' to the position described by 'coords' with a CSS translation.
@@ -254,17 +255,17 @@ export default {
       })
     },
     init () {
-      this.computeLayout()
-      this.nodes.forEach(n => {
-        n.pos = n.pos || {}
-        n.pos.x = 0
-        n.pos.y = 0
-        n.size = n.size || {}
-        n.size.width = 60
-        n.size.height = 60
-      })
-      this.cleanLayout({ instant: true, goHome: false, resetZoom: false })
-      this.$forceUpdate()
+      // this.computeLayout()
+      // this.nodes.forEach(n => {
+      //   n.pos = n.pos || {}
+      //   n.pos.x = 0
+      //   n.pos.y = 0
+      //   n.size = n.size || {}
+      //   n.size.width = 60
+      //   n.size.height = 60
+      // })
+      // this.cleanLayout({ instant: true, goHome: false, resetZoom: false })
+      // this.$forceUpdate()
     },
     async cleanLayout ({ instant, goHome, resetZoom, goNode } = {}) {
       TWEEN.removeAll()

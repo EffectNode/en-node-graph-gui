@@ -46,22 +46,32 @@ export default {
       let links = Node.getLinks({ nodes })
       let allChd = Node.getAllChildren({ node, nodes, links })
 
-      let remove1NodePermenetly = (node) => {
-        let idx = nodes.findIndex(n => n._id === node._id)
-        nodes.splice(idx, 1)
-
-        this.$forceUpdate()
+      let markDelNode = (node) => {
+        node.toBeRemoved = true
       }
-
-      remove1NodePermenetly(node)
+      markDelNode(node)
 
       // all descendets
       allChd.forEach((n) => {
-        remove1NodePermenetly(n)
+        markDelNode(n)
       })
+
       // this node
+      this.$forceUpdate()
+
+      this.nodes.filter(n => n.toBeRemoved).forEach(n => {
+        let idx = this.nodes.findIndex(no => no._id === n._id)
+        this.nodes.splice(idx, 1)
+      })
 
       this.$emit('close', { node, nodes })
+      this.$emit('onLayout', {
+        node,
+        nodes,
+        args: {
+          goNode: nodes.find(m => m._id === node.to)
+        }
+      })
     },
     recycleNode ({ node, nodes }) {
       let links = Node.getLinks({ nodes })

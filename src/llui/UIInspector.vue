@@ -152,7 +152,7 @@ export default {
 .box{
   /* border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2); */
   width: 400px;
-  height: calc(100% - 140px);
+  height: calc(300px * 18 / 9);
   border: #dadada solid 1px;
   box-sizing: border-box;
   background-color: #efefef;

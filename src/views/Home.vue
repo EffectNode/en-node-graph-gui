@@ -8,7 +8,7 @@
     <NodeTree v-if="nodes" :show="show" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
     </NodeTree>
 
-    <UIBtnTools :show="show" @show="show = $event" v-if="nodes" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
+    <UIBtnTools v-if="nodes" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
     <UIPreviewBox>
     </UIPreviewBox>
     <UIInspector v-if="open.inspector" @close="open.inspector = false">
@@ -45,50 +45,35 @@ export default {
     }
   },
   watch: {
-    show () {
-      // setTimeout(() => {
-      //   this.nodes.forEach((node) => {
-      //     node.pos.x += 0.00001
-      //     node.pos.y += 0.00001
-      //   })
-      //   this.$refs.editor.$emit('do', {
-      //     action: 'cleanLayout',
-      //     args: {
-      //       instant: false,
-      //       goHome: false,
-      //       goNode: this.nodes.find(n => n.isActive),
-      //       resetZoom: false
-      //     }
-      //   })
-      // }, 3)
-    }
   },
   mounted () {
-    let root = [
-      {
-        '_id': 'root',
-        'title': 'Your 3D App',
-        'protected': true,
-        'cannotDrop': true,
-        'acceptDrop': ['pages'],
-        'isRoot': true,
-        'type': 'root',
-        'to': null,
-        'pos': {
-          'x': 152,
-          'y': 61
-        }
-      }
-    ]
-    let nodesForHome = require('../llsvg/nodes.json')
-    let pages = require('../llsvg/pages.json')
+    // let root = [
+    //   {
+    //     '_id': 'root',
+    //     'title': 'Your 3D App',
+    //     'protected': true,
+    //     'cannotDrop': true,
+    //     'acceptDrop': ['pages'],
+    //     'isRoot': true,
+    //     'type': 'root',
+    //     'to': null,
+    //     'pos': {
+    //       'x': 152,
+    //       'y': 61
+    //     }
+    //   }
+    // ]
+    // let nodesForHome = require('../llsvg/nodes.json')
+    // let pages = require('../llsvg/pages.json')
     setTimeout(() => {
-      this.nodes = [
-        ...root,
-        ...pages,
-        ...nodesForHome
-      ]
+      // this.nodes = [
+      //   ...root,
+      //   ...pages,
+      //   ...nodesForHome
+      // ]
       this.nodes = require('../llui/versions/diamond-05.json')
+
+      // this.$refs.editor.computeLayout({  })
     }, 150)
   },
   created () {

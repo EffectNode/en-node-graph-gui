@@ -15,6 +15,8 @@
 </template>
 
 <script>
+//
+
 export default {
   props: {
     show: {},
@@ -34,7 +36,9 @@ export default {
       this.nodes.forEach((n) => {
         n.isActive = false
       })
-      this.node.isActive = true
+      if (this.node) {
+        this.node.isActive = true
+      }
       this.$nextTick(() => {
         if (this.$parent.show === 'normal') {
           this.$parent.$refs['editor'].cleanLayout({ instant: false, goNode: this.nodes.find(n => n.isActive), resetZoom: false })

@@ -2,12 +2,11 @@ import _ from 'lodash'
 
 export const getAllChildren = ({ node, nodes, links }) => {
   let bucket = []
-  bucket.push(node)
-  let mover = (node) => {
-    bucket.push(node)
-    let kids = get1LevelKids({ node, nodes, links })
+
+  let mover = (mnode) => {
+    bucket.push(mnode)
+    let kids = get1LevelKids({ node: mnode, nodes, links })
     kids.forEach((k) => {
-      bucket.push(k)
       mover(k)
     })
   }
@@ -30,7 +29,7 @@ export const get1LevelKids = ({ node, nodes, links }) => {
 export const getLinks = ({ nodes }) => {
   return nodes.reduce((arr, item, ii) => {
     let toNode = nodes.find(n => n._id === item.to)
-    if (toNode && item.to !== null) {
+    if (toNode && !!item.to) {
       arr.push({
         _id: item.to + item._id,
         dashed: true,
