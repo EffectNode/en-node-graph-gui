@@ -102,9 +102,9 @@ export default {
             n.isOverlappingWith = false
             n.hasFound = false
             this.composMap[n._id].sync()
-            this.composMap[n._id].$refs['node'].style.transform = `translateZ(0px)`
+            // this.composMap[n._id].$refs['node'].style.transform = `translateZ(0px)`
           })
-          this.$refs['node'].style.transform = `translateZ(10px)`
+          // this.$refs['node'].style.transform = `translateZ(10px)`
 
           // if (evt.target.node)
           if (!this.node.protected) {
@@ -167,30 +167,39 @@ export default {
       },
       onMUClick: () => {
       },
+      // running on all nodes
       onMU: (evt) => {
+        let doClick = false
         this.isDown = false
+        if (inttt === 1) {
+          doClick = true
+        }
 
+        this.node.isActive = false
         let overlappingNode = this.nodes.find(a => a.isOverlapping)
-        if (overlappingNode._id !== this.node._id && overlappingNode && this.node.hasFound) {
+        if (overlappingNode && overlappingNode._id !== this.node._id && this.node.hasFound) {
           this.node.to = overlappingNode._id
+          this.node.isActive = true
           this.$parent.cleanLayout({ instant: false, goHome: false, resetZoom: false, goNode: false })
         }
-        if (inttt === 1) {
+
+        if (doClick) {
+          this.node.isActive = true
           let rect = this.getRect()
           this.$emit('click', { rect })
         }
 
         setTimeout(() => {
-          this.nodes.forEach((n) => {
-            delete n.isOverlapping
-            delete n.isOverlappingWith
-            this.composMap[n._id].sync()
-          })
+          this.node.isOverlapping = false
+          this.node.isOverlappingWith = false
+          this.sync()
           this.$forceUpdate()
         }, 500)
       },
       onMUMe: (evt) => {
-        this.$parent.cleanLayout({ instant: false, goHome: false, resetZoom: false, goNode: false })
+        if (inttt !== 1) {
+          this.$parent.cleanLayout({ instant: false, goHome: false, resetZoom: false, goNode: false })
+        }
       }
     }
     // console.log(this)
