@@ -118,6 +118,10 @@ export default {
       newNode.trashed = node.trashed
       newNode.title = `My New Node`
       newNode.pos = { ...node.pos }
+      // this.nodes.forEach(m => {
+      //   m.isActive = false
+      // })
+      // newNode.isActive = true
       this.nodes.push(
         newNode
       )

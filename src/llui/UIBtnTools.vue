@@ -3,7 +3,7 @@
     <div class="uit-icon" :class="{ isActivated: show === 'trashed' }" @click="onGoHome()">
       <img src="../icons/home.svg" title="oraganise" alt="oraganise">
     </div>
-    <div class="uit-icon" @click="$parent.$refs['editor'].toggleZoom()">
+    <div class="uit-icon" @click="toggleZoom()">
       <img src="../icons/magnify.svg" title="map view" alt="map view">
     </div>
     <div class="uit-icon" v-if="nodes.some(n => n.trashed)" @click="() => { onToggleRecycleView() }">
@@ -29,7 +29,21 @@ export default {
     isAtRecycle () {
       return this.show === 'trashed'
     },
-    onGoHome () {
+    async toggleZoom () {
+      await this.$parent.$refs['editor'].toggleZoom()
+      this.nodes.forEach((n) => {
+        n.isActive = false
+      })
+      this.node.isActive = true
+      this.$nextTick(() => {
+        if (this.$parent.show === 'normal') {
+          this.$parent.$refs['editor'].cleanLayout({ instant: false, goNode: this.nodes.find(n => n.isActive), resetZoom: false })
+        } else {
+          this.$parent.$refs['editor'].cleanLayout({ instant: false, goNode: this.nodes.find(n => n.trashed), resetZoom: false })
+        }
+      })
+    },
+    async onGoHome () {
       this.$emit('show', 'normal')
       this.$nextTick(() => {
         this.$parent.$refs['editor'].cleanLayout({ instant: false, goHome: true, resetZoom: true })

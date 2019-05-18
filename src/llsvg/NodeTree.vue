@@ -433,16 +433,17 @@ export default {
     },
     async toggleZoom () {
       if (this.zoom === 4) {
-        this.cleanLayout({ instant: false, goHome: false, resetZoom: true })
+        await this.zoomBa({ to: 1 })
+        // this.cleanLayout({ instant: false, goHome: false, resetZoom: true })
       } else {
         await this.zoomBa({ to: 4 })
-        this.cleanLayout({ instant: false, goHome: false, resetZoom: false })
+        // this.cleanLayout({ instant: false, goHome: false, resetZoom: false })
       }
     },
     tweenNode (node, toPos) {
       return new Promise((resolve) => {
         new TWEEN.Tween(node.pos) // Create a new tween that modifies 'coords'.
-          .to(toPos, 1500) // Move to (300, 200) in 1 second.
+          .to(toPos, 500) // Move to (300, 200) in 1 second.
           .easing(TWEEN.Easing.Elastic.Out) // Use an easing function to make the animation smooth.
           .onUpdate(() => { // Called after tween.js updates 'coords'.
             // Move 'box' to the position described by 'coords' with a CSS translation.
@@ -509,8 +510,8 @@ export default {
     zoomBa ({ to }) {
       return new Promise((resolve, reject) => {
         new TWEEN.Tween(this) // Create a new tween that modifies 'coords'.
-          .to({ zoom: to }, 250) // Move to (300, 200) in 1 second.
-          .easing(TWEEN.Easing.Quadratic.InOut) // Use an easing function to make the animation smooth.
+          .to({ zoom: to }, 500) // Move to (300, 200) in 1 second.
+          .easing(TWEEN.Easing.Quadratic.Out) // Use an easing function to make the animation smooth.
           .onUpdate(() => { // Called after tween.js updates 'coords'.
             // Move 'box' to the position described by 'coords' with a CSS translation.
             this.computeLayout()
