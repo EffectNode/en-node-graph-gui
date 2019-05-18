@@ -226,10 +226,16 @@ export default {
     panToCenter ({ rect }) {
       let view2 = {}
       view2.x = this.view.x - rect.left
-      view2.x += (window.innerWidth - 300 - 400 - 10 - 10) * 0.5
-
       view2.y = this.view.y - rect.top
-      view2.y += window.innerHeight * 0.35
+
+      if (window.innerWidth > 767) {
+        view2.x += (window.innerWidth - 300 - 400 - 10 - 10) * 0.5
+        view2.y += window.innerHeight * 0.35
+      } else {
+        view2.x += (window.innerWidth) * 0.5
+        view2.y += window.innerHeight * 0.25
+      }
+
 
       // this.computeLayout()
       // this.$forceUpdate()

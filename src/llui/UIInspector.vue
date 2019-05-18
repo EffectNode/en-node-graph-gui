@@ -6,7 +6,7 @@
         Inspector
       </p>
     </div>
-    <div class="title-cross" @click="$emit('close')">
+    <div class="title-cross" @click="$emit('close')" @touchend="$emit('close')">
       <img src="../icons/cross.svg" :style="corssStyle" alt="">
     </div>
   </div>
