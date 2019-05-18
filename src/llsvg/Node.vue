@@ -155,14 +155,12 @@ export default {
           return
         }
 
-        if (sendMovement === 'desktop') {
+        if (this.isDown && sendMovement === 'desktop') {
           this.$emit('move', {
             dx: evt.movementX,
             dy: evt.movementY
           })
         }
-
-
       },
       onMUClick: () => {
       },

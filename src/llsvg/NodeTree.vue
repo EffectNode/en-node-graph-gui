@@ -236,7 +236,6 @@ export default {
         view2.y += window.innerHeight * 0.25
       }
 
-
       // this.computeLayout()
       // this.$forceUpdate()
 
