@@ -1,29 +1,41 @@
 [
 	{
-		"_id": "home.group",
-		"title": "Group",
-		"to": "homepage",
-		"pos": {
-			"x": 72,
-			"y": 249
-		}
+		"_id": "home.cam",
+		"title": "Camera",
+		"to": "homepage"
+	},
+
+	{
+		"_id": "home.group.slideshow",
+		"title": "SlideShow Group",
+		"to": "homepage"
 	},
 	{
 		"_id": "home.page.hero",
 		"title": "Hero Item",
-		"to": "homepage",
-		"pos": {
-			"x": 72,
-			"y": 249
-		}
+		"to": "home.group.slideshow"
 	},
 	{
 		"_id": "home.page.hero2",
 		"title": "Hero Item 2",
-		"to": "home.page.hero",
-		"pos": {
-			"x": 72,
-			"y": 249
-		}
+		"to": "home.group.slideshow"
+	},
+
+
+
+	{
+		"_id": "home.gorup.2.slideshow",
+		"title": "SlideShow Group",
+		"to": "contactus"
+	},
+	{
+		"_id": "home.page.group.2.hero",
+		"title": "Hero Item",
+		"to": "home.gorup.2.slideshow"
+	},
+	{
+		"_id": "home.page.group.2.hero2",
+		"title": "Hero Item 2",
+		"to": "home.gorup.2.slideshow"
 	}
 ]

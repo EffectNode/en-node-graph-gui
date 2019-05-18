@@ -2,37 +2,29 @@
 	{
 		"_id": "homepage",
 		"title": "Home",
-		"to": "root",
-		"pos": {
-			"x": 217,
-			"y": 240
-		}
+		"protected": true,
+		"type": "pages",
+		"to": "root"
   },
   {
 		"_id": "contactus",
 		"title": "Contact Us",
-		"to": "root",
-		"pos": {
-			"x": 72,
-			"y": 249
-		}
+		"protected": true,
+		"type": "pages",
+		"to": "root"
 	},
 	{
 		"_id": "about",
 		"title": "About",
-		"to": "root",
-		"pos": {
-			"x": 72,
-			"y": 249
-		}
+		"protected": true,
+		"type": "pages",
+		"to": "root"
 	},
 	{
 		"_id": "news",
 		"title": "News",
-		"to": "root",
-		"pos": {
-			"x": 72,
-			"y": 249
-		}
+		"protected": true,
+		"type": "pages",
+		"to": "root"
 	}
 ]

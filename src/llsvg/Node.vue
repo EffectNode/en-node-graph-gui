@@ -14,8 +14,13 @@
 
 <script>
 import { setTimeout, clearTimeout } from 'timers'
+
+let composMap = {}
+
 export default {
   props: {
+    node: {},
+    nodes: {},
     uniq: {},
     isRoot: {
       default: false
@@ -49,12 +54,13 @@ export default {
       showTitle: false || this.isRoot,
       int: 0,
       mover: {},
-      isDown: false
+      isDown: false,
+      composMap
     }
   },
   watch: {
     isActive () {
-      this.fill = this.isActive ? `url(#${this.uniq}rainbow-gradient-movin)` : `url(#${this.uniq}rainbow-gradient)`
+      this.sync()
     },
     pos: {
       deep: true,
@@ -64,6 +70,10 @@ export default {
     }
   },
   mounted () {
+    this.$refs['node'].node = this.node
+    this.$refs['node'].nodes = this.nodes
+    this.composMap[this.node._id] = this
+
     let tap = 0
     let inttt = 0
     let h = {
@@ -86,6 +96,60 @@ export default {
           inttt = -1
         }, 150)
 
+        let sendMovement = false
+
+        if (this.isDown) {
+          this.nodes.forEach((n) => {
+            n.isOverlapping = false
+            n.isOverlappingWith = false
+            n.hasFound = false
+            this.composMap[n._id].sync()
+            this.composMap[n._id].$refs['node'].style.transform = `translateZ(0px)`
+          })
+          this.$refs['node'].style.transform = `translateZ(10px)`
+
+          // if (evt.target.node)
+          if (!this.node.protected) {
+            let cNode = this.node
+            let stat = this.nodes.filter(n => n._id !== cNode._id).reduce((info, n) => {
+              let x1 = n.pos.x
+              let y1 = n.pos.y
+              let x2 = cNode.pos.x
+              let y2 = cNode.pos.y
+
+              var a = x1 - x2
+              var b = y1 - y2
+
+              var c = Math.sqrt(a * a + b * b)
+              if (c < info.cursor && c < 35) {
+                info.cursor = c
+                info.overlapNode = n
+                info.title = n.title
+              }
+              return info
+            }, { title: '', cursor: 100000000000000, overlapNode: false })
+
+            if (stat.overlapNode) {
+              stat.overlapNode.isOverlapping = true
+              stat.overlapNode.isOverlappingWith = this.node._id
+              this.node.hasFound = true
+              this.composMap[stat.overlapNode._id].sync()
+            }
+
+            // console.log(evt.target.node.title)
+            console.log(stat.title, JSON.stringify(stat))
+          }
+
+          sendMovement = 'desktop'
+          if (sendMovement === 'desktop') {
+            this.$emit('move', {
+              dx: evt.movementX,
+              dy: evt.movementY
+            })
+          }
+          // console.log(evt)
+        }
+
         if (evt.touches && evt.touches[0]) {
           evt.preventDefault()
           h.dx = evt.touches[0].pageX - h.tsx
@@ -93,29 +157,41 @@ export default {
           h.tsx = evt.touches[0].pageX
           h.tsy = evt.touches[0].pageY
           if (this.isDown) {
-            this.$emit('move', {
-              dx: h.dx,
-              dy: h.dy
-            })
+            sendMovement = 'mobile'
           }
-          return
         }
-        if (this.isDown) {
+        if (sendMovement === 'mobile') {
           this.$emit('move', {
-            dx: evt.movementX,
-            dy: evt.movementY
+            dx: h.dx,
+            dy: h.dy
           })
-          // console.log(evt)
         }
       },
       onMUClick: () => {
       },
       onMU: (evt) => {
         this.isDown = false
+
+        let overlappingNode = this.nodes.find(a => a.isOverlapping)
+        if (overlappingNode._id !== this.node._id && overlappingNode && this.node.hasFound) {
+          this.node.to = overlappingNode._id
+          this.$parent.cleanLayout({ instant: false, goHome: false, resetZoom: false, goNode: false })
+        }
         if (inttt === 1) {
-          let rect = this.$refs['node'].getBoundingClientRect()
+          let rect = this.getRect()
           this.$emit('click', { rect })
         }
+
+        setTimeout(() => {
+          this.nodes.forEach((n) => {
+            delete n.isOverlapping
+            delete n.isOverlappingWith
+            this.composMap[n._id].sync()
+          })
+          this.$forceUpdate()
+        }, 500)
+      },
+      onMUMe: (evt) => {
       }
     }
     // console.log(this)
@@ -129,15 +205,29 @@ export default {
     window.addEventListener('mousemove', h.onMM, false)
     window.addEventListener('mouseleave', h.onMU, false)
     this.$refs['node'].addEventListener('mouseleave', h.onMUClick, false)
+    this.$refs['node'].addEventListener('mouseup', h.onMUMe, false)
     this.clean = () => {
       this.$refs['node'].removeEventListener('mousedown', h.onMD)
       window.removeEventListener('mouseup', h.onMU)
       window.removeEventListener('mousemove', h.onMM)
       window.removeEventListener('mouseleave', h.onMU)
       this.$refs['node'].removeEventListener('mouseleave', h.onMUClick)
+      this.$refs['node'].removeEventListener('mouseup', h.onMUMe)
     }
   },
   methods: {
+    sync () {
+      if (this.node.isOverlapping) {
+        this.fill = `url(#${this.uniq}hover-gradient-movin)`
+      } else {
+        this.fill = this.isActive ? `url(#${this.uniq}rainbow-gradient-movin)` : `url(#${this.uniq}rainbow-gradient)`
+      }
+      return this.fill
+    },
+    getRect () {
+      let rect = this.$refs['node'].getBoundingClientRect()
+      return rect
+    },
     doLayout () {
       this.mover = {
         transform: `translate3d(${this.pos.x}px, ${this.pos.y}px, 1px)`

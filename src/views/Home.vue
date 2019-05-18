@@ -5,15 +5,14 @@
       <router-link to="/about">About</router-link> |
     </div> -->
 
-    <NodeTree v-if="nodes" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="nodes" class="full svg-box" ref="editor">
+    <NodeTree v-if="nodes" :show="show" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
     </NodeTree>
 
-    <UITools></UITools>
-    <UIPanel></UIPanel>
+    <UIBtnTools :show="show" @show="show = $event" v-if="nodes" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
     <UIPreviewBox>
     </UIPreviewBox>
     <UIInspector v-if="open.inspector" @close="open.inspector = false">
-      <UIControls :nodes="nodes" :node="node"></UIControls>
+      <UIControls :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
     </UIInspector>
 
   </div>
@@ -29,11 +28,11 @@ export default {
     UIPreviewBox: require('../llui/UIPreviewBox.vue').default,
     UIControls: require('../llui/UIControls.vue').default,
     UIInspector: require('../llui/UIInspector.vue').default,
-    UIPanel: require('../llui/UIPanel.vue').default,
-    UITools: require('../llui/UITools.vue').default
+    UIBtnTools: require('../llui/UIBtnTools.vue').default
   },
   data () {
     return {
+      show: 'normal',
       open: {
         inspector: false
       },
@@ -45,25 +44,37 @@ export default {
       nodes: false
     }
   },
+  watch: {
+    show () {
+      // setTimeout(() => {
+      //   this.nodes.forEach((node) => {
+      //     node.pos.x += 0.00001
+      //     node.pos.y += 0.00001
+      //   })
+      //   this.$refs.editor.$emit('do', {
+      //     action: 'cleanLayout',
+      //     args: {
+      //       instant: false,
+      //       goHome: false,
+      //       goNode: this.nodes.find(n => n.isActive),
+      //       resetZoom: false
+      //     }
+      //   })
+      // }, 3)
+    }
+  },
   mounted () {
     let root = [
       {
         '_id': 'root',
         'title': 'Your 3D App',
         'protected': true,
+        'isRoot': true,
+        'type': 'root',
         'to': null,
         'pos': {
           'x': 152,
           'y': 61
-        }
-      },
-      {
-        '_id': 'camera',
-        'title': 'Camera',
-        'to': 'homepage',
-        'pos': {
-          'x': 72,
-          'y': 249
         }
       }
     ]
@@ -75,29 +86,43 @@ export default {
         ...pages,
         ...nodesForHome
       ]
-        .filter(n => !n.trashed)
-        .filter(n => !n.hidden)
     }, 150)
-
-    // let i = 0
-    // setInterval(() => {
-    //   i = i + 1
-
-    //   // let newItem = {
-    //   //   '_id': i + 'FunPage',
-    //   //   'title': 'Fun Page',
-    //   //   'to': pages[i % pages.length]._id,
-    //   //   pos: { x: 0, y: 0 },
-    //   //   size: { x: 1, y: 1 }
-    //   // }
-    //   // this.nodes.push(newItem)
-
-    //   // this.$nextTick(() => {
-    //   //   this.$refs['editor'].cleanLayout({ instant: true, goHome: false, resetZoom: false })
-    //   // })
-    // }, 1500)
+  },
+  created () {
+    this.$on('onLayout', ({ node, nodes, args = {} }) => {
+      nodes.forEach((node) => {
+        node.pos.x += 0.00001
+        node.pos.y += 0.00001
+      })
+      this.$refs.editor.$emit('do', {
+        action: 'cleanLayout',
+        args: {
+          instant: false,
+          goHome: false,
+          resetZoom: false,
+          ...args
+        }
+      })
+    })
   },
   methods: {
+    onClose ({ node, nodes }) {
+      this.open.inspector = false
+    },
+    dynamic (show, nodes) {
+      let h = {}
+      h.normal = (nodes) => {
+        return nodes
+          .filter(n => !n.trashed)
+          .filter(n => !n.hidden)
+      }
+      h.trashed = (nodes) => {
+        return nodes
+          .filter(n => n.trashed)
+      }
+      return h[show](nodes)
+    },
+
     onNodeClick ({ node, nodes }) {
       console.log(node, nodes)
       this.node = node

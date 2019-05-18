@@ -3,7 +3,7 @@
   <div class="inspector-box-title" ref="title" :style="titleStyle">
     <div class="title-text">
       <p>
-        UI Insepctor Box
+        Inspector
       </p>
     </div>
     <div class="title-cross" @click="$emit('close')">
@@ -11,9 +11,10 @@
     </div>
   </div>
   <div class="inspector-box-content" :style="contentStyle">
-    <slot>
-
-    </slot>
+    <div class="marginer">
+      <slot>
+      </slot>
+    </div>
   </div>
 </div>
 </template>
@@ -27,8 +28,8 @@ export default {
       anchor: {
         // 10 = margin edge for preview box
         // 10 = margin for ui inspectpor
-        x: 10 + 10 + 0 + 300,
-        y: 10 + 0
+        x: 20 + 20 + 0 + 300,
+        y: 20 + 0
       },
       boxStyle: {},
       titleStyle: {},
@@ -149,12 +150,16 @@ export default {
 
 <style scoped>
 .box{
+  border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2);
   width: 400px;
   height: calc(100% - 140px);
-  outline: #efefef solid 1px;
+  border: #dadada solid 1px;
+  box-sizing: border-box;
   background-color: #efefef;
+  box-shadow: 0px 5px 30px 0px #c7c7c7;
 }
 .inspector-box-title{
+  border-radius: calc(60px / 2) calc(60px / 2) 0px 0px;
   position: relative;
   height: 60px;
   background-color: #e7e7e7;
@@ -188,10 +193,20 @@ export default {
 }
 .title-cross img{
   cursor: pointer;
-  border: black solid 5px;
-  border-radius: 959px;
-  padding: 7px;
+  /* border: black solid 5px; */
+  /* border-radius: 959px; */
+  /* padding: 7px; */
   width: 24px;
   height: 24px;
+}
+
+.marginer{
+  margin: calc(60px / 2);
+}
+
+.inspector-box-content{
+  height: calc(100% - 60px / 2 * 2);
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 </style>

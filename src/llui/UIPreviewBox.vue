@@ -21,8 +21,8 @@ export default {
   data () {
     return {
       anchor: {
-        x: 10 + 0,
-        y: 10 + 0
+        x: 20 + 0,
+        y: 20 + 0
       },
       boxStyle: {},
       titleStyle: {},
@@ -136,10 +136,15 @@ export default {
 .box{
   width: 300px;
   height: calc(300px * 16 / 9 + 60px);
-  outline: #efefef solid 1px;
-  background-color: #dfdfdf;
+
+  border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2);
+  border: #dadada solid 1px;
+  box-sizing: border-box;
+  background-color: #efefef;
+  box-shadow: 0px 5px 30px 0px #c7c7c7;
 }
 .preview-box-title{
+  border-radius: calc(60px / 2) calc(60px / 2) calc(0px / 2) calc(0px / 2);
   position: relative;
   height: 60px;
   background-color: #e7e7e7;
@@ -178,5 +183,9 @@ export default {
   padding: 7px;
   width: 24px;
   height: 24px;
+}
+.preview-box-content{
+  height: 100%;
+  overflow: hidden;
 }
 </style>

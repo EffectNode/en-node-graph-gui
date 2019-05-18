@@ -22,6 +22,18 @@
             </stop>
         </radialGradient>
 
+        <radialGradient :id="`${uniq}hover-gradient-movin`" cx="50%" cy="50%" fx="50%" fy="50%" r="100%">
+            <stop stop-color="#ffff00" offset="0%">
+              <animate attributeName="stop-color" values="#ffff00; #0000ff; #ffff00;" dur="2s" repeatCount="indefinite"></animate>
+`          </stop>
+            <stop stop-color="#0000ff" offset="50%">
+              <animate attributeName="stop-color" values="#0000ff; #ffff00; #0000ff;" dur="2s" repeatCount="indefinite"></animate>
+            </stop>
+            <stop stop-color="#ffff00" offset="100%">
+              <animate attributeName="stop-color" values="#ffff00; #0000ff; #ffff00;" dur="2s" repeatCount="indefinite"></animate>
+            </stop>
+        </radialGradient>
+
         <marker :id="`${uniq}circle-ok`" style="overflow:visible; cursor: pointer;">
           <circle r="3" :fill="'lime'" />
         </marker>
@@ -66,19 +78,11 @@
 
       <ScreenPanner :zoom="zoom" :view="view" @move="onMove" :win="win"></ScreenPanner>
 
-      <!-- HUD UIs -->
-      <!-- <NodeButton v-if="(view.x + view.y) !== 0" :pos="{ x: win.width - 60, y: 0 }" @click="goHome">
-        <text x="-20" y="20" slot="desc">GoHome</text>
-      </NodeButton> -->
-      <!-- <NodeButton :pos="{ x: win.width - 60, y: win.height - 60 }" @click="cleanLayout({ instant: false, goHome: true })">
-        <text x="0" y="20" slot="desc">Home</text>
-      </NodeButton> -->
-
       <!-- Move the scene -->
       <g :style="mover">
 
         <g :key="node._id + node.to + ii" v-for="(node, ii) in nodes" x>
-          <Node :title="node.title" :isRoot="node.to === null" @click="onClick({ node, nodes, ...$event })" :uniq="uniq" :isActive="node.isActive" @move="(ev) => { onModeNodes(ev, node, nodes) }" :pos="node.pos" :type="'circle'"></Node>
+          <Node :node="node" :nodes="nodes" :title="node.title" :isRoot="node.to === null" :ref="`_node_${node._id}`" @click="onClick({ node, nodes, ...$event })" :uniq="uniq" :isActive="node.isActive" @move="(ev) => { onModeNodes(ev, node, nodes) }" :pos="node.pos" :type="'circle'"></Node>
         </g>
 
         <g :key="link.from + link.to + ii" v-for="(link, ii) in links">
@@ -99,6 +103,9 @@ import * as Node from './node.js'
 var dagre = require('dagre')
 export default {
   props: {
+    show: {
+      default: 'normal'
+    },
     nodes: {
       required: true
     },
@@ -182,24 +189,35 @@ export default {
         this.computeLayout()
       }
     },
+    show () {
+      this.onInit()
+    },
     nodes () {
-      this.computeLayout()
-      this.nodes.forEach(n => {
-        n.pos = n.pos || { x: 0, y: 0 }
-        n.size = n.size || { width: 60, height: 60 }
-        n.size.width = 60
-        n.size.height = 60
-      })
-      this.cleanLayout({ instnat: true, goHome: false, resetZoom: false })
-      this.$forceUpdate()
+      this.onInit()
     }
   },
   methods: {
+    onInit () {
+      this.computeLayout()
+      this.nodes.forEach(n => {
+        n.pos = n.pos || { x: 0, y: 0 }
+        n.pos.x += 0.01
+        n.pos.y += 0.01
+        n.size = n.size || { width: 60, height: 60 }
+        n.size.width = 60
+        n.size.height = 60
+        n.isOverlapping = false
+        n.isOverlappingWith = false
+      })
+      this.cleanLayout({ instant: true, goHome: false, resetZoom: false })
+      this.$forceUpdate()
+    },
     onClick ({ node, nodes, rect }) {
       nodes.forEach(m => {
         m.isActive = false
       })
       node.isActive = true
+      node.rect = rect
       this.$forceUpdate()
 
       this.panToCenter({ rect })
@@ -216,14 +234,19 @@ export default {
       // this.computeLayout()
       // this.$forceUpdate()
 
-      new TWEEN.Tween(this.view) // Create a new tween that modifies 'coords'.
-        .to(view2, 750) // Move to (300, 200) in 1 second.
-        .easing(TWEEN.Easing.Circular.Out) // Use an easing function to make the animation smooth.
-        .onUpdate(() => { // Called after tween.js updates 'coords'.
-          // Move 'box' to the position described by 'coords' with a CSS translation.
-          this.computeLayout()
-        })
-        .start()
+      return new Promise((resolve) => {
+        new TWEEN.Tween(this.view) // Create a new tween that modifies 'coords'.
+          .to(view2, 750) // Move to (300, 200) in 1 second.
+          .easing(TWEEN.Easing.Circular.Out) // Use an easing function to make the animation smooth.
+          .onUpdate(() => { // Called after tween.js updates 'coords'.
+            // Move 'box' to the position described by 'coords' with a CSS translation.
+            this.computeLayout()
+          })
+          .onComplete(() => {
+            resolve()
+          })
+          .start()
+      })
     },
     init () {
       this.computeLayout()
@@ -235,10 +258,12 @@ export default {
         n.size.width = 60
         n.size.height = 60
       })
-      this.cleanLayout({ instnat: true, goHome: false, resetZoom: false })
+      this.cleanLayout({ instant: true, goHome: false, resetZoom: false })
       this.$forceUpdate()
     },
-    cleanLayout ({ instnat, goHome, resetZoom } = {}) {
+    async cleanLayout ({ instant, goHome, resetZoom, goNode } = {}) {
+      TWEEN.removeAll()
+
       let g = new dagre.graphlib.Graph()
       /* eslint-disable */
       // Set an object for the graph label
@@ -251,7 +276,7 @@ export default {
         ranksep: 120,
         rankdir: 'RL',
         // https://github.com/dagrejs/dagre/wiki#using-dagre
-        // align: 'UL'
+        // align: 'DL'
       });
 
       // Default to assigning a new object as a label for each new edge.
@@ -290,7 +315,7 @@ export default {
 
         let node = this.nodes.find(n => n._id === v)
         let neWNodePos = g.node(v)
-        if (instnat) {
+        if (instant) {
           this.$nextTick(() => {
             node.pos.x = neWNodePos.x
             node.pos.y = neWNodePos.y
@@ -299,10 +324,14 @@ export default {
         } else {
           this.tweenNode(node, neWNodePos)
         }
-        //
       });
 
-      if (!instnat) {
+      if (resetZoom) {
+        this.zoom += 0.01
+        await this.zoomBa({ to: 1 })
+      }
+
+      if (!instant) {
         this.links.forEach((link) => {
           link.running = false
           link.dashed = false
@@ -315,16 +344,43 @@ export default {
         }, 1000)
       }
 
-      if (resetZoom) {
-        if (this.zoom === 1) {
-          this.zoomBa({ to: 1.1 })
+      if (goNode) {
+        this.nodes.forEach(m => {
+          m.isActive = false
+        })
+        goNode.isActive = true
+
+        let nodeEl = this.$refs[`_node_${goNode._id}`][0]
+        if (nodeEl) {
+          let rect = nodeEl.getRect()
+          await this.sleep(1)
+          this.panToCenter({ rect })
         }
-        setTimeout(() => {
-          this.zoomBa({ to: 1 })
-        }, 100)
-      }
-      if (goHome) {
-        this.goHome()
+      } else if (goHome) {
+        let homeNode = this.nodes.find(n => n.isRoot)
+        if (homeNode) {
+          this.nodes.forEach(m => {
+            m.isActive = false
+          })
+          homeNode.isActive = true
+
+          let nodeEl = this.$refs[`_node_${homeNode._id}`][0]
+          if (nodeEl) {
+            let rect = nodeEl.getRect()
+            await this.sleep(1)
+            this.panToCenter({ rect })
+          }
+        }
+      } else {
+        let activeNode = this.nodes.find(n => n.isActive)
+        if (activeNode) {
+          let nodeEl = this.$refs[`_node_${activeNode._id}`][0]
+          if (nodeEl) {
+            let rect = nodeEl.getRect()
+            await this.sleep(1)
+            this.panToCenter({ rect })
+          }
+        }
       }
 
 
@@ -333,6 +389,14 @@ export default {
       //   console.log("Edge " + e.v + " -> " + e.w + ": " + JSON.stringify(g.edge(e)));
       // });
       /* eslint-enable */
+    },
+
+    sleep (time) {
+      return new Promise((resolve) => {
+        setTimeout(() => {
+          resolve()
+        }, time || 0)
+      })
     },
     onModeNodes (v, node, nodes) {
       this.moveNode(node, v)
@@ -362,11 +426,12 @@ export default {
       this.tempDisableDash()
       // this.$forceUpdate()
     },
-    toggleZoom () {
+    async toggleZoom () {
       if (this.zoom === 4) {
-        this.zoomBa({ to: 1 })
+        this.cleanLayout({ instant: false, goHome: false, resetZoom: true })
       } else {
-        this.zoomBa({ to: 4 })
+        await this.zoomBa({ to: 4 })
+        this.cleanLayout({ instant: false, goHome: false, resetZoom: false })
       }
     },
     tweenNode (node, toPos) {
@@ -384,16 +449,16 @@ export default {
           .start()
       })
     },
-    goHome () {
-      new TWEEN.Tween(this.view) // Create a new tween that modifies 'coords'.
-        .to({ x: 0, y: 0 }, 1500) // Move to (300, 200) in 1 second.
-        .easing(TWEEN.Easing.Elastic.Out) // Use an easing function to make the animation smooth.
-        .onUpdate(() => { // Called after tween.js updates 'coords'.
-          // Move 'box' to the position described by 'coords' with a CSS translation.
-          this.computeLayout()
-        })
-        .start()
-    },
+    // goHome () {
+    //   new TWEEN.Tween(this.view) // Create a new tween that modifies 'coords'.
+    //     .to({ x: 0, y: 0 }, 1500) // Move to (300, 200) in 1 second.
+    //     .easing(TWEEN.Easing.Elastic.Out) // Use an easing function to make the animation smooth.
+    //     .onUpdate(() => { // Called after tween.js updates 'coords'.
+    //       // Move 'box' to the position described by 'coords' with a CSS translation.
+    //       this.computeLayout()
+    //     })
+    //     .start()
+    // },
     getChildren (node) {
       return Node.get1LevelKids({ node, nodes: this.nodes, links: this.links })
       // return this.links.filter(c => c.to === node._id).map((c) => {
@@ -437,21 +502,31 @@ export default {
       // }, [])
     },
     zoomBa ({ to }) {
-      new TWEEN.Tween(this) // Create a new tween that modifies 'coords'.
-        .to({ zoom: to }, 250) // Move to (300, 200) in 1 second.
-        .easing(TWEEN.Easing.Quadratic.InOut) // Use an easing function to make the animation smooth.
-        .onUpdate(() => { // Called after tween.js updates 'coords'.
-          // Move 'box' to the position described by 'coords' with a CSS translation.
-          this.computeLayout()
-        })
-        .start()
+      return new Promise((resolve, reject) => {
+        new TWEEN.Tween(this) // Create a new tween that modifies 'coords'.
+          .to({ zoom: to }, 250) // Move to (300, 200) in 1 second.
+          .easing(TWEEN.Easing.Quadratic.InOut) // Use an easing function to make the animation smooth.
+          .onUpdate(() => { // Called after tween.js updates 'coords'.
+            // Move 'box' to the position described by 'coords' with a CSS translation.
+            this.computeLayout()
+          })
+          .onComplete(() => {
+            resolve()
+          })
+          .start()
+      })
     },
-    computeLayout () {
+    computeLayout ({ syncLinks = false } = {}) {
       this.win.width = this.rect.width
       this.win.height = this.rect.height
 
       this.viewBox = `0 0 ${this.win.width * this.zoom} ${this.win.height * this.zoom}`
-      // this.links = this.getLinks(this.nodes)
+
+      setTimeout(() => {
+        if (syncLinks) {
+          this.links = this.getLinks(this.nodes)
+        }
+      })
 
       this.mover = {
         transform: `translate3d(${this.view.x}px, ${this.view.y}px, 1px)`
