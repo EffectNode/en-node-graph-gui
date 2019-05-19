@@ -1,4 +1,3 @@
-<script src="/sandbox.js"></script>
 <script>
 (() => {
 
@@ -8,7 +7,26 @@
   const ENGRAPH_WATER = ____ENGRAPH_WATER____
   // eslint-disable-next-line no-unused-vars
 
-  window.MAKE_EFFECT_NODE_GRAPH_ENGINE({ dom: ENGRAPH_EL, water: ENGRAPH_WATER })
+  const app = new Vue({
+    components: {
+      effectnodegraph: window.effectnodegraph
+    },
+    el: ENGRAPH_EL,
+    template: `
+      <effectnodegraph :water="water"></effectnodegraph>
+    `,
+    data () {
+      return {
+        water: ENGRAPH_WATER
+      }
+    },
+    methods: {
+      init () {
 
+      }
+    }
+  })
+
+  app.init()
 })()
 </script>

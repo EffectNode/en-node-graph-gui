@@ -4,6 +4,7 @@ export const injector = ({ water = {}, compos = {} }) => {
   const EGRAPH_ID = `_APP_${Number(Math.random() * 100000).toFixed(0)}`
   const APPID_REPLACER = `____APPID____`
   const ENGRAPH_WATER_REPLACER = `____ENGRAPH_WATER____`
+  const BASEURL_REPLACER = `<!--BASE_URL-->`
 
   // eslint-disable-next-line import/no-webpack-loader-syntax
   let head = require('raw-loader!../../public/head.fragment.html').default
@@ -12,7 +13,8 @@ export const injector = ({ water = {}, compos = {} }) => {
   // eslint-disable-next-line import/no-webpack-loader-syntax
   let body = require('raw-loader!../../public/body.fragment.html').default
   // eslint-disable-next-line import/no-webpack-loader-syntax
-  // eslint-disable-next-line import/no-webpack-loader-syntax
+
+  head = head.replace(BASEURL_REPLACER, window.location.origin)
 
   body = body.replace(APPID_REPLACER, EGRAPH_ID)
   body = body.replace(ENGRAPH_WATER_REPLACER, JSON.stringify(water))
