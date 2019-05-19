@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     init () {
-      let mat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      let mat = new THREE.MeshBasicMaterial({ color: 0x00ff00, wireframe: true });
       this.material = mat
     }
   },

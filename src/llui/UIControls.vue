@@ -50,10 +50,10 @@
     <button v-if="!node.trashed" @click="addScene({ node, nodes })">Add Scene</button>
 
     <br />
-    <button v-if="!node.trashed" @click="addDrawable({ node, nodes })">Add Drawable Child</button>
+    <button v-if="!node.trashed" @click="addExample({ node, nodes })">Add Sample Ball</button>
 
     <br />
-    <button v-if="!node.trashed" @click="addBasicSolidMaterial({ node, nodes })">Add Basic Solid Material Child</button>
+    <button v-if="!node.trashed" @click="addWireFrame({ node, nodes })">Add Basic Solid Material Child</button>
 
     <div>
       <br />
@@ -158,6 +158,7 @@ export default {
         }
       })
       this.$emit('reload')
+      this.$root.$forceUpdate()
     },
     restoreNode ({ node, nodes }) {
       let links = Node.getLinks({ nodes })
@@ -188,40 +189,40 @@ export default {
     //   }
     //   this.addChildTo({ node, nodes, args })
     // },
-    addBasicSolidMaterial ({ node, nodes }) {
+    addWireFrame ({ node, nodes, returnNode }) {
       let args = {
-        title: `New Solid Material`,
+        title: `WireFrame Material`,
         type: `material`,
         /* eslint-disable */
-        src: require('raw-loader!./UINodeTemplates/SolidMaterial.vue.txt').default,
+        src: require('raw-loader!./UINodeTemplates/WireFrameMaterial.vue.txt').default,
         /* eslitnt-enable */
         library: []
       }
-      this.addChildTo({ node, nodes, args })
+      return this.addChildTo({ node, nodes, args, returnNode })
     },
-    addSphereGeometry ({ node, nodes }) {
+    addSphereGeometry ({ node, nodes, returnNode }) {
       let args = {
-        title: `New Sphere Geometry`,
+        title: `Sphere Geometry`,
         type: `geometry`,
         /* eslint-disable */
         src: require('raw-loader!./UINodeTemplates/SphereGeometry.vue.txt').default,
         /* eslitnt-enable */
         library: []
       }
-      this.addChildTo({ node, nodes, args })
+      return this.addChildTo({ node, nodes, args, returnNode })
     },
     addScene ({ node, nodes }) {
       let args = {
-        title: `New Scene`,
+        title: `Scene`,
         type: `scene`,
         /* eslint-disable */
         src: require('raw-loader!./UINodeTemplates/Scene.vue.txt').default,
         /* eslitnt-enable */
         library: []
       }
-      this.addChildTo({ node, nodes, args })
+      return this.addChildTo({ node, nodes, args, returnNode })
     },
-    addDrawable ({ node, nodes }) {
+    addMesh ({ node, nodes, returnNode }) {
       let args = {
         title: `Mesh`,
         type: `drawable`,
@@ -230,7 +231,16 @@ export default {
         /* eslitnt-enable */
         library: []
       }
-      this.addChildTo({ node, nodes, args })
+      return this.addChildTo({ node, nodes, args, returnNode })
+    },
+    addExample ({ node, nodes, returnNode }) {
+      let meshNode = this.addMesh({ node, nodes, returnNode: true })
+      let matNode = this.addWireFrame({ node, nodes, returnNode: true })
+      let geoNode = this.addSphereGeometry({ node, nodes, returnNode: true })
+      matNode.to = meshNode._id
+      geoNode.to = meshNode._id
+
+      this.doLayoutAndReload({ node, nodes })
     },
     addObject3DChildTo ({ node, nodes }) {
       let args = {
@@ -243,7 +253,7 @@ export default {
       }
       this.addChildTo({ node, nodes, args })
     },
-    addChildTo ({ node, nodes, args = {} }) {
+    addChildTo ({ node, nodes, args = {}, returnNode }) {
       let parentID = node._id
       let newNode = Node.getNodeTemplate()
       newNode._id = Node.getID()
@@ -264,8 +274,15 @@ export default {
       this.nodes.push(
         newNode
       )
+      if (returnNode) {
+        return newNode
+      }
+      this.doLayoutAndReload({ node, nodes })
+    },
+    doLayoutAndReload ({ node, nodes }) {
       this.$emit('onLayout', { node, nodes })
       this.$emit('reload')
+      this.$forceUpdate()
     }
   },
   created () {

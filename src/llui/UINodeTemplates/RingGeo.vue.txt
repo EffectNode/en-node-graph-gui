@@ -16,17 +16,17 @@ export default {
   },
   data () {
     return {
-      geo: false,
-      mat: false,
-      drawable: false
+      geometry: false
     }
   },
   methods: {
     init () {
-      // let geo = new THREE.BoxBufferGeometry(100, 100, 100, 20, 20);
-      // let mat = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.1 });
-      this.drawable = new THREE.Mesh()
-      this.drawable.visible = false
+      let radius = 40
+      let tube = 4
+      let radSeg = 30
+      let tubSeg = 200
+      let arc2PI = Math.PI * 2.0
+      this.geometry = new THREE.TorusGeometry(radius, tube, radSeg, tubSeg, arc2PI)
     }
   },
   mounted () {
@@ -38,17 +38,6 @@ export default {
       // console.log(this.node.title, 'addToParent', parent.node.title)
     })
     this.$on('addChild', ({ child }) => {
-      if (child.node.type === 'material') {
-        this.drawable.material = child.material
-        this.material = child.material
-      }
-      if (child.node.type === 'geometry') {
-        this.drawable.geometry = child.geometry
-        this.geometry = child.geometry
-      }
-      if (this.geometry && this.material) {
-        this.drawable.visible = true
-      }
       console.log(this.node.title, 'addChild', child.node.title)
     })
     this.$on('removeFromParent', ({ parent }) => {

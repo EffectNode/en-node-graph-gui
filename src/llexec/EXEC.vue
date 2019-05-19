@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import * as ENV from '../llexec/engine.js'
+import * as CodeGen from '../llexec/code-generator.js'
 import * as Node from '../llsvg/node'
 export default {
   props: {
@@ -20,7 +20,12 @@ export default {
     }
   },
   created () {
-
+    this.$on('reload', () => {
+      this.reload()
+    })
+    this.$on('push', (v) => {
+      this.pushData(v)
+    })
   },
   components: {
     DevExec: () => import('./DevExec.vue')
@@ -66,23 +71,22 @@ export default {
     }
   },
   async mounted () {
-    this.$on('reload', () => {
-      this.reload()
-    })
-
     let dimension = () => {
       let rect = this.$el.getBoundingClientRect()
       this.iframe.width = rect.width.toFixed(0)
-      this.iframe.height = (rect.height).toFixed(0)
+      this.iframe.height = rect.height.toFixed(0)
     }
     window.addEventListener('resize', dimension, false)
     dimension()
 
     await this.reload()
-    this.pushData({ nodes: this.nodes })
   },
   methods: {
     tryGet (fn = () => {}) {
+      let insta = fn()
+      if (insta) {
+        return insta
+      }
       return new Promise((resolve) => {
         let tt = setInterval(() => {
           let result = fn()
@@ -93,9 +97,9 @@ export default {
         }, 0)
       })
     },
-    async pushData ({ nodes }) {
+    async pushData (v) {
       let sender = await this.getSender()
-      sender({ omg: 'omg' })
+      sender(v)
     },
     async getSender () {
       if (this.isProd) {
@@ -125,8 +129,8 @@ export default {
       })
     },
     restartUI () {
-      let code = ENV.nodeToCode({ nodes: this.nodes })
-      let url = ENV.codeToBlobURL({ code })
+      let code = CodeGen.nodeToCode({ nodes: this.nodes })
+      let url = CodeGen.codeToBlobURL({ code })
       this.src = url
     }
   }

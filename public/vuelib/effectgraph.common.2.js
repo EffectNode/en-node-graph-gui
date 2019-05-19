@@ -6,12 +6,21 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/DevExec.vue?vue&type=template&id=9f0f8484&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/DevExec.vue?vue&type=template&id=6f353588&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"full"},[(_vm.water)?_c('SandBox',{attrs:{"water":_vm.water}}):_vm._e()],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/DevExec.vue?vue&type=template&id=9f0f8484&
+// CONCATENATED MODULE: ./src/llexec/DevExec.vue?vue&type=template&id=6f353588&
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es6.promise.js
+var es6_promise = __webpack_require__("551c");
+
+// EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
+var runtime = __webpack_require__("96cf");
+
+// EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/helpers/esm/asyncToGenerator.js
+var asyncToGenerator = __webpack_require__("3b8d");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=353899c0&scoped=true&
 var SandBoxvue_type_template_id_353899c0_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"nodeMap":_vm.nodeMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
@@ -20,18 +29,12 @@ var SandBoxvue_type_template_id_353899c0_scoped_true_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=353899c0&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=27cc674a&
-var GraphNodevue_type_template_id_27cc674a_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
-var GraphNodevue_type_template_id_27cc674a_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=59aa00ad&
+var GraphNodevue_type_template_id_59aa00ad_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
+var GraphNodevue_type_template_id_59aa00ad_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=27cc674a&
-
-// EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
-var runtime = __webpack_require__("96cf");
-
-// EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/helpers/esm/asyncToGenerator.js
-var asyncToGenerator = __webpack_require__("3b8d");
+// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=59aa00ad&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.find.js
 var es6_array_find = __webpack_require__("7514");
@@ -256,17 +259,35 @@ function () {
         return n._id === _this.node.to;
       }),
       compo: false,
-      self: {}
+      self: {},
+      rAFID: 0,
+      execFnc: function execFnc() {}
     };
   },
-  created: function created() {},
+  beforeDestroy: function beforeDestroy() {
+    window.cancelAnimationFrame(this.rAFID);
+  },
+  created: function created() {
+    var _this2 = this;
+
+    var rAF = function rAF() {
+      _this2.rAFID = window.requestAnimationFrame(rAF);
+
+      _this2.execFnc();
+    };
+
+    this.rAFID = window.requestAnimationFrame(rAF);
+  },
   methods: {
+    onExec: function onExec(v) {
+      this.execFnc = v;
+    },
     onReady: function onReady(compos) {
-      var _this2 = this;
+      var _this3 = this;
 
       var tt = setInterval(function () {
-        var me = _this2.nodeMap[_this2.node._id] = compos;
-        var parent = _this2.nodeMap[_this2.node.to];
+        var me = _this3.nodeMap[_this3.node._id] = compos;
+        var parent = _this3.nodeMap[_this3.node.to];
 
         if (parent) {
           clearInterval(tt);
@@ -357,8 +378,8 @@ var componentNormalizer = __webpack_require__("2877");
 
 var component = Object(componentNormalizer["a" /* default */])(
   llexec_GraphNodevue_type_script_lang_js_,
-  GraphNodevue_type_template_id_27cc674a_render,
-  GraphNodevue_type_template_id_27cc674a_staticRenderFns,
+  GraphNodevue_type_template_id_59aa00ad_render,
+  GraphNodevue_type_template_id_59aa00ad_staticRenderFns,
   false,
   null,
   null,
@@ -431,6 +452,9 @@ var SandBox_component = Object(componentNormalizer["a" /* default */])(
 
 /* harmony default export */ var SandBox = (SandBox_component.exports);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--12-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/DevExec.vue?vue&type=script&lang=js&
+
+
+
 //
 //
 //
@@ -453,10 +477,42 @@ var SandBox_component = Object(componentNormalizer["a" /* default */])(
     };
   },
   methods: {
-    postMessage: function postMessage(evt) {
-      console.log(evt);
+    postMessage: function () {
+      var _postMessage = Object(asyncToGenerator["a" /* default */])(
+      /*#__PURE__*/
+      regeneratorRuntime.mark(function _callee(evt) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
+          while (1) {
+            switch (_context.prev = _context.next) {
+              case 0:
+                console.log(evt); // let sandbox = await this.tryGet(() => this.$refs.sandbox)
 
-      if (this.$refs.sandbox) {}
+              case 1:
+              case "end":
+                return _context.stop();
+            }
+          }
+        }, _callee);
+      }));
+
+      function postMessage(_x) {
+        return _postMessage.apply(this, arguments);
+      }
+
+      return postMessage;
+    }(),
+    tryGet: function tryGet() {
+      var fn = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : function () {};
+      return new Promise(function (resolve) {
+        var tt = setInterval(function () {
+          var result = fn();
+
+          if (result) {
+            clearInterval(tt);
+            resolve(result);
+          }
+        }, 0);
+      });
     }
   },
   watch: {
