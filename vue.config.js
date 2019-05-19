@@ -1,6 +1,6 @@
 module.exports = {
   runtimeCompiler: true,
-
+  css: { extract: false },
   pages: {
     index: 'src/main.js'// ,
     // sandbox: 'src/sandbox.js'

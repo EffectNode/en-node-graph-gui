@@ -6,9 +6,15 @@
 
 <script>
 export default {
-
+  props: {
+    water: {}
+  }
 }
 </script>
+
+<style>
+
+</style>
 
 <style>
 

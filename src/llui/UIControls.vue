@@ -15,7 +15,10 @@
     </p>
     <input type="text" v-model="node.to"  @input="$emit('onInputAnimate', { node })"> -->
 
+    <p>title</p>
     <input type="text" v-model="node.title">
+    <p>type</p>
+    <input type="text" v-model="node.type">
 
     <button v-if="!node.trashed" @click="addChildTo({ node, nodes })">Add Child</button>
     <div v-if="!node.protected">
