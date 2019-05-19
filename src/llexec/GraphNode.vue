@@ -17,7 +17,6 @@ export default {
       self: {},
       rAFID: 0,
       execFnc () {
-        console.log('omg')
       }
     }
   },

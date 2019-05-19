@@ -5,19 +5,19 @@
       <router-link to="/about">About</router-link> |
     </div> -->
 
-    <NodeTree v-if="nodes" :show="show" @dropped="onReload()" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
+    <NodeTree v-if="nodes" :show="show" @dropped="onReload({ timeout: 300 })" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
     </NodeTree>
 
     <UIBtnTools v-if="nodes" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
-    <UIPreviewBox v-if="nodes" @run="onReload()">
+    <UIPreviewBox v-if="nodes" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :nodes="nodes"></EXEC>
     </UIPreviewBox>
     <UIInspector v-if="open.inspector" @close="onClose">
-      <UIControls @reload="onReload()" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
+      <UIControls @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
     </UIInspector>
 
     <UICoder v-if="open.coder" @close="open.coder = false; $forceUpdate()">
-      <UICodeControl @reload="onReload()" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onCloseCoder" :node="node" @nodes="nodes = $event" @show="show = $event"></UICodeControl>
+      <UICodeControl @reload="onReload({ timeout: 0 })" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onCloseCoder" :node="node" @nodes="nodes = $event" @show="show = $event"></UICodeControl>
     </UICoder>
 
   </div>
@@ -128,8 +128,10 @@ export default {
       this.open.coder = true
       this.$forceUpdate()
     },
-    onReload () {
-      this.$refs.exec.$emit('reload')
+    onReload ({ timeout } = {}) {
+      setTimeout(() => {
+        this.$refs.exec.$emit('reload')
+      }, timeout || 0)
     },
     onClose () {
       this.open.inspector = false

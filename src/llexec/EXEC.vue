@@ -1,7 +1,7 @@
 <template>
-  <div class="full" v-if="refresher">
-    <iframe v-if="isProd" class="full" :width="iframe.width" ref="winwin" :height="iframe.height" frameborder="0" :src="src"></iframe>
-    <DevExec v-else class="full" :nodes="nodes" ref="winwin"></DevExec>
+  <div class="full">
+    <iframe v-if="refresher" class="full" :width="iframe.width" ref="iframe" :height="iframe.height" frameborder="0" :src="src"></iframe>
+    <DevExec v-else-if="refresher" class="full" :nodes="nodes" ref="devexec"></DevExec>
   </div>
 </template>
 
@@ -20,9 +20,7 @@ export default {
     }
   },
   created () {
-    this.$on('reload', () => {
-      this.reload()
-    })
+
   },
   components: {
     DevExec: () => import('./DevExec.vue')
@@ -38,15 +36,22 @@ export default {
     }
   },
   watch: {
-    links () {
-      this.reload()
-    },
-    activeNodes () {
-      this.reload()
-    },
-    nodes () {
-      this.reload()
-    }
+    // refresher () {
+    //   if (this.refresher) {
+    //     this.$nextTick(() => {
+
+    //     })
+    //   }
+    // },
+    // links () {
+    //   this.reload()
+    // },
+    // activeNodes () {
+    //   this.reload()
+    // },
+    // nodes () {
+    //   this.reload()
+    // }
   },
   data () {
     return {
@@ -60,7 +65,11 @@ export default {
       src: 'about:blank'
     }
   },
-  mounted () {
+  async mounted () {
+    this.$on('reload', () => {
+      this.reload()
+    })
+
     let dimension = () => {
       let rect = this.$el.getBoundingClientRect()
       this.iframe.width = rect.width.toFixed(0)
@@ -69,22 +78,51 @@ export default {
     window.addEventListener('resize', dimension, false)
     dimension()
 
-    this.reload()
-    this.sendData({ nodes: this.nodes })
+    await this.reload()
+    this.pushData({ nodes: this.nodes })
   },
   methods: {
-    sendData ({ nodes }) {
-      let item = this.$refs['winwin'].contentWindow
-      console.log(item)
+    tryGet (fn = () => {}) {
+      return new Promise((resolve) => {
+        let tt = setInterval(() => {
+          let result = fn()
+          if (result) {
+            clearInterval(tt)
+            resolve(result)
+          }
+        }, 0)
+      })
+    },
+    async pushData ({ nodes }) {
+      let sender = await this.getSender()
+      sender({ omg: 'omg' })
+    },
+    async getSender () {
+      if (this.isProd) {
+        let iframe = await this.tryGet(() => {
+          return this.$refs['iframe']
+        })
+        return iframe.contentWindow.postMessage
+      } else {
+        let devexec = await this.tryGet(() => {
+          return this.$refs['devexec']
+        })
+        return devexec.postMessage
+      }
     },
     reload () {
-      this.refresher = false
-      this.$forceUpdate()
-      setTimeout(() => {
-        this.restartUI()
-        this.refresher = true
+      return new Promise((resolve) => {
+        this.refresher = false
         this.$forceUpdate()
-      }, 15)
+        setTimeout(() => {
+          this.restartUI()
+          this.refresher = true
+          this.$forceUpdate()
+          this.$nextTick(() => {
+            resolve()
+          })
+        }, 5)
+      })
     },
     restartUI () {
       let code = ENV.nodeToCode({ nodes: this.nodes })

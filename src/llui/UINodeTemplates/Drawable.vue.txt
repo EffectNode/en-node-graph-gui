@@ -21,9 +21,9 @@ export default {
   },
   methods: {
     init () {
-      let geo = new THREE.BoxBufferGeometry(100, 100, 100, 20, 20);
-      let mat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-      this.drawable = new THREE.Mesh(geo, mat)
+      // let geo = new THREE.BoxBufferGeometry(100, 100, 100, 20, 20);
+      // let mat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
+      this.drawable = new THREE.Mesh()
     }
   },
   mounted () {

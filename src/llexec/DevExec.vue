@@ -22,10 +22,20 @@ export default {
     }
   },
   methods: {
-    postMessage (evt) {
+    async postMessage (evt) {
       console.log(evt)
-      if (this.$refs.sandbox) {
-      }
+      // let sandbox = await this.tryGet(() => this.$refs.sandbox)
+    },
+    tryGet (fn = () => {}) {
+      return new Promise((resolve) => {
+        let tt = setInterval(() => {
+          let result = fn()
+          if (result) {
+            clearInterval(tt)
+            resolve(result)
+          }
+        }, 0)
+      })
     }
   },
   watch: {
