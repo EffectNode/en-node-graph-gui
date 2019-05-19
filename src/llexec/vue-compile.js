@@ -209,7 +209,7 @@ export const makeCompo = async ({ src, library = [] }) => {
     vueComp = addDeps({
       vue: vueComp,
       dep: {
-        Object3D: require('../vfx/FreeJS/Object3D.vue').default
+        // Object3D: require('../vfx/FreeJS/Object3D.vue').default
       }
     })
     Cache[src] = vueComp

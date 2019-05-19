@@ -12,7 +12,7 @@
     "to": null,
     "pos": {
       "x": 60,
-      "y": 160
+      "y": 210
     },
     "size": {
       "width": 60,
@@ -45,7 +45,7 @@
     "to": "root",
     "pos": {
       "x": 240,
-      "y": 160
+      "y": 210
     },
     "size": {
       "width": 60,
@@ -56,14 +56,14 @@
     "hasFound": false,
     "isActive": false,
     "rect": {
-      "x": 240,
-      "y": 110,
+      "x": 180,
+      "y": 168.09999084472656,
       "width": 60,
       "height": 60,
-      "top": 110,
-      "right": 300,
-      "bottom": 170,
-      "left": 240
+      "top": 168.09999084472656,
+      "right": 240,
+      "bottom": 228.09999084472656,
+      "left": 180
     },
     "library": [],
     "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      scene: false\n    }\n  },\n  methods: {\n    init () {\n      this.scene = new THREE.Scene()\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'camera') {\n        this.components[this.node.to].$emit('addChild', { child })\n      }\n      if (child.node.type === 'object3D') {\n        this.scene.add(child.object3D)\n      }\n      if (child.node.type === 'drawable') {\n        this.scene.add(child.drawable)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n"
@@ -113,26 +113,31 @@
     },
     "isOverlapping": false,
     "isOverlappingWith": false,
-    "hasFound": true,
+    "hasFound": false,
     "isActive": false,
     "rect": {
-      "x": 360,
-      "y": 168.09999084472656,
+      "x": 599,
+      "y": 260,
       "width": 60,
       "height": 60,
-      "top": 168.09999084472656,
-      "right": 420,
-      "bottom": 228.09999084472656,
-      "left": 360
+      "top": 260,
+      "right": 659,
+      "bottom": 320,
+      "left": 599
     },
     "trashed": false,
     "type": "drawable",
-    "library": [],
+    "library": [
+      {
+        "_id": "_886488",
+        "url": ""
+      }
+    ],
     "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      camera: false\n    }\n  },\n  methods: {\n    init () {\n      let geo = new THREE.BoxBufferGeometry(100, 100, 100, 20, 20);\n      let mat = new THREE.MeshBasicMaterial({ color: 0xff0000 });\n      this.drawable = new THREE.Mesh(geo, mat)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n"
   },
   {
     "_id": "_733283",
-    "title": "Object3D",
+    "title": "Object3D (upper)",
     "to": "homepage",
     "pos": {
       "x": 420,
@@ -148,25 +153,25 @@
     "isActive": false,
     "rect": {
       "x": 360,
-      "y": 168.1000213623047,
+      "y": 168.10000610351562,
       "width": 60,
       "height": 60,
-      "top": 168.1000213623047,
+      "top": 168.10000610351562,
       "right": 420,
-      "bottom": 228.1000213623047,
+      "bottom": 228.10000610351562,
       "left": 360
     },
     "library": [],
     "type": "object3D",
-    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n"
+    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n      this.object3D.position.y = 150\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n"
   },
   {
     "_id": "_429266",
     "title": "Purple Box",
-    "to": "_733283",
+    "to": "_120701",
     "pos": {
       "x": 600,
-      "y": 160
+      "y": 360
     },
     "size": {
       "width": 60,
@@ -177,14 +182,14 @@
     "hasFound": false,
     "isActive": false,
     "rect": {
-      "x": 540,
-      "y": 218.1000213623047,
+      "x": 360,
+      "y": 368.1000061035156,
       "width": 60,
-      "height": 59.99998474121094,
-      "top": 218.1000213623047,
-      "right": 600,
-      "bottom": 278.1000061035156,
-      "left": 540
+      "height": 60,
+      "top": 368.1000061035156,
+      "right": 420,
+      "bottom": 428.1000061035156,
+      "left": 360
     },
     "library": [],
     "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      drawable: false\n    }\n  },\n  methods: {\n    init () {\n      let geo = new THREE.BoxBufferGeometry(100, 100, 100, 20, 20);\n      let mat = new THREE.MeshBasicMaterial({ color: 0xff00ff });\n      this.drawable = new THREE.Mesh(geo, mat)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
@@ -192,13 +197,13 @@
   },
   {
     "_id": "_535371",
-    "title": "Object 3D",
+    "title": "Object 3D (center)",
     "to": "homepage",
     "pos": {
       "x": 420,
       "y": 260
     },
-    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n      this.object3D.position.y = 200\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
     "library": [],
     "type": "object3D",
     "size": {
@@ -210,14 +215,44 @@
     "isActive": false,
     "hasFound": false,
     "rect": {
-      "x": 362,
-      "y": 253.09999084472656,
+      "x": 180,
+      "y": 268.1000061035156,
       "width": 60,
-      "height": 59.99998474121094,
-      "top": 253.09999084472656,
-      "right": 422,
-      "bottom": 313.0999755859375,
-      "left": 362
+      "height": 60,
+      "top": 268.1000061035156,
+      "right": 240,
+      "bottom": 328.1000061035156,
+      "left": 180
+    }
+  },
+  {
+    "_id": "_120701",
+    "title": "Object 3D (lower)",
+    "to": "homepage",
+    "pos": {
+      "x": 420,
+      "y": 360
+    },
+    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n      this.object3D.position.y = -150\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+    "library": [],
+    "type": "object3D",
+    "size": {
+      "width": 60,
+      "height": 60
+    },
+    "isOverlapping": false,
+    "isOverlappingWith": false,
+    "hasFound": false,
+    "isActive": false,
+    "rect": {
+      "x": 491,
+      "y": 474.0999755859375,
+      "width": 60,
+      "height": 60,
+      "top": 474.0999755859375,
+      "right": 551,
+      "bottom": 534.0999755859375,
+      "left": 491
     }
   }
 ]

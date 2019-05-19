@@ -1,6 +1,6 @@
 <template>
   <div class="full" v-if="refresher">
-    <iframe v-if="true" class="full" :width="iframe.width" :height="iframe.height" frameborder="0" :src="src"></iframe>
+    <iframe v-if="true" class="full" :width="iframe.width" ref="winwin" :height="iframe.height" frameborder="0" :src="src"></iframe>
     <DevExec v-else class="full" :nodes="nodes" ref="winwin"></DevExec>
   </div>
 </template>
@@ -70,8 +70,13 @@ export default {
     dimension()
 
     this.reload()
+    this.sendData({ nodes: this.nodes })
   },
   methods: {
+    sendData ({ nodes }) {
+      let item = this.$refs['winwin'].contentWindow
+      console.log(item)
+    },
     reload () {
       this.refresher = false
       this.$forceUpdate()

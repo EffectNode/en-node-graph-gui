@@ -87,15 +87,18 @@ export default {
       //   ...nodesForHome
       // ]
       this.nodes = require('../llui/versions/diamond-06.json')
-      let str = localStorage.getItem('nodes')
-      if (str) {
-        this.nodes = JSON.parse(str)
-      }
 
-      this.tt = setInterval(() => {
-        console.log('saving....')
-        localStorage.setItem('nodes', JSON.stringify(this.nodes))
-      }, 1000)
+      if (process.env.NODE_ENV === 'development') {
+        let str = localStorage.getItem('nodes')
+        if (str) {
+          this.nodes = JSON.parse(str)
+        }
+
+        this.tt = setInterval(() => {
+          console.log('saving....')
+          localStorage.setItem('nodes', JSON.stringify(this.nodes))
+        }, 1000)
+      }
 
       // this.$refs.editor.computeLayout({  })
     }, 150)
