@@ -24,7 +24,6 @@
       <li><button @click="addLib({ libs: node.library, add: adderLib })">Add</button> <input type="text" v-model="adderLib"></li>
     </ul>
 
-
     <select v-if="node.type === 'root'" v-model="node.sceneID" @change="$emit('reload')">
       <option :value="node._id" :key="node._id" v-for="node in nodes.filter(t => t.type === 'scene')">{{ node.title }}</option>
     </select>
