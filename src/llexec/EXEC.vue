@@ -1,6 +1,6 @@
 <template>
   <div class="full" v-if="refresher">
-    <iframe v-if="isProd" class="full" :width="iframe.width" :height="iframe.height" frameborder="0" :srcdoc="srcdoc"></iframe>
+    <iframe v-if="true" class="full" :width="iframe.width" :height="iframe.height" frameborder="0" :src="src"></iframe>
     <DevExec v-else class="full" :nodes="nodes" ref="winwin"></DevExec>
   </div>
 </template>
@@ -62,7 +62,9 @@ export default {
   methods: {
     restartUI () {
       let code = ENV.nodeToCode({ nodes: this.nodes })
-      this.srcdoc = code
+      console.log(code)
+      let url = ENV.codeToBlobURL({ code })
+      this.src = url
     }
   }
 }

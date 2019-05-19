@@ -1,11 +1,18 @@
+<script type="json" id="____APPJSON____">
+____ENGRAPH_WATER____
+</script>
 <script>
 (() => {
 
   // eslint-disable-next-line no-unused-vars
   const ENGRAPH_EL = `#____APPID____`
+  let src = document.querySelector('#____APPJSON____').innerHTML.trim()
+  src = decodeURIComponent(src)
   // eslint-disable-next-line no-unused-vars
-  const ENGRAPH_WATER = ____ENGRAPH_WATER____
+  const ENGRAPH_WATER = JSON.parse(src)
   // eslint-disable-next-line no-unused-vars
+
+  console.log(effectnodegraph, ENGRAPH_WATER)
 
   const app = new Vue({
     components: {
@@ -13,7 +20,7 @@
     },
     el: ENGRAPH_EL,
     template: `
-      <effectnodegraph :water="water"></effectnodegraph>
+      <effectnodegraph v-if="water" :water="water"></effectnodegraph>
     `,
     data () {
       return {

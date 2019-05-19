@@ -1,5 +1,5 @@
 <template>
-  <div class="app-entry-dom" v-if="nodes">
+  <div class="app-entry-dom" v-if="activeNodes && water">
     <GraphNode :nodeMap="nodeMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
   </div>
 </template>
