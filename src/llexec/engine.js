@@ -14,7 +14,11 @@ export const injector = ({ water = {}, compos = {} }) => {
   let body = require('raw-loader!../../public/body.fragment.html').default
   // eslint-disable-next-line import/no-webpack-loader-syntax
 
-  head = head.replace(BASEURL_REPLACER, window.location.origin)
+  if (process.env.NODE_ENV === 'production') {
+    head = head.replace(BASEURL_REPLACER, 'https://en-node-graph-gui.netlify.com')
+  } else {
+    head = head.replace(BASEURL_REPLACER, window.location.origin)
+  }
 
   body = body.replace(APPID_REPLACER, EGRAPH_ID)
   body = body.replace(ENGRAPH_WATER_REPLACER, JSON.stringify(water))

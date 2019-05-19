@@ -1520,7 +1520,10 @@ var injector = function injector(_ref) {
   var body = __webpack_require__("b23a").default; // eslint-disable-next-line import/no-webpack-loader-syntax
 
 
-  head = head.replace(BASEURL_REPLACER, window.location.origin);
+  if (true) {
+    head = head.replace(BASEURL_REPLACER, 'https://en-node-graph-gui.netlify.com');
+  } else {}
+
   body = body.replace(APPID_REPLACER, EGRAPH_ID);
   body = body.replace(ENGRAPH_WATER_REPLACER, JSON.stringify(water));
   app = app.replace(APPID_REPLACER, EGRAPH_ID); // eslint-disable-next-line import/no-webpack-loader-syntax
