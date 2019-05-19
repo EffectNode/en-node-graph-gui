@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <!-- <p>
       ID
     </p> -->
@@ -15,13 +14,28 @@
     </p>
     <input type="text" v-model="node.to"  @input="$emit('onInputAnimate', { node })"> -->
 
-    <p>title</p>
+    <h1>{{ node.title }}</h1>
     <input type="text" v-model="node.title">
     <p>type</p>
     <input type="text" v-model="node.type">
 
+    <ul v-bind="node.library = node.library || []">
+      <li :key="ii" v-for="(lib, ii) in node.library"><input type="text" v-model="lib.url"></li>
+      <li><button @click="addLib({ libs: node.library, add: adderLib })">Add</button> <input type="text" v-model="adderLib"></li>
+    </ul>
+
+    <select v-if="node.type === 'root'" v-model="node.sceneID">
+      <option :value="node._id" :key="node._id" v-for="node in nodes.filter(t => t.type === 'scene')">{{ node.title }}</option>
+    </select>
+
+    <select v-if="node.type === 'root'" v-model="node.cameraID">
+      <option :value="node._id" :key="node._id" v-for="node in nodes.filter(t => t.type === 'camera')">{{ node.title }}</option>
+    </select>
+
+    <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code this</button>
+    <br />
     <button v-if="!node.trashed" @click="addChildTo({ node, nodes })">Add Child</button>
-    <div v-if="!node.protected">
+    <div>
       <br />
       <button v-if="!node.trashed" @click="recycleNode({ node, nodes })">Recycle Node and SubTree</button>
       <button v-if="node.trashed" @click="restoreNode({ node, nodes })">Restore</button>
@@ -44,7 +58,22 @@ export default {
       required: true
     }
   },
+  data () {
+    return {
+      adderLib: ''
+    }
+  },
   methods: {
+    setViewingMe () {
+
+    },
+    addLib ({ libs, add }) {
+      libs.push({
+        _id: Node.getID(),
+        url: add
+      })
+      this.$forceUpdate()
+    },
     removeNodePerm ({ node, nodes }) {
       let links = Node.getLinks({ nodes })
       let allChd = Node.getAllChildren({ node, nodes, links })

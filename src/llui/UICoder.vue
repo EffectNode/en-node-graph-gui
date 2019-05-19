@@ -3,11 +3,14 @@
   <div class="preview-box-title" ref="title" :style="titleStyle">
     <div class="title-text">
       <p>
-        Preview Box
+        Code Box
       </p>
     </div>
     <div class="title-cross">
-      <img src="../icons/refresh.svg" @click="run()" alt="">
+      <img src="../icons/cloud-up.svg" @click="up()" alt="">
+    </div>
+    <div class="title-cross2" @click="$emit('close')" @touchend="$emit('close')">
+      <img src="../icons/cross.svg" alt="">
     </div>
   </div>
   <div class="preview-box-content" :style="contentStyle">
@@ -21,7 +24,7 @@ export default {
   data () {
     return {
       anchor: {
-        x: 20 + 0,
+        x: 20 + 300 + 400 + 20 + 20 + 0,
         y: 20 + 0
       },
       boxStyle: {},
@@ -43,8 +46,8 @@ export default {
     window.addEventListener('resize', sizer)
   },
   methods: {
-    run () {
-      this.$emit('run')
+    up () {
+      this.$emit('up')
     },
     handle () {
       let h = {
@@ -137,7 +140,8 @@ export default {
 
 <style scoped>
 .box{
-  width: 300px;
+  width: calc(100% - 300px - 400px - 20px - 20px * 3);
+  min-width: calc(500px);
   height: calc(300px * 16 / 9 + 60px);
 
   /* border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2); */
@@ -179,7 +183,28 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
+.title-cross2{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 60px;
+  width: 60px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .title-cross img{
+  cursor: pointer;
+  /* border: black solid 5px; */
+  /* border-radius: 959px; */
+  /* padding: 7px; */
+  width: 24px;
+  height: 24px;
+}
+.title-cross2 img{
   cursor: pointer;
   /* border: black solid 5px; */
   /* border-radius: 959px; */

@@ -9,18 +9,22 @@
     </NodeTree>
 
     <UIBtnTools v-if="nodes" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
-    <UIPreviewBox>
-      <EXEC v-if="nodes" mode="preview" :nodes="nodes"></EXEC>
+    <UIPreviewBox v-if="nodes" @run="onReload()">
+      <EXEC ref="exec" mode="preview" :nodes="nodes"></EXEC>
     </UIPreviewBox>
-    <UIInspector v-if="open.inspector" @close="open.inspector = false">
-      <UIControls :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
+    <UIInspector v-if="open.inspector" @close="onClose">
+      <UIControls @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
     </UIInspector>
+
+    <UICoder v-if="open.coder" @close="open.coder = false; $forceUpdate()">
+      <UICodeControl @reload="onReload()" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onCloseCoder" :node="node" @nodes="nodes = $event" @show="show = $event"></UICodeControl>
+    </UICoder>
 
   </div>
 </template>
 
 <script>
-import { setTimeout } from 'timers'
+import { setTimeout, setInterval, clearInterval } from 'timers'
 // @ is an alias to /src
 export default {
   name: 'home',
@@ -29,8 +33,10 @@ export default {
 
     NodeTree: require('../llsvg/NodeTree.vue').default,
     UIPreviewBox: require('../llui/UIPreviewBox.vue').default,
+    UICodeControl: require('../llui/UICodeControl.vue').default,
     UIControls: require('../llui/UIControls.vue').default,
     UIInspector: require('../llui/UIInspector.vue').default,
+    UICoder: require('../llui/UICoder.vue').default,
     UIBtnTools: require('../llui/UIBtnTools.vue').default
   },
   data () {
@@ -50,6 +56,12 @@ export default {
   watch: {
   },
   mounted () {
+    window.getNODES = () => {
+      return this.nodes
+    }
+
+    console.log(`copy(window.getNODES())`)
+
     // let root = [
     //   {
     //     '_id': 'root',
@@ -75,6 +87,15 @@ export default {
       //   ...nodesForHome
       // ]
       this.nodes = require('../llui/versions/diamond-06.json')
+      let str = localStorage.getItem('nodes')
+      if (str) {
+        this.nodes = JSON.parse(str)
+      }
+
+      this.tt = setInterval(() => {
+        console.log('saving....')
+        localStorage.setItem('nodes', JSON.stringify(this.nodes))
+      }, 1000)
 
       // this.$refs.editor.computeLayout({  })
     }, 150)
@@ -96,9 +117,28 @@ export default {
       })
     })
   },
+  beforeDestroy () {
+    clearInterval(this.tt)
+  },
   methods: {
-    onClose ({ node, nodes }) {
+    openCoder () {
+      this.open.coder = true
+      this.$forceUpdate()
+    },
+    onReload () {
+      console.log(`copy(window.getNODES())`)
+      this.$refs.exec.$emit('run')
+    },
+    onClose () {
       this.open.inspector = false
+      this.$nextTick(() => {
+        this.open.coder = false
+        this.$forceUpdate()
+      })
+      this.$forceUpdate()
+    },
+    onCloseCoder () {
+      this.open.coder = false
     },
     dynamic (show, nodes) {
       let h = {}

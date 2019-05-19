@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run dev-web\" \"npm run dev-lib\"",
+    "dev-complicated": "concurrently \"npm run dev-web\" \"npm run dev-lib\"",
     "deploy": "npm run deploy-web;",
     "deploy-both": "npm run deploy-web; npm run deploy-lib;",
     "deploy-web": "npm run build-lib; npm run build-vue-lib; npm run build; npm run netlify;  npm run github;",
@@ -14,14 +14,18 @@
     "build-vue-lib": "vue-cli-service build --target lib --name effectgraph ./src/llexec/EXEC.vue --dest ./public/vuelib;",
     "netlify": "netlify deploy --dir=\"./dist\" --prod",
     "dev-web": "vue-cli-service serve --https",
+    "dev": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
     "@tweenjs/tween.js": "^17.3.0",
+    "brace": "^0.11.1",
     "core-js": "^2.6.5",
     "dagre": "^0.8.4",
+    "load-js": "^3.0.3",
     "raw-loader": "^2.0.0",
+    "three": "^0.104.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
     "vuex": "^3.0.1"

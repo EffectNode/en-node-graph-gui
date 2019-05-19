@@ -133,7 +133,7 @@ export default {
             }
 
             // console.log(evt.target.node.title)
-            console.log(stat.title, JSON.stringify(stat))
+            // console.log(stat.title, JSON.stringify(stat))
           }
           // console.log(evt)
         }

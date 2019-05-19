@@ -1,3 +1,33 @@
+// // npm i @babel/standalone@7.0.0-beta.32 babel-plugin-transform-object-rest-spread babel-plugin-transform-es2015-modules-umd --save
+// import * as Babel from '@babel/standalone/babel.js'
+
+// var dynamicSpread = require('babel-plugin-transform-object-rest-spread')
+// Babel.registerPlugin('transform-object-rest-spread', dynamicSpread)
+
+// // var umd = require('babel-plugin-transform-es2015-modules-umd')
+// // Babel.registerPlugin('transform-es2015-modules-umd', umd)
+
+// // var es6 = [
+// //   [ 'transform-object-rest-spread', { 'useBuiltIns': true } ],
+// //   [
+// //     'transform-es2015-modules-umd',
+// //     {
+// //       exactGlobals: true
+// //     }
+// //   ]
+// // ]
+// var es6 = [
+//   [ 'transform-object-rest-spread', { 'useBuiltIns': true } ]
+//   // [
+//   //   'transform-es2015-modules-umd',
+//   //   {
+//   //     exactGlobals: true
+//   //   }
+//   // ]
+// ]
+import Vue from 'vue'
+import * as THREE from 'three'
+import loadJS from 'load-js'
 
 function getTagContent (str, start, end) {
   if (str.indexOf(start) === -1) {
@@ -18,7 +48,7 @@ const getCompoInfo = (compoStr) => {
   return output
 }
 
-export const compile = ({ src, noCSS = false }) => {
+export const compile = async ({ src, noCSS, library = [] }) => {
   let info = getCompoInfo(src)
   var scopeID = ' data-s-' + (Math.ceil(Math.random() * 100000)).toString(36)
   let css = JSON.stringify(info.style)
@@ -137,5 +167,52 @@ export const compile = ({ src, noCSS = false }) => {
   // console.log(info)
   let output = code + info.script + end
 
-  return output
+  window.THREE = THREE
+
+  console.log(library)
+
+  await loadJS(library.filter(f => f.url).map((lib) => {
+    return {
+      url: lib.url
+    }
+  }))
+
+  /* eslint-disable */
+  let runner = new Function('Vue', 'THREE', 'window', output)
+  /* eslint-enable */
+
+  let result = runner(Vue, THREE, window)
+
+  console.log(result)
+  return result
+}
+
+export const addDeps = ({ vue, dep = {} }) => {
+  vue.components = {
+    ...vue.components,
+    ...dep
+  }
+  return vue
+}
+
+export const Cache = {}
+
+export const makeCompo = async ({ src, library = [] }) => {
+  if (Cache[src]) {
+    return Cache[src]
+  } else {
+    let vueComp = await compile({
+      src,
+      noCSS: false,
+      library
+    })
+    vueComp = addDeps({
+      vue: vueComp,
+      dep: {
+        Object3D: require('../vfx/FreeJS/Object3D.vue').default
+      }
+    })
+    Cache[src] = vueComp
+    return vueComp
+  }
 }

@@ -21,6 +21,13 @@ export default {
       }
     }
   },
+  methods: {
+    postMessage (evt) {
+      console.log(evt)
+      if (this.$refs.sandbox) {
+      }
+    }
+  },
   watch: {
     nodes () {
       this.water.nodes = this.nodes

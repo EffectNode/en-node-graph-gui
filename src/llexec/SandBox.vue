@@ -1,36 +1,39 @@
 <template>
-  <div class="app-entry-dom">
-    <GraphScene @scene="(scene) => { sceneMap[gs._id] = scene }" :key="gs._id" v-for="gs in scenes">
-      <GraphNode :key="node._id" v-for="node in gnodes"></GraphNode>
-    </GraphScene>
-    <WebGLRenderer></WebGLRenderer>
+  <div class="app-entry-dom" v-if="nodes">
+    <GraphNode :nodeMap="nodeMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
   </div>
 </template>
 
 <script>
-import WebGLRenderer from './WebGLRenderer.vue'
+import GraphNode from './GraphNode.vue'
+// import * as Node from '../llsvg/node.js'
 export default {
   components: {
-    WebGLRenderer
+    GraphNode
   },
   props: {
     water: {}
   },
+  computed: {
+    nodes () {
+      return this.water.nodes
+    },
+    activeNodes () {
+      return this.nodes.filter(a => !a.trashed).slice()
+    }
+  },
+  watch: {
+    water () {
+    }
+  },
   data () {
     return {
-      scenes: [],
-      gnodes: [],
-      sceneMap: {},
-      show: this.water.nodes.find(n => n.type === 'scene')._id
+      nodeMap: {}
     }
   },
   mounted () {
   },
   methods: {
-    syncProp () {
-      this.scenes = this.water.nodes.filter(n => n.type === 'scene')
-      this.gnodes = this.water.nodes.filter(n => n.type === 'gnode')
-    }
   }
 }
 </script>
@@ -51,6 +54,9 @@ body{
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
+
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 </style>
 
