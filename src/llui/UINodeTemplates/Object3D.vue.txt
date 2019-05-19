@@ -33,6 +33,12 @@ export default {
       console.log(this.node.title, 'addToParent', parent.node.title)
     })
     this.$on('addChild', ({ child }) => {
+      if (child.node.type === 'drawable') {
+        this.object3D.add(child.drawable)
+      }
+      if (child.node.type === 'object3D') {
+        this.object3D.add(child.object3D)
+      }
       console.log(this.node.title, 'addChild', child.node.title)
     })
     this.$on('removeFromParent', ({ parent }) => {

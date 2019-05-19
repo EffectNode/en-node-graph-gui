@@ -7,6 +7,7 @@
 
 <script>
 import * as ENV from '../llexec/engine.js'
+import * as Node from '../llsvg/node'
 export default {
   props: {
     mode: {
@@ -19,22 +20,32 @@ export default {
     }
   },
   created () {
-    this.$on('run', () => {
-      this.restartUI()
-      this.refresher = false
-      this.$forceUpdate()
-      setTimeout(() => {
-        this.refresher = true
-        this.$forceUpdate()
-      }, 15)
+    this.$on('reload', () => {
+      this.reload()
     })
   },
   components: {
     DevExec: () => import('./DevExec.vue')
   },
+  computed: {
+    activeNodes () {
+      return (this.nodes || []).filter(n => {
+        return !n.trashed
+      })
+    },
+    links () {
+      return (Node.getLinks({ nodes: this.nodes }))
+    }
+  },
   watch: {
+    links () {
+      this.reload()
+    },
+    activeNodes () {
+      this.reload()
+    },
     nodes () {
-      this.restartUI()
+      this.reload()
     }
   },
   data () {
@@ -58,12 +69,20 @@ export default {
     window.addEventListener('resize', dimension, false)
     dimension()
 
-    this.restartUI()
+    this.reload()
   },
   methods: {
+    reload () {
+      this.refresher = false
+      this.$forceUpdate()
+      setTimeout(() => {
+        this.restartUI()
+        this.refresher = true
+        this.$forceUpdate()
+      }, 15)
+    },
     restartUI () {
       let code = ENV.nodeToCode({ nodes: this.nodes })
-      console.log(code)
       let url = ENV.codeToBlobURL({ code })
       this.src = url
     }

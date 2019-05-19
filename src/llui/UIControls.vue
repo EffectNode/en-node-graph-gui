@@ -33,8 +33,13 @@
     </select>
 
     <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code this</button>
+
     <br />
-    <button v-if="!node.trashed" @click="addChildTo({ node, nodes })">Add Child</button>
+    <button v-if="!node.trashed" @click="addEmptyChildTo({ node, nodes })">Add Empty Child</button>
+
+    <br />
+    <button v-if="!node.trashed" @click="addObject3DChildTo({ node, nodes })">Add Object3D Child</button>
+
     <div>
       <br />
       <button v-if="!node.trashed" @click="recycleNode({ node, nodes })">Recycle Node and SubTree</button>
@@ -152,7 +157,25 @@ export default {
 
       this.$emit('close', { node, nodes })
     },
-    addChildTo ({ node, nodes }) {
+    addEmptyChildTo ({ node, nodes }) {
+      let args = {
+        src: ``,
+        library: []
+      }
+      this.addChildTo({ node, nodes, args })
+    },
+    addObject3DChildTo ({ node, nodes }) {
+      let args = {
+        title: `Object 3D`,
+        type: `object3D`,
+        /* eslint-disable */
+        src: require('raw-loader!./UINodeTemplates/Object3D.vue.txt').default,
+        /* eslitnt-enable */
+        library: []
+      }
+      this.addChildTo({ node, nodes, args })
+    },
+    addChildTo ({ node, nodes, args = {} }) {
       let parentID = node._id
       let newNode = Node.getNodeTemplate()
       newNode._id = Node.getID()
@@ -164,6 +187,12 @@ export default {
       //   m.isActive = false
       // })
       // newNode.isActive = true
+      newNode.src = ``
+      newNode.library = []
+      newNode = {
+        ...newNode,
+        ...args
+      }
       this.nodes.push(
         newNode
       )

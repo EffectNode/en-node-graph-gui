@@ -178,6 +178,7 @@ export default {
           this.node.to = overlappingNode._id
           this.node.isActive = true
           this.$parent.cleanLayout({ instant: false, goHome: false, resetZoom: false, goNode: false })
+          this.$emit('dropped')
         }
 
         if (doClick) {

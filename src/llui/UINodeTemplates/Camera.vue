@@ -24,9 +24,11 @@ export default {
       let fov = 75
       let aspect = 9 / 18
       let near = 0.1
-      let far = 100000000
+      let far = 100000000000000
 
       this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+      this.camera.position.z = 500
+      this.camera.lookAt(0,0,0)
 
       this.$emit('ready', this)
     }

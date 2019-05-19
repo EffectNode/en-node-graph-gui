@@ -5,7 +5,7 @@
       <router-link to="/about">About</router-link> |
     </div> -->
 
-    <NodeTree v-if="nodes" :show="show" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
+    <NodeTree v-if="nodes" :show="show" @dropped="onReload()" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
     </NodeTree>
 
     <UIBtnTools v-if="nodes" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
@@ -126,8 +126,7 @@ export default {
       this.$forceUpdate()
     },
     onReload () {
-      console.log(`copy(window.getNODES())`)
-      this.$refs.exec.$emit('run')
+      this.$refs.exec.$emit('reload')
     },
     onClose () {
       this.open.inspector = false

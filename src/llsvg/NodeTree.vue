@@ -82,7 +82,7 @@
       <g :style="mover">
 
         <g :key="node._id + node.to + ii" v-for="(node, ii) in nodes" x>
-          <Node :node="node" :nodes="nodes" :title="node.title" :isRoot="node.to === null" :ref="`_node_${node._id}`" @click="onClick({ node, nodes, ...$event })" :uniq="uniq" :isActive="node.isActive" @move="(ev) => { onModeNodes(ev, node, nodes) }" :pos="node.pos" :type="'circle'"></Node>
+          <Node @dropped="$emit('dropped')" :node="node" :nodes="nodes" :title="node.title" :isRoot="node.to === null" :ref="`_node_${node._id}`" @click="onClick({ node, nodes, ...$event })" :uniq="uniq" :isActive="node.isActive" @move="(ev) => { onModeNodes(ev, node, nodes) }" :pos="node.pos" :type="'circle'"></Node>
         </g>
 
         <g :key="link.from + link.to + ii" v-for="(link, ii) in links">
