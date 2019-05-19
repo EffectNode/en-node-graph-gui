@@ -16,14 +16,12 @@ export default {
   },
   data () {
     return {
-      camera: false
+      scene: false
     }
   },
   methods: {
     init () {
-      let geo = new THREE.BoxBufferGeometry(100, 100, 100, 20, 20);
-      let mat = new THREE.MeshBasicMaterial({ color: 0xff0000 });
-      this.drawable = new THREE.Mesh(geo, mat)
+      this.scene = new THREE.Scene()
     }
   },
   mounted () {
@@ -35,6 +33,18 @@ export default {
       console.log(this.node.title, 'addToParent', parent.node.title)
     })
     this.$on('addChild', ({ child }) => {
+      // if camera then pass to parent
+      if (child.node.type === 'camera') {
+        this.components[this.node.to].$emit('addChild', { child })
+      }
+
+      // add here
+      if (child.node.type === 'object3D') {
+        this.scene.add(child.object3D)
+      }
+      if (child.node.type === 'drawable') {
+        this.scene.add(child.drawable)
+      }
       console.log(this.node.title, 'addChild', child.node.title)
     })
     this.$on('removeFromParent', ({ parent }) => {

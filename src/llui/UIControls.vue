@@ -24,11 +24,12 @@
       <li><button @click="addLib({ libs: node.library, add: adderLib })">Add</button> <input type="text" v-model="adderLib"></li>
     </ul>
 
-    <select v-if="node.type === 'root'" v-model="node.sceneID">
+
+    <select v-if="node.type === 'root'" v-model="node.sceneID" @change="$emit('reload')">
       <option :value="node._id" :key="node._id" v-for="node in nodes.filter(t => t.type === 'scene')">{{ node.title }}</option>
     </select>
 
-    <select v-if="node.type === 'root'" v-model="node.cameraID">
+    <select v-if="node.type === 'root'" v-model="node.cameraID" @change="$emit('reload')">
       <option :value="node._id" :key="node._id" v-for="node in nodes.filter(t => t.type === 'camera')">{{ node.title }}</option>
     </select>
 
@@ -39,6 +40,12 @@
 
     <br />
     <button v-if="!node.trashed" @click="addObject3DChildTo({ node, nodes })">Add Object3D Child</button>
+
+    <br />
+    <button v-if="!node.trashed" @click="addScene({ node, nodes })">Add Scene</button>
+
+    <br />
+    <button v-if="!node.trashed" @click="addDrawable({ node, nodes })">Add Drawable Child</button>
 
     <div>
       <br />
@@ -160,6 +167,28 @@ export default {
     addEmptyChildTo ({ node, nodes }) {
       let args = {
         src: ``,
+        library: []
+      }
+      this.addChildTo({ node, nodes, args })
+    },
+    addScene ({ node, nodes }) {
+      let args = {
+        title: `New Scene`,
+        type: `scene`,
+        /* eslint-disable */
+        src: require('raw-loader!./UINodeTemplates/Scene.vue.txt').default,
+        /* eslitnt-enable */
+        library: []
+      }
+      this.addChildTo({ node, nodes, args })
+    },
+    addDrawable ({ node, nodes }) {
+      let args = {
+        title: `Box`,
+        type: `drawable`,
+        /* eslint-disable */
+        src: require('raw-loader!./UINodeTemplates/Drawable.vue.txt').default,
+        /* eslitnt-enable */
         library: []
       }
       this.addChildTo({ node, nodes, args })

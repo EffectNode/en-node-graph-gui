@@ -13,7 +13,7 @@
       <EXEC ref="exec" mode="preview" :nodes="nodes"></EXEC>
     </UIPreviewBox>
     <UIInspector v-if="open.inspector" @close="onClose">
-      <UIControls @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
+      <UIControls @reload="onReload()" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
     </UIInspector>
 
     <UICoder v-if="open.coder" @close="open.coder = false; $forceUpdate()">
