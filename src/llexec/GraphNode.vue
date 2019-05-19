@@ -79,8 +79,10 @@ export default {
         <style>
         </style>
       `
-      this.compo = await VC.makeCompo({ src: node.src || temp, library: node.library || [] })
-      this.$forceUpdate()
+      setTimeout(async () => {
+        this.compo = await VC.makeCompo({ src: node.src || temp, library: node.library || [] })
+        this.$forceUpdate()
+      }, 1)
     },
     init () {
 

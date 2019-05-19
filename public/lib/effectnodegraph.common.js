@@ -5051,12 +5051,12 @@ var staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=353899c0&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=59aa00ad&
-var GraphNodevue_type_template_id_59aa00ad_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
-var GraphNodevue_type_template_id_59aa00ad_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=c1935aa4&
+var GraphNodevue_type_template_id_c1935aa4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
+var GraphNodevue_type_template_id_c1935aa4_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=59aa00ad&
+// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=c1935aa4&
 
 // EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
 var runtime = __webpack_require__("96cf");
@@ -54072,30 +54072,50 @@ function () {
     getCompos: function () {
       var _getCompos = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee(_ref) {
+      regeneratorRuntime.mark(function _callee2(_ref) {
+        var _this4 = this;
+
         var node, temp;
-        return regeneratorRuntime.wrap(function _callee$(_context) {
+        return regeneratorRuntime.wrap(function _callee2$(_context2) {
           while (1) {
-            switch (_context.prev = _context.next) {
+            switch (_context2.prev = _context2.next) {
               case 0:
                 node = _ref.node;
                 temp = "\n        <template>\n          <div class=\"omg-this-compo\" nodeid=\"".concat(node._id, "\"></div>\n        </template>\n        <script>\n        export default {\n        };\n        ", '<', "/script>\n        <style>\n        </style>\n      ");
-                _context.next = 4;
-                return makeCompo({
-                  src: node.src || temp,
-                  library: node.library || []
-                });
+                setTimeout(
+                /*#__PURE__*/
+                _asyncToGenerator(
+                /*#__PURE__*/
+                regeneratorRuntime.mark(function _callee() {
+                  return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          _context.next = 2;
+                          return makeCompo({
+                            src: node.src || temp,
+                            library: node.library || []
+                          });
 
-              case 4:
-                this.compo = _context.sent;
-                this.$forceUpdate();
+                        case 2:
+                          _this4.compo = _context.sent;
 
-              case 6:
+                          _this4.$forceUpdate();
+
+                        case 4:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                })), 1);
+
+              case 3:
               case "end":
-                return _context.stop();
+                return _context2.stop();
             }
           }
-        }, _callee, this);
+        }, _callee2);
       }));
 
       function getCompos(_x) {
@@ -54219,8 +54239,8 @@ function normalizeComponent (
 
 var component = normalizeComponent(
   llexec_GraphNodevue_type_script_lang_js_,
-  GraphNodevue_type_template_id_59aa00ad_render,
-  GraphNodevue_type_template_id_59aa00ad_staticRenderFns,
+  GraphNodevue_type_template_id_c1935aa4_render,
+  GraphNodevue_type_template_id_c1935aa4_staticRenderFns,
   false,
   null,
   null,
