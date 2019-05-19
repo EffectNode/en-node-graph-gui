@@ -9,7 +9,7 @@
     "deploy-web": "npm run build-lib; npm run build-vue-lib; npm run build; npm run netlify;  npm run github;",
     "github": "git add .; git commit -am \"front-end-deploy\"; git push -u origin master;",
     "netlify-lib": "netlify deploy -s REPLACE_ME_NETLIFY_LIB_UUID --dir=dist --prod",
-    "dev-lib": "nodemon --exec \"npm run build-lib\" --watch ./src/llexec",
+    "dev-lib": "nodemon --exec \"npm run build-lib\" --watch ./src/llexec -e js,vue --watch ./src/llexec",
     "build-lib": "vue-cli-service build --target lib --name effectnodegraph ./src/llexec/SandBox.vue --dest ./public/lib;",
     "build-vue-lib": "vue-cli-service build --target lib --name effectgraph ./src/llexec/EXEC.vue --dest ./public/vuelib;",
     "netlify": "netlify deploy --dir=\"./dist\" --prod",

@@ -1,6 +1,7 @@
 <template>
   <div class="full">
-    <iframe class="full" :width="iframe.width" :height="iframe.height" frameborder="0" :srcdoc="srcdoc"></iframe>
+    <iframe v-if="isProd" class="full" :width="iframe.width" :height="iframe.height" frameborder="0" :srcdoc="srcdoc"></iframe>
+    <DevExec v-else class="full" :nodes="nodes"></DevExec>
   </div>
 </template>
 
@@ -18,7 +19,7 @@ export default {
     }
   },
   components: {
-
+    DevExec: () => import('./DevExec.vue')
   },
   watch: {
     nodes () {
@@ -27,6 +28,7 @@ export default {
   },
   data () {
     return {
+      isProd: process.env.NODE_ENV === 'production',
       iframe: {
         width: 1,
         height: 1

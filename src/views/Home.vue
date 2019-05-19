@@ -74,7 +74,7 @@ export default {
       //   ...pages,
       //   ...nodesForHome
       // ]
-      this.nodes = require('../llui/versions/diamond-05.json')
+      this.nodes = require('../llui/versions/diamond-06.json')
 
       // this.$refs.editor.computeLayout({  })
     }, 150)
