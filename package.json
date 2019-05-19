@@ -6,7 +6,7 @@
     "dev": "concurrently \"npm run dev-web\" \"npm run dev-lib\"",
     "deploy": "npm run deploy-web;",
     "deploy-both": "npm run deploy-web; npm run deploy-lib;",
-    "deploy-web": "npm run build; npm run build-lib; npm run build-vue-lib; npm run netlify;  npm run github;",
+    "deploy-web": "npm run build-lib; npm run build-vue-lib; npm run build; npm run netlify;  npm run github;",
     "github": "git add .; git commit -am \"front-end-deploy\"; git push -u origin master;",
     "netlify-lib": "netlify deploy -s REPLACE_ME_NETLIFY_LIB_UUID --dir=dist --prod",
     "dev-lib": "nodemon --exec \"npm run build-lib\" --watch ./src/llexec",
