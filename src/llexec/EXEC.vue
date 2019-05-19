@@ -20,6 +20,7 @@ export default {
   },
   created () {
     this.$on('run', () => {
+      this.restartUI()
       this.refresher = false
       this.$forceUpdate()
       setTimeout(() => {

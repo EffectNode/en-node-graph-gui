@@ -13,11 +13,14 @@ export default {
     BRACE: require('./Brace.vue').default
   },
   watch: {
-    node () {
-      this.refresher = false
-      this.$nextTick(() => {
-        this.refresher = true
-      })
+    node: {
+      deep: false,
+      handler () {
+        this.refresher = false
+        this.$nextTick(() => {
+          this.refresher = true
+        })
+      }
     }
   },
   data () {
