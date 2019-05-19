@@ -20,7 +20,10 @@
     <input type="text" v-model="node.type">
 
     <ul v-bind="node.library = node.library || []">
-      <li :key="ii" v-for="(lib, ii) in node.library"><input type="text" v-model="lib.url"></li>
+      <li :key="ii" v-for="(lib, ii) in node.library">
+        <input type="text" v-model="lib.url">
+        <button @click="removeLib({ libs: node.library, lib, idx: ii })">X</button>
+      </li>
       <li><button @click="addLib({ libs: node.library, add: adderLib })">Add</button> <input type="text" v-model="adderLib"></li>
     </ul>
 
@@ -33,18 +36,24 @@
     </select>
 
     <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code this</button>
-
+<!--
     <br />
-    <button v-if="!node.trashed" @click="addEmptyChildTo({ node, nodes })">Add Empty Child</button>
+    <button v-if="!node.trashed" @click="addEmptyChildTo({ node, nodes })">Add TE Child</button> -->
 
     <br />
     <button v-if="!node.trashed" @click="addObject3DChildTo({ node, nodes })">Add Object3D Child</button>
+
+    <br />
+    <button v-if="!node.trashed" @click="addSphereGeometry({ node, nodes })">Add Sphere Geometry Child</button>
 
     <br />
     <button v-if="!node.trashed" @click="addScene({ node, nodes })">Add Scene</button>
 
     <br />
     <button v-if="!node.trashed" @click="addDrawable({ node, nodes })">Add Drawable Child</button>
+
+    <br />
+    <button v-if="!node.trashed" @click="addBasicSolidMaterial({ node, nodes })">Add Basic Solid Material Child</button>
 
     <div>
       <br />
@@ -78,12 +87,18 @@ export default {
     setViewingMe () {
 
     },
+    removeLib ({ libs, idx, lib }) {
+      libs.splice(idx, 1)
+      this.$forceUpdate()
+      this.$emit('reload')
+    },
     addLib ({ libs, add }) {
       libs.push({
         _id: Node.getID(),
         url: add
       })
       this.$forceUpdate()
+      this.$emit('reload')
     },
     removeNodePerm ({ node, nodes }) {
       let links = Node.getLinks({ nodes })
@@ -115,6 +130,7 @@ export default {
           goNode: nodes.find(m => m._id === node.to)
         }
       })
+      this.$emit('reload')
     },
     recycleNode ({ node, nodes }) {
       let links = Node.getLinks({ nodes })
@@ -141,6 +157,7 @@ export default {
           goNode: nodes.find(m => m._id === node.to)
         }
       })
+      this.$emit('reload')
     },
     restoreNode ({ node, nodes }) {
       let links = Node.getLinks({ nodes })
@@ -162,10 +179,33 @@ export default {
       this.$forceUpdate()
 
       this.$emit('close', { node, nodes })
+      this.$emit('reload')
     },
-    addEmptyChildTo ({ node, nodes }) {
+    // addEmptyChildTo ({ node, nodes }) {
+    //   let args = {
+    //     src: ``,
+    //     library: []
+    //   }
+    //   this.addChildTo({ node, nodes, args })
+    // },
+    addBasicSolidMaterial ({ node, nodes }) {
       let args = {
-        src: ``,
+        title: `New Solid Material`,
+        type: `material`,
+        /* eslint-disable */
+        src: require('raw-loader!./UINodeTemplates/SolidMaterial.vue.txt').default,
+        /* eslitnt-enable */
+        library: []
+      }
+      this.addChildTo({ node, nodes, args })
+    },
+    addSphereGeometry ({ node, nodes }) {
+      let args = {
+        title: `New Sphere Geometry`,
+        type: `geometry`,
+        /* eslint-disable */
+        src: require('raw-loader!./UINodeTemplates/SphereGeometry.vue.txt').default,
+        /* eslitnt-enable */
         library: []
       }
       this.addChildTo({ node, nodes, args })
@@ -183,7 +223,7 @@ export default {
     },
     addDrawable ({ node, nodes }) {
       let args = {
-        title: `Box`,
+        title: `Mesh`,
         type: `drawable`,
         /* eslint-disable */
         src: require('raw-loader!./UINodeTemplates/Drawable.vue.txt').default,
@@ -225,6 +265,7 @@ export default {
         newNode
       )
       this.$emit('onLayout', { node, nodes })
+      this.$emit('reload')
     }
   },
   created () {

@@ -16,14 +16,13 @@ export default {
   },
   data () {
     return {
-      drawable: false
+      material: false
     }
   },
   methods: {
     init () {
-      let geo = new THREE.BoxBufferGeometry(100, 100, 100, 20, 20);
-      let mat = new THREE.MeshBasicMaterial({ color: 0xffff00 });
-      this.drawable = new THREE.Mesh(geo, mat)
+      let mat = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
+      this.material = mat
     }
   },
   mounted () {
@@ -35,12 +34,12 @@ export default {
       // console.log(this.node.title, 'addToParent', parent.node.title)
     })
     this.$on('addChild', ({ child }) => {
-      if (child.node.type === 'material') {
-        this.drawable.material = child.material
-      }
-      if (child.node.type === 'geometry') {
-        this.drawable.geometry = child.geometry
-      }
+      // if (child.node.type === 'map') {
+      //   this.material.map = child.map
+      // }
+      // if (child.node.type === 'geometry') {
+      //   this.material.geometry = child.geometry
+      // }
       console.log(this.node.title, 'addChild', child.node.title)
     })
     this.$on('removeFromParent', ({ parent }) => {
