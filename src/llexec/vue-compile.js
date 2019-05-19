@@ -169,7 +169,7 @@ export const compile = async ({ src, noCSS, library = [] }) => {
 
   window.THREE = THREE
 
-  console.log(library)
+  // console.log(library)
 
   await loadJS(library.filter(f => f.url).map((lib) => {
     return {
@@ -183,7 +183,7 @@ export const compile = async ({ src, noCSS, library = [] }) => {
 
   let result = runner(Vue, THREE, window)
 
-  console.log(result)
+  // console.log(result)
   return result
 }
 

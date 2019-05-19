@@ -85,14 +85,14 @@
     "hasFound": false,
     "isActive": false,
     "rect": {
-      "x": 420,
-      "y": 60,
+      "x": 328,
+      "y": 183.09999084472656,
       "width": 60,
       "height": 60,
-      "top": 60,
-      "right": 480,
-      "bottom": 120,
-      "left": 420
+      "top": 183.09999084472656,
+      "right": 388,
+      "bottom": 243.09999084472656,
+      "left": 328
     },
     "trashed": false,
     "type": "camera",
@@ -116,14 +116,14 @@
     "hasFound": false,
     "isActive": false,
     "rect": {
-      "x": 647,
-      "y": 272.1000061035156,
+      "x": 540,
+      "y": 268.1000061035156,
       "width": 60,
       "height": 60,
-      "top": 272.1000061035156,
-      "right": 707,
-      "bottom": 332.1000061035156,
-      "left": 647
+      "top": 268.1000061035156,
+      "right": 600,
+      "bottom": 328.1000061035156,
+      "left": 540
     },
     "library": [],
     "type": "object3D",
@@ -209,14 +209,14 @@
     "isActive": false,
     "hasFound": false,
     "rect": {
-      "x": 180,
-      "y": 299.95001220703125,
+      "x": 154.64520263671875,
+      "y": 277.5103759765625,
       "width": 60,
       "height": 60,
-      "top": 299.95001220703125,
-      "right": 240,
-      "bottom": 359.95001220703125,
-      "left": 180
+      "top": 277.5103759765625,
+      "right": 214.64520263671875,
+      "bottom": 337.5103759765625,
+      "left": 154.64520263671875
     }
   },
   {
@@ -227,7 +227,7 @@
       "x": 960,
       "y": 60
     },
-    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      geometry: false\n    }\n  },\n  methods: {\n    init () {\n      let radius = 40\n      let tube = 4\n      let radSeg = 30\n      let tubSeg = 200\n      let arc2PI = Math.PI * 2.0\n      this.geometry = new THREE.TorusGeometry(radius, tube, radSeg, tubSeg, arc2PI)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      geometry: false\n    }\n  },\n  methods: {\n    init () {\n      let radius = 40\n      let tube = 4\n      let radSeg = 15\n      let tubSeg = 100\n      let arc2PI = Math.PI * 2.0\n      this.geometry = new THREE.TorusGeometry(radius, tube, radSeg, tubSeg, arc2PI)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
     "library": [],
     "type": "geometry",
     "size": {
@@ -239,14 +239,14 @@
     "isActive": false,
     "hasFound": false,
     "rect": {
-      "x": 180,
-      "y": 118.10000610351562,
+      "x": 720,
+      "y": 119.0999984741211,
       "width": 60,
-      "height": 60,
-      "top": 118.10000610351562,
-      "right": 240,
-      "bottom": 178.10000610351562,
-      "left": 180
+      "height": 60.00000762939453,
+      "top": 119.0999984741211,
+      "right": 780,
+      "bottom": 179.10000610351562,
+      "left": 720
     }
   },
   {
@@ -298,14 +298,14 @@
     "isOverlappingWith": false,
     "isActive": false,
     "rect": {
-      "x": 51,
-      "y": 292.10003662109375,
+      "x": 180,
+      "y": 269.1000061035156,
       "width": 60,
       "height": 60,
-      "top": 292.10003662109375,
-      "right": 111,
-      "bottom": 352.10003662109375,
-      "left": 51
+      "top": 269.1000061035156,
+      "right": 240,
+      "bottom": 329.1000061035156,
+      "left": 180
     },
     "hasFound": false
   },
@@ -397,7 +397,7 @@
       "x": 1140,
       "y": 310
     },
-    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      geometry: false\n    }\n  },\n  methods: {\n    init () {\n      let radius = 40\n      let tube = 4\n      let radSeg = 30\n      let tubSeg = 200\n      let arc2PI = Math.PI * 2.0\n      this.geometry = new THREE.TorusGeometry(radius, tube, radSeg, tubSeg, arc2PI)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      geometry: false\n    }\n  },\n  methods: {\n    init () {\n      let radius = 40\n      let tube = 4\n      let radSeg = 15\n      let tubSeg = 100\n      let arc2PI = Math.PI * 2.0\n      this.geometry = new THREE.TorusGeometry(radius, tube, radSeg, tubSeg, arc2PI)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
     "library": [],
     "type": "geometry",
     "size": {
@@ -409,14 +409,14 @@
     "isActive": false,
     "hasFound": false,
     "rect": {
-      "x": 180,
-      "y": 118.09999084472656,
+      "x": 463,
+      "y": 388.1000061035156,
       "width": 60,
       "height": 60,
-      "top": 118.09999084472656,
-      "right": 240,
-      "bottom": 178.09999084472656,
-      "left": 180
+      "top": 388.1000061035156,
+      "right": 523,
+      "bottom": 448.1000061035156,
+      "left": 463
     }
   },
   {
@@ -517,7 +517,7 @@
       "x": 1320,
       "y": 460
     },
-    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      geometry: false\n    }\n  },\n  methods: {\n    init () {\n      let radius = 40\n      let tube = 4\n      let radSeg = 30\n      let tubSeg = 200\n      let arc2PI = Math.PI * 2.0\n      this.geometry = new THREE.TorusGeometry(radius, tube, radSeg, tubSeg, arc2PI)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+    "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      geometry: false\n    }\n  },\n  methods: {\n    init () {\n      let radius = 40\n      let tube = 4\n      let radSeg = 15\n      let tubSeg = 100\n      let arc2PI = Math.PI * 2.0\n      this.geometry = new THREE.TorusGeometry(radius, tube, radSeg, tubSeg, arc2PI)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
     "library": [],
     "type": "geometry",
     "size": {
@@ -528,14 +528,14 @@
     "isOverlappingWith": false,
     "isActive": false,
     "rect": {
-      "x": 360,
-      "y": 268.1000061035156,
+      "x": 540,
+      "y": 419.1000061035156,
       "width": 60,
       "height": 60,
-      "top": 268.1000061035156,
-      "right": 420,
-      "bottom": 328.1000061035156,
-      "left": 360
+      "top": 419.1000061035156,
+      "right": 600,
+      "bottom": 479.1000061035156,
+      "left": 540
     },
     "hasFound": false
   },
@@ -559,14 +559,14 @@
     "isActive": false,
     "hasFound": false,
     "rect": {
-      "x": 309.88800048828125,
-      "y": 226.24935913085938,
+      "x": 180,
+      "y": 368.1000061035156,
       "width": 60,
       "height": 60,
-      "top": 226.24935913085938,
-      "right": 369.88800048828125,
-      "bottom": 286.2493591308594,
-      "left": 309.88800048828125
+      "top": 368.1000061035156,
+      "right": 240,
+      "bottom": 428.1000061035156,
+      "left": 180
     }
   }
 ]

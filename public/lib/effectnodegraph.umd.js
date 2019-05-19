@@ -53903,9 +53903,9 @@ function () {
             end = "\n    return mycompo;\n  "; // console.log(info)
 
             output = code + info.script + end;
-            window.THREE = three_module_namespaceObject;
-            console.log(library);
-            _context.next = 15;
+            window.THREE = three_module_namespaceObject; // console.log(library)
+
+            _context.next = 14;
             return load_js_default()(library.filter(function (f) {
               return f.url;
             }).map(function (lib) {
@@ -53914,16 +53914,16 @@ function () {
               };
             }));
 
-          case 15:
+          case 14:
             /* eslint-disable */
             runner = new Function('Vue', 'THREE', 'window', output);
             /* eslint-enable */
 
-            result = runner(external_commonjs_vue_commonjs2_vue_root_Vue_default.a, three_module_namespaceObject, window);
-            console.log(result);
+            result = runner(external_commonjs_vue_commonjs2_vue_root_Vue_default.a, three_module_namespaceObject, window); // console.log(result)
+
             return _context.abrupt("return", result);
 
-          case 19:
+          case 17:
           case "end":
             return _context.stop();
         }
