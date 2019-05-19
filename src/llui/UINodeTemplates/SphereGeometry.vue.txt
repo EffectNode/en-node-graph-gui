@@ -21,7 +21,7 @@ export default {
   },
   methods: {
     init () {
-      this.geometry = new THREE.SphereGeometry(100, 64, 64)
+      this.geometry = new THREE.SphereGeometry(56, 64, 64)
     }
   },
   mounted () {

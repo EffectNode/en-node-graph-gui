@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev-run-lib": "concurrently \"npm run dev-web\" \"npm run dev-lib\"",
+    "dev-both": "concurrently \"npm run dev-web\" \"npm run dev-lib\"",
     "deploy": "npm run deploy-web;",
     "deploy-both": "npm run deploy-web; npm run deploy-lib;",
     "deploy-web": "npm run build-lib; npm run build-vue-lib; npm run build; npm run netlify;  npm run github;",

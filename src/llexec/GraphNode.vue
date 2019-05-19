@@ -1,5 +1,5 @@
 <template>
-  <Component v-if="compo && node" :parentNode="parentNode" ref="me" :parentComponent="nodeMap[node.to]" :isRootNode="!!!node.to" :components="nodeMap" :nodes="nodes" :node="node" @ready="onReady" @remove="onRemove" :is="compo"></Component>
+  <Component v-if="compo && node" @exec="onExec" :parentNode="parentNode" ref="me" :parentComponent="nodeMap[node.to]" :isRootNode="!!!node.to" :components="nodeMap" :nodes="nodes" :node="node" @ready="onReady" @remove="onRemove" :is="compo"></Component>
 </template>
 
 <script>
@@ -14,12 +14,27 @@ export default {
     return {
       parentNode: this.nodes.find(n => n._id === this.node.to),
       compo: false,
-      self: {}
+      self: {},
+      rAFID: 0,
+      execFnc () {
+        console.log('omg')
+      }
     }
   },
+  beforeDestroy () {
+    window.cancelAnimationFrame(this.rAFID)
+  },
   created () {
+    let rAF = () => {
+      this.rAFID = window.requestAnimationFrame(rAF)
+      this.execFnc()
+    }
+    this.rAFID = window.requestAnimationFrame(rAF)
   },
   methods: {
+    onExec (v) {
+      this.execFnc = v
+    },
     onReady (compos) {
       let tt = setInterval(() => {
         let me = this.nodeMap[this.node._id] = compos

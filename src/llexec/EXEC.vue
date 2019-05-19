@@ -1,6 +1,6 @@
 <template>
   <div class="full" v-if="refresher">
-    <iframe v-if="true" class="full" :width="iframe.width" ref="winwin" :height="iframe.height" frameborder="0" :src="src"></iframe>
+    <iframe v-if="isProd" class="full" :width="iframe.width" ref="winwin" :height="iframe.height" frameborder="0" :src="src"></iframe>
     <DevExec v-else class="full" :nodes="nodes" ref="winwin"></DevExec>
   </div>
 </template>
