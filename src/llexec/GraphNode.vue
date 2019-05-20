@@ -46,10 +46,10 @@ export default {
         let parent = this.nodeMap[this.node.to]
         if (parent) {
           clearInterval(tt)
-          me.$emit('addToParent', {
-            parent,
-            me
-          })
+          // me.$emit('addToParent', {
+          //   parent,
+          //   me
+          // })
           parent.$emit('addChild', {
             child: me,
             me: parent
@@ -60,12 +60,12 @@ export default {
     onRemove () {
       let me = this.$refs['me']
       let parent = this.nodeMap[this.node.to]
-      if (this.nodeMap[this.node._id]) {
-        this.nodeMap[this.node._id].$emit('removeFromParent', {
-          me: me,
-          parent: parent
-        })
-      }
+      // if (this.nodeMap[this.node._id]) {
+      //   this.nodeMap[this.node._id].$emit('removeFromParent', {
+      //     me: me,
+      //     parent: parent
+      //   })
+      // }
       if (this.node.to) {
         this.nodeMap[this.node.to].$emit('removeChild', {
           me: parent,

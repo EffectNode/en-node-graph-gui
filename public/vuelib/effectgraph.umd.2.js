@@ -6,12 +6,12 @@
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/DevExec.vue?vue&type=template&id=6f353588&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/DevExec.vue?vue&type=template&id=ffeb8356&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return _c('div',{staticClass:"full"},[(_vm.water)?_c('SandBox',{attrs:{"water":_vm.water}}):_vm._e()],1)}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/DevExec.vue?vue&type=template&id=6f353588&
+// CONCATENATED MODULE: ./src/llexec/DevExec.vue?vue&type=template&id=ffeb8356&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.promise.js
 var es6_promise = __webpack_require__("551c");
@@ -22,19 +22,19 @@ var runtime = __webpack_require__("96cf");
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/helpers/esm/asyncToGenerator.js
 var asyncToGenerator = __webpack_require__("3b8d");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=3d83fe4e&scoped=true&
-var SandBoxvue_type_template_id_3d83fe4e_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"execStack":_vm.execStack,"nodeMap":_vm.nodeMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
-var SandBoxvue_type_template_id_3d83fe4e_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=2966bd45&scoped=true&
+var SandBoxvue_type_template_id_2966bd45_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"execStack":_vm.execStack,"nodeMap":_vm.nodeMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
+var SandBoxvue_type_template_id_2966bd45_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=3d83fe4e&scoped=true&
+// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=2966bd45&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=2097ef5b&
-var GraphNodevue_type_template_id_2097ef5b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
-var GraphNodevue_type_template_id_2097ef5b_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=dc330936&
+var GraphNodevue_type_template_id_dc330936_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
+var GraphNodevue_type_template_id_dc330936_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=2097ef5b&
+// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=dc330936&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.find.js
 var es6_array_find = __webpack_require__("7514");
@@ -290,11 +290,11 @@ function () {
         var parent = _this2.nodeMap[_this2.node.to];
 
         if (parent) {
-          clearInterval(tt);
-          me.$emit('addToParent', {
-            parent: parent,
-            me: me
-          });
+          clearInterval(tt); // me.$emit('addToParent', {
+          //   parent,
+          //   me
+          // })
+
           parent.$emit('addChild', {
             child: me,
             me: parent
@@ -304,14 +304,12 @@ function () {
     },
     onRemove: function onRemove() {
       var me = this.$refs['me'];
-      var parent = this.nodeMap[this.node.to];
-
-      if (this.nodeMap[this.node._id]) {
-        this.nodeMap[this.node._id].$emit('removeFromParent', {
-          me: me,
-          parent: parent
-        });
-      }
+      var parent = this.nodeMap[this.node.to]; // if (this.nodeMap[this.node._id]) {
+      //   this.nodeMap[this.node._id].$emit('removeFromParent', {
+      //     me: me,
+      //     parent: parent
+      //   })
+      // }
 
       if (this.node.to) {
         this.nodeMap[this.node.to].$emit('removeChild', {
@@ -398,8 +396,8 @@ var componentNormalizer = __webpack_require__("2877");
 
 var component = Object(componentNormalizer["a" /* default */])(
   llexec_GraphNodevue_type_script_lang_js_,
-  GraphNodevue_type_template_id_2097ef5b_render,
-  GraphNodevue_type_template_id_2097ef5b_staticRenderFns,
+  GraphNodevue_type_template_id_dc330936_render,
+  GraphNodevue_type_template_id_dc330936_staticRenderFns,
   false,
   null,
   null,
@@ -446,6 +444,10 @@ var component = Object(componentNormalizer["a" /* default */])(
   mounted: function mounted() {
     var _this = this;
 
+    window.addEventListener('message', function (omg) {
+      console.log(omg);
+    });
+
     var rAF = function rAF() {
       _this.rAFID = window.requestAnimationFrame(rAF);
 
@@ -481,11 +483,11 @@ var SandBoxvue_type_style_index_0_lang_css_ = __webpack_require__("923e");
 
 var SandBox_component = Object(componentNormalizer["a" /* default */])(
   llexec_SandBoxvue_type_script_lang_js_,
-  SandBoxvue_type_template_id_3d83fe4e_scoped_true_render,
-  SandBoxvue_type_template_id_3d83fe4e_scoped_true_staticRenderFns,
+  SandBoxvue_type_template_id_2966bd45_scoped_true_render,
+  SandBoxvue_type_template_id_2966bd45_scoped_true_staticRenderFns,
   false,
   null,
-  "3d83fe4e",
+  "2966bd45",
   null
   
 )
@@ -525,7 +527,7 @@ var SandBox_component = Object(componentNormalizer["a" /* default */])(
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
-                console.log(evt); // let sandbox = await this.tryGet(() => this.$refs.sandbox)
+                window.postMessage(evt, window.location.origin);
 
               case 1:
               case "end":

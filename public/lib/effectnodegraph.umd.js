@@ -5053,19 +5053,19 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=3d83fe4e&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=2966bd45&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"execStack":_vm.execStack,"nodeMap":_vm.nodeMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=3d83fe4e&scoped=true&
+// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=2966bd45&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=2097ef5b&
-var GraphNodevue_type_template_id_2097ef5b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
-var GraphNodevue_type_template_id_2097ef5b_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=dc330936&
+var GraphNodevue_type_template_id_dc330936_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
+var GraphNodevue_type_template_id_dc330936_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=2097ef5b&
+// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=dc330936&
 
 // EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
 var runtime = __webpack_require__("96cf");
@@ -54048,11 +54048,11 @@ function () {
         var parent = _this2.nodeMap[_this2.node.to];
 
         if (parent) {
-          clearInterval(tt);
-          me.$emit('addToParent', {
-            parent: parent,
-            me: me
-          });
+          clearInterval(tt); // me.$emit('addToParent', {
+          //   parent,
+          //   me
+          // })
+
           parent.$emit('addChild', {
             child: me,
             me: parent
@@ -54062,14 +54062,12 @@ function () {
     },
     onRemove: function onRemove() {
       var me = this.$refs['me'];
-      var parent = this.nodeMap[this.node.to];
-
-      if (this.nodeMap[this.node._id]) {
-        this.nodeMap[this.node._id].$emit('removeFromParent', {
-          me: me,
-          parent: parent
-        });
-      }
+      var parent = this.nodeMap[this.node.to]; // if (this.nodeMap[this.node._id]) {
+      //   this.nodeMap[this.node._id].$emit('removeFromParent', {
+      //     me: me,
+      //     parent: parent
+      //   })
+      // }
 
       if (this.node.to) {
         this.nodeMap[this.node.to].$emit('removeChild', {
@@ -54248,8 +54246,8 @@ function normalizeComponent (
 
 var component = normalizeComponent(
   llexec_GraphNodevue_type_script_lang_js_,
-  GraphNodevue_type_template_id_2097ef5b_render,
-  GraphNodevue_type_template_id_2097ef5b_staticRenderFns,
+  GraphNodevue_type_template_id_dc330936_render,
+  GraphNodevue_type_template_id_dc330936_staticRenderFns,
   false,
   null,
   null,
@@ -54296,6 +54294,10 @@ var component = normalizeComponent(
   mounted: function mounted() {
     var _this = this;
 
+    window.addEventListener('message', function (omg) {
+      console.log(omg);
+    });
+
     var rAF = function rAF() {
       _this.rAFID = window.requestAnimationFrame(rAF);
 
@@ -54335,7 +54337,7 @@ var SandBox_component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "3d83fe4e",
+  "2966bd45",
   null
   
 )

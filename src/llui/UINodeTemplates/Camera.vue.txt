@@ -30,15 +30,20 @@ export default {
       this.camera.position.z = 500
       this.camera.lookAt(0,0,0)
 
-      this.$emit('ready', this)
+      // this.$emit('exec', () => {
+      //   let time = window.performance.now() * 0.001
+      //   this.camera.position.x = 100 * Math.sin(time)
+      //   this.camera.position.y = 100 * Math.cos(time)
+      // })
     }
   },
   mounted () {
     this.init()
+    this.$emit('ready', this)
   },
   created () {
     this.$on('addToParent', ({ parent }) => {
-      console.log(this.node.title, 'addToParent', parent.node.title)
+      // console.log(this.node.title, 'addToParent', parent.node.title)
     })
     this.$on('addChild', ({ child }) => {
       console.log(this.node.title, 'addChild', child.node.title)

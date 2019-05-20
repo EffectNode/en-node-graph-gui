@@ -42,6 +42,8 @@
 
     <br />
     <button v-if="!node.trashed" @click="addObject3DChildTo({ node, nodes })">Add Object3D Child</button>
+    <br />
+    <button v-if="!node.trashed" @click="addCamera({ node, nodes })">Add Camera Child</button>
 
     <br />
     <button v-if="!node.trashed" @click="addSphereGeometry({ node, nodes })">Add Sphere Geometry Child</button>
@@ -149,6 +151,8 @@ export default {
       // this node
       this.$forceUpdate()
 
+      this.$emit('nodes', [...this.nodes])
+
       this.$emit('close', { node, nodes })
       this.$emit('onLayout', {
         node,
@@ -206,6 +210,17 @@ export default {
         type: `geometry`,
         /* eslint-disable */
         src: require('raw-loader!./UINodeTemplates/SphereGeometry.vue.txt').default,
+        /* eslitnt-enable */
+        library: []
+      }
+      return this.addChildTo({ node, nodes, args, returnNode })
+    },
+    addCamera ({ node, nodes, returnNode }) {
+      let args = {
+        title: `Camera`,
+        type: `camera`,
+        /* eslint-disable */
+        src: require('raw-loader!./UINodeTemplates/Camera.vue.txt').default,
         /* eslitnt-enable */
         library: []
       }

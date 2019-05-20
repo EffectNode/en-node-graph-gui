@@ -23,8 +23,7 @@ export default {
   },
   methods: {
     async postMessage (evt) {
-      console.log(evt)
-      // let sandbox = await this.tryGet(() => this.$refs.sandbox)
+      window.postMessage(evt, window.location.origin)
     },
     tryGet (fn = () => {}) {
       return new Promise((resolve) => {

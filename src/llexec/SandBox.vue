@@ -33,6 +33,10 @@ export default {
     }
   },
   mounted () {
+    window.addEventListener('message', (omg) => {
+      console.log(omg)
+    })
+
     let rAF = () => {
       this.rAFID = window.requestAnimationFrame(rAF)
       for (var key in this.execStack) {
