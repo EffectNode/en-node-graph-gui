@@ -14,7 +14,7 @@
     </UIPreviewBox>
 
     <UITimeline v-if="open.timeline" @close="open.timeline = false; $forceUpdate()">
-      <UITimelineEngine></UITimelineEngine>
+      <UITimelineEngine :water="water"></UITimelineEngine>
     </UITimeline>
 
     <UIInspector v-if="open.inspector" @close="onClose">
@@ -54,12 +54,35 @@ export default {
         timeline: true,
         inspector: false
       },
+      water: {
+        nodes: false,
+        timleine: false
+      },
       view: {
         x: 0,
         y: 0
       },
-      node: false,
-      nodes: false
+      node: false
+
+      // nodes: false
+    }
+  },
+  computed: {
+    nodes: {
+      get () {
+        return this.water.nodes
+      },
+      set (v) {
+        this.water.nodes = v
+      }
+    },
+    timeline: {
+      get () {
+        return this.water.timeline
+      },
+      set (v) {
+        this.water.timeline = v
+      }
     }
   },
   watch: {
@@ -68,9 +91,14 @@ export default {
     window.getNODES = () => {
       return this.nodes
     }
+    window.getWater = () => {
+      return this.water
+    }
 
     console.log(`copy(window.getNODES())`)
     console.log(`copy(encodeURIComponent(JSON.stringify(getNODES())))`)
+    console.log(`copy(window.getWater())`)
+    console.log(`copy(encodeURIComponent(JSON.stringify(getWater())))`)
     // let root = [
     //   {
     //     '_id': 'root',
@@ -95,17 +123,30 @@ export default {
       //   ...pages,
       //   ...nodesForHome
       // ]
+
       this.nodes = require('../llui/versions/diamond-06.json')
 
       if (process.env.NODE_ENV === 'development') {
-        let str = localStorage.getItem('nodes')
-        if (str) {
-          this.nodes = JSON.parse(str)
+        // // nodes
+        // let str = localStorage.getItem('nodes')
+        // if (str) {
+        //   this.nodes = JSON.parse(str)
+        // }
+
+        // this.tt = setInterval(() => {
+        //   console.log('saving....')
+        //   localStorage.setItem('nodes', JSON.stringify(this.nodes))
+        // }, 1000)
+
+        // water
+        let waterString = localStorage.getItem('water')
+        if (waterString) {
+          this.water = JSON.parse(waterString)
         }
 
-        this.tt = setInterval(() => {
-          console.log('saving....')
-          localStorage.setItem('nodes', JSON.stringify(this.nodes))
+        this.waterTimer = setInterval(() => {
+          console.log('SAVING WATER....')
+          localStorage.setItem('water', JSON.stringify(this.water))
         }, 1000)
       }
 
@@ -130,7 +171,7 @@ export default {
     })
   },
   beforeDestroy () {
-    clearInterval(this.tt)
+    clearInterval(this.waterTimer)
   },
   methods: {
     openCoder () {

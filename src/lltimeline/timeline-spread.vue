@@ -39,14 +39,17 @@ export default {
         let deltaX = now - state.sx
         state.dx = deltaX
 
+        let width = this.$parent.rect.width
+
+        width /= this.$parent.baseTime / this.$parent.initBaseTime
         // console.log(deltaX)
 
-        this.$parent.track.start += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
-        this.$parent.track.end += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
+        this.$parent.track.start += Number(deltaX / width * this.$parent.$parent.baseTime)
+        this.$parent.track.end += Number(deltaX / width * this.$parent.$parent.baseTime)
 
         if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
-          this.$parent.track.end -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
+          this.$parent.track.start -= Number(deltaX / width * this.$parent.$parent.baseTime)
+          this.$parent.track.end -= Number(deltaX / width * this.$parent.$parent.baseTime)
         }
 
         this.$parent.syncCSS()

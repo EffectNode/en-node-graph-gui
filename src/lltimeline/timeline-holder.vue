@@ -7,8 +7,8 @@
           <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
           <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
           <div class="button-pill" @click="restart">Restart</div>
-          <div class="button-pill" @click="baseTime *= 1.5">-</div>
-          <div class="button-pill" @click="baseTime /= 1.5">+</div>
+          <div class="button-pill" @click="baseTime *= 1.25">-</div>
+          <div class="button-pill" @click="baseTime /= 1.25">+</div>
 
           Max Time (seconds):
           <input type="text" v-model="timeline.totalTime" />
@@ -52,7 +52,6 @@
 </template>
 
 <script>
-import { setInterval } from 'timers'
 export default {
   props: {
     title: {
@@ -246,16 +245,18 @@ export default {
           // let width = this.toucherRect.width - this.sizer
           let width = this.toucherRect.width - this.sizer
 
-          width *= this.baseTime / this.initBaseTime
+          width /= this.baseTime / this.initBaseTime
 
           this.editor.timelinePercentage = Number((now) / (width))
           this.editor.timelinePercentageLast = this.editor.timelinePercentage
           this.editor.totalTime = this.timeline.totalTime
         }
       }
-      setInterval(() => {
+
+      let loop = () => {
+        window.requestAnimationFrame(loop)
         let width = this.toucherRect.width - this.sizer
-        width *= this.baseTime / this.initBaseTime
+        width /= this.baseTime / this.initBaseTime
 
         if (this.$refs['timetick']) {
           let ticker = Number(3 + this.editor.timelinePercentage * (width) + 0)
@@ -275,7 +276,9 @@ export default {
           // let sT = this.toucher.scrollTop
           this.$refs['timetick2'].style.transform = `translateZ(1px) translateY(${sT.toFixed(1)}px) translateX(${tickerMaxTime.toFixed(1)}px)`
         }
-      }, 1000 / 60)
+      }
+      requestAnimationFrame(loop)
+
       dom.addEventListener('mouseneter', (evt) => {
         this.hover()
       })
@@ -329,7 +332,7 @@ export default {
 .timeline{
   width: 100%;
   height: 100%;
-  min-height: 200px;
+  min-height: 275px;
   max-width: 100%;
   overflow-x: scroll;
   position: relative;
