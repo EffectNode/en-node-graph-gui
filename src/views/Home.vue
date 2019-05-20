@@ -61,7 +61,7 @@ export default {
     }
 
     console.log(`copy(window.getNODES())`)
-
+    console.log(`copy(encodeURIComponent(JSON.stringify(getNODES())))`)
     // let root = [
     //   {
     //     '_id': 'root',

@@ -1,6 +1,6 @@
 <template>
   <div class="app-entry-dom" v-if="activeNodes && water">
-    <GraphNode :nodeMap="nodeMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
+    <GraphNode :execStack="execStack" :nodeMap="nodeMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
   </div>
 </template>
 
@@ -28,10 +28,24 @@ export default {
   },
   data () {
     return {
+      execStack: {},
       nodeMap: {}
     }
   },
   mounted () {
+    let rAF = () => {
+      this.rAFID = window.requestAnimationFrame(rAF)
+      for (var key in this.execStack) {
+        let fn = this.execStack[key]
+        if (fn) {
+          fn()
+        }
+      }
+    }
+    this.rAFID = window.requestAnimationFrame(rAF)
+  },
+  beforeDestroy () {
+    cancelAnimationFrame(this.rAFID)
   },
   methods: {
   }

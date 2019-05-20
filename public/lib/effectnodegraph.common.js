@@ -5044,19 +5044,19 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=353899c0&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"nodeMap":_vm.nodeMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=3d83fe4e&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"execStack":_vm.execStack,"nodeMap":_vm.nodeMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=353899c0&scoped=true&
+// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=3d83fe4e&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=69c3a9dc&
-var GraphNodevue_type_template_id_69c3a9dc_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
-var GraphNodevue_type_template_id_69c3a9dc_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=2097ef5b&
+var GraphNodevue_type_template_id_2097ef5b_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
+var GraphNodevue_type_template_id_2097ef5b_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=69c3a9dc&
+// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=2097ef5b&
 
 // EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
 var runtime = __webpack_require__("96cf");
@@ -53998,7 +53998,12 @@ function () {
   props: {
     node: {},
     nodes: {},
-    nodeMap: {}
+    nodeMap: {},
+    execStack: {
+      default: function _default() {
+        return {};
+      }
+    }
   },
   data: function data() {
     var _this = this;
@@ -54014,29 +54019,24 @@ function () {
     };
   },
   beforeDestroy: function beforeDestroy() {
-    window.cancelAnimationFrame(this.rAFID);
+    this.execStack[this.node._id] = false; // window.cancelAnimationFrame(this.rAFID)
   },
-  created: function created() {
-    var _this2 = this;
-
-    var rAF = function rAF() {
-      _this2.rAFID = window.requestAnimationFrame(rAF);
-
-      _this2.execFnc();
-    };
-
-    this.rAFID = window.requestAnimationFrame(rAF);
+  created: function created() {// let rAF = () => {
+    //   this.rAFID = window.requestAnimationFrame(rAF)
+    //   this.execFnc()
+    // }
+    // this.rAFID = window.requestAnimationFrame(rAF)
   },
   methods: {
     onExec: function onExec(v) {
-      this.execFnc = v;
+      this.execStack[this.node._id] = v;
     },
     onReady: function onReady(compos) {
-      var _this3 = this;
+      var _this2 = this;
 
       var tt = setInterval(function () {
-        var me = _this3.nodeMap[_this3.node._id] = compos;
-        var parent = _this3.nodeMap[_this3.node.to];
+        var me = _this2.nodeMap[_this2.node._id] = compos;
+        var parent = _this2.nodeMap[_this2.node.to];
 
         if (parent) {
           clearInterval(tt);
@@ -54073,7 +54073,7 @@ function () {
       var _getCompos = _asyncToGenerator(
       /*#__PURE__*/
       regeneratorRuntime.mark(function _callee2(_ref) {
-        var _this4 = this;
+        var _this3 = this;
 
         var node, temp;
         return regeneratorRuntime.wrap(function _callee2$(_context2) {
@@ -54098,9 +54098,9 @@ function () {
                           });
 
                         case 2:
-                          _this4.compo = _context.sent;
+                          _this3.compo = _context.sent;
 
-                          _this4.$forceUpdate();
+                          _this3.$forceUpdate();
 
                         case 4:
                         case "end":
@@ -54239,8 +54239,8 @@ function normalizeComponent (
 
 var component = normalizeComponent(
   llexec_GraphNodevue_type_script_lang_js_,
-  GraphNodevue_type_template_id_69c3a9dc_render,
-  GraphNodevue_type_template_id_69c3a9dc_staticRenderFns,
+  GraphNodevue_type_template_id_2097ef5b_render,
+  GraphNodevue_type_template_id_2097ef5b_staticRenderFns,
   false,
   null,
   null,
@@ -54280,10 +54280,30 @@ var component = normalizeComponent(
   },
   data: function data() {
     return {
+      execStack: {},
       nodeMap: {}
     };
   },
-  mounted: function mounted() {},
+  mounted: function mounted() {
+    var _this = this;
+
+    var rAF = function rAF() {
+      _this.rAFID = window.requestAnimationFrame(rAF);
+
+      for (var key in _this.execStack) {
+        var fn = _this.execStack[key];
+
+        if (fn) {
+          fn();
+        }
+      }
+    };
+
+    this.rAFID = window.requestAnimationFrame(rAF);
+  },
+  beforeDestroy: function beforeDestroy() {
+    cancelAnimationFrame(this.rAFID);
+  },
   methods: {}
 });
 // CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=script&lang=js&
@@ -54306,7 +54326,7 @@ var SandBox_component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "353899c0",
+  "3d83fe4e",
   null
   
 )

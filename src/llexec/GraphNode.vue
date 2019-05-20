@@ -8,7 +8,12 @@ export default {
   props: {
     node: {},
     nodes: {},
-    nodeMap: {}
+    nodeMap: {},
+    execStack: {
+      default () {
+        return {}
+      }
+    }
   },
   data () {
     return {
@@ -21,18 +26,19 @@ export default {
     }
   },
   beforeDestroy () {
-    window.cancelAnimationFrame(this.rAFID)
+    this.execStack[this.node._id] = false
+    // window.cancelAnimationFrame(this.rAFID)
   },
   created () {
-    let rAF = () => {
-      this.rAFID = window.requestAnimationFrame(rAF)
-      this.execFnc()
-    }
-    this.rAFID = window.requestAnimationFrame(rAF)
+    // let rAF = () => {
+    //   this.rAFID = window.requestAnimationFrame(rAF)
+    //   this.execFnc()
+    // }
+    // this.rAFID = window.requestAnimationFrame(rAF)
   },
   methods: {
     onExec (v) {
-      this.execFnc = v
+      this.execStack[this.node._id] = v
     },
     onReady (compos) {
       let tt = setInterval(() => {
