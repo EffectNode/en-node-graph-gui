@@ -35,8 +35,18 @@
       <option :value="node._id" :key="node._id" v-for="node in nodes.filter(t => t.type === 'camera')">{{ node.title }}</option>
     </select> -->
 
-    <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code editor</button>
+    <div class="timeline" v-if="node.type === 'camera' || node.type === 'scene'">
+      <p>
+        Use which Track?
+      </p>
+      <p :key="tt._id" v-for="tt in node.trackIDs">
+        <select v-model="tt.trackID">
+          <option :value="track._id" :key="track._id" v-for="track in tracks">{{ track.title }}</option>
+        </select>
+      </p>
+    </div>
 
+    <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code editor</button>
     <!--
     <br />
     <button v-if="!node.trashed" @click="addEmptyChildTo({ node, nodes })">Add TE Child</button> -->
@@ -82,6 +92,9 @@ export default {
       required: true
     },
     nodes: {
+      required: true
+    },
+    water: {
       required: true
     }
   },

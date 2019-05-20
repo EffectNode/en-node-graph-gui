@@ -48,11 +48,12 @@ export default {
     })
     window.addEventListener('resize', sizer)
 
-    window.addEventListener('keydown', evt => {
-      if (evt.keyCode === 27) {
-        this.$emit('close')
-      }
-    })
+    // window.addEventListener('keydown', evt => {
+    //   if (evt.keyCode === 27) {
+    //     this.$emit('close')
+    //   }
+    // })
+
     window.dispatchEvent(new Event('en-timleine-layout'))
   },
   methods: {

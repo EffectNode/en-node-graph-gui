@@ -13,10 +13,7 @@ export default {
     mode: {
       default: 'preview'
     },
-    nodes: {
-      default () {
-        return []
-      }
+    water: {
     }
   },
   created () {
@@ -31,6 +28,33 @@ export default {
     // DevExec: () => import('./DevExec.vue')
   },
   computed: {
+    // nodes: {
+    //   get () {
+    //     return this.water.nodes
+    //   },
+    //   set (v) {
+    //     this.water.nodes = v
+    //     return v
+    //   }
+    // },
+    // timeinfo: {
+    //   get () {
+    //     return this.water.timeinfo
+    //   },
+    //   set (v) {
+    //     this.water.timeinfo = v
+    //     return v
+    //   }
+    // },
+    // timeline: {
+    //   get () {
+    //     return this.water.timeline
+    //   },
+    //   set (v) {
+    //     this.water.timeline = v
+    //     return v
+    //   }
+    // },
     activeNodes () {
       return (this.nodes || []).filter(n => {
         return !n.trashed
@@ -61,16 +85,27 @@ export default {
   data () {
     return {
       refresher: true,
-      isProd: process.env.NODE_ENV === 'production',
+      // isProd: process.env.NODE_ENV === 'production',
+
       iframe: {
         width: 1,
         height: 1
       },
-      srcdoc: '',
       src: 'about:blank'
     }
   },
   async mounted () {
+    window.addEventListener('sync-all', (evt) => {
+      if (evt.type === 'sync-all') {
+        let iframe = this.$refs['iframe']
+        if (iframe) {
+          let toSend = JSON.parse(JSON.stringify(evt.detail))
+          // console.log(toSend)
+          iframe.contentWindow.postMessage({ type: evt.type, data: toSend })
+        }
+      }
+    }, false)
+
     let dimension = () => {
       let rect = this.$el.getBoundingClientRect()
       this.iframe.width = rect.width.toFixed(0)
@@ -82,38 +117,31 @@ export default {
     await this.reload()
   },
   methods: {
-    tryGet (fn = () => {}) {
-      let insta = fn()
-      if (insta) {
-        return insta
-      }
-      return new Promise((resolve) => {
-        let tt = setInterval(() => {
-          let result = fn()
-          if (result) {
-            clearInterval(tt)
-            resolve(result)
-          }
-        }, 0)
-      })
-    },
-    async pushData (v) {
-      let sender = await this.getSender()
-      sender(v)
-    },
-    async getSender () {
-      if (this.isProd) {
-        let iframe = await this.tryGet(() => {
-          return this.$refs['iframe']
-        })
-        return iframe.contentWindow.postMessage
-      } else {
-        let devexec = await this.tryGet(() => {
-          return this.$refs['devexec']
-        })
-        return devexec.postMessage
-      }
-    },
+    // tryGet (fn = () => {}) {
+    //   let insta = fn()
+    //   if (insta) {
+    //     return Promise.resolve(insta)
+    //   }
+    //   return new Promise((resolve) => {
+    //     let tt = setInterval(() => {
+    //       let result = fn()
+    //       if (result) {
+    //         clearInterval(tt)
+    //         resolve(result)
+    //       }
+    //     }, 0)
+    //   })
+    // },
+    // async pushData (v) {
+    //   let sender = await this.getSender()
+    //   sender(v)
+    // },
+    // async getSender () {
+    //   let iframe = await this.tryGet(() => {
+    //     return this.$refs['iframe']
+    //   })
+    //   return iframe.contentWindow.postMessage
+    // },
     reload () {
       return new Promise((resolve) => {
         this.refresher = false
@@ -129,7 +157,7 @@ export default {
       })
     },
     restartUI () {
-      let code = CodeGen.nodeToCode({ nodes: this.nodes })
+      let code = CodeGen.generate({ water: this.water })
       let url = CodeGen.codeToBlobURL({ code })
       this.src = url
     }

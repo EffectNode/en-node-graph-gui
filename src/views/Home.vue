@@ -9,16 +9,16 @@
     </NodeTree>
 
     <UIBtnTools v-if="nodes" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
-    <UIPreviewBox v-if="nodes" @run="onReload({ timeout: 0 })">
-      <EXEC ref="exec" mode="preview" :nodes="nodes"></EXEC>
+    <UIPreviewBox v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
+      <EXEC ref="exec" mode="preview" :water="water"></EXEC>
     </UIPreviewBox>
 
-    <UITimeline v-if="open.timeline" @close="open.timeline = false; $forceUpdate()">
-      <UITimelineEngine :water="water"></UITimelineEngine>
+    <UITimeline v-if="open.timeline && water" @close="open.timeline = false; $forceUpdate()">
+      <UITimelineHolder :timeline="water.timeline" :doSync="doSync" :editor="water.timeinfo"></UITimelineHolder>
     </UITimeline>
 
-    <UIInspector v-if="open.inspector" @close="onClose">
-      <UIControls @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
+    <UIInspector v-if="open.inspector && water" @close="onClose">
+      <UIControls :water="water" @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
     </UIInspector>
 
     <UICoder v-if="open.coder" @close="open.coder = false; $forceUpdate()">
@@ -42,7 +42,7 @@ export default {
     UIControls: require('../llui/UIControls.vue').default,
     UIInspector: require('../llui/UIInspector.vue').default,
     UITimeline: require('../llui/UITimeline.vue').default,
-    UITimelineEngine: require('../lltimeline/timeline.vue').default,
+    UITimelineHolder: require('../lltimeline/timeline-holder.vue').default,
     UICoder: require('../llui/UICoder.vue').default,
     UIBtnTools: require('../llui/UIBtnTools.vue').default
   },
@@ -55,9 +55,34 @@ export default {
         inspector: false
       },
       water: {
-        nodes: false,
-        timleine: false
+        nodes: [],
+        timeline: {
+          totalTime: 30,
+          tracks: [
+            {
+              _id: '_62003052518',
+              start: 0,
+              end: 20.071031128319383,
+              title: 'fly',
+              trashed: false
+            }
+          ]
+        },
+        timeinfo: {
+          $forceUpdate () {},
+          getTime (start) {
+            let now = window.performance.now() * 0.001
+            return now - start
+          },
+          start: 0,
+          totalTime: 30,
+          timelinePlaying: true,
+          timelineControl: 'timer',
+          timelinePercentageLast: 0,
+          timelinePercentage: 0 // can be timeline, render or play
+        }
       },
+
       view: {
         x: 0,
         y: 0
@@ -75,19 +100,39 @@ export default {
       set (v) {
         this.water.nodes = v
       }
-    },
-    timeline: {
-      get () {
-        return this.water.timeline
-      },
-      set (v) {
-        this.water.timeline = v
-      }
     }
+    // timeline: {
+    //   get () {
+    //     return this.water.timeline
+    //   },
+    //   set (v) {
+    //     this.water.timeline = v
+    //   }
+    // },
+    // timeinfo: {
+    //   get () {
+    //     return this.water.timeinfo
+    //   },
+    //   set (v) {
+    //     this.water.timeinfo = v
+    //   }
+    // }
   },
   watch: {
   },
   mounted () {
+    // let loop = () => {
+    //   window.requestAnimationFrame(loop)
+    //   if (this.timeinfo && this.timeline && this.timeinfo.timelineControl === 'timer' && this.timeinfo.timelinePlaying) {
+    //     let totalTime = this.timeline.totalTime
+    //     this.timeinfo.timelinePercentageLast = this.timeinfo.getTime(this.timeinfo.start) / totalTime
+    //     let lastTime = this.timeinfo.timelinePercentageLast * totalTime
+    //     this.timeinfo.timelinePercentage = lastTime / totalTime
+    //     this.timeinfo.timelinePercentage %= 1
+    //   }
+    // }
+    // window.requestAnimationFrame(loop)
+
     window.getNODES = () => {
       return this.nodes
     }
@@ -174,6 +219,27 @@ export default {
     clearInterval(this.waterTimer)
   },
   methods: {
+    doSync (type) {
+      let sync = false
+      if (type === 'update-timleine') {
+        sync = true
+      } else if (type === 'play') {
+        sync = true
+      } else if (type === 'start') {
+        sync = true
+      } else if (type === 'stop') {
+        sync = true
+      } else if (type === 'restart') {
+        sync = true
+      } else if (type === 'hovering') {
+        sync = true
+      }
+      if (sync) {
+        window.dispatchEvent(new CustomEvent('sync-all', {
+          detail: this.water
+        }))
+      }
+    },
     openCoder () {
       this.open.coder = true
       this.$forceUpdate()

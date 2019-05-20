@@ -5044,12 +5044,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=754e15ea&scoped=true&
-var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"execStack":_vm.execStack,"compoMap":_vm.compoMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=1efcc370&scoped=true&
+var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"timeinfo":_vm.timeinfo,"timeline":_vm.timeline,"execStack":_vm.execStack,"compoMap":_vm.compoMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=754e15ea&scoped=true&
+// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=1efcc370&scoped=true&
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=ba3d0ab6&
 var GraphNodevue_type_template_id_ba3d0ab6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.compoMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.compoMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
@@ -54278,6 +54278,29 @@ var component = normalizeComponent(
   },
   data: function data() {
     return {
+      timeline: {
+        totalTime: 30,
+        tracks: [{
+          _id: '_62003052518',
+          start: 0,
+          end: 20.071031128319383,
+          title: 'fly',
+          trashed: false
+        }]
+      },
+      getTime: function getTime(start) {
+        var now = window.performance.now() * 0.001;
+        return now - start;
+      },
+      timeinfo: {
+        start: 0,
+        // totalTime: 30,
+        timelinePlaying: true,
+        timelineControl: 'timer',
+        timelinePercentageLast: 0,
+        timelinePercentage: 0 // can be timeline, render or play
+
+      },
       execStack: {},
       compoMap: {}
     };
@@ -54285,8 +54308,31 @@ var component = normalizeComponent(
   mounted: function mounted() {
     var _this = this;
 
-    window.addEventListener('message', function (omg) {
-      console.log(omg);
+    var loop = function loop() {
+      window.requestAnimationFrame(loop);
+
+      if (_this.timeinfo.timelineControl === 'timer' && _this.timeinfo.timelinePlaying) {
+        var totalTime = _this.timeline.totalTime;
+        _this.timeinfo.timelinePercentageLast = _this.getTime(_this.timeinfo.start) / totalTime;
+        var lastTime = _this.timeinfo.timelinePercentageLast * totalTime;
+        _this.timeinfo.timelinePercentage = lastTime / totalTime;
+        _this.timeinfo.timelinePercentage %= 1;
+      }
+    };
+
+    window.requestAnimationFrame(loop);
+    window.addEventListener('message', function (evt) {
+      if (window.top && window.top.location.origin === window.location.origin) {
+        var msg = evt.data;
+        var type = msg.type;
+        var args = msg.data;
+
+        if (type === 'sync-all') {
+          console.log(JSON.stringify(args));
+          _this.timeline = args.timeline;
+          _this.timeinfo = args.timeinfo;
+        }
+      }
     });
 
     var rAF = function rAF() {
@@ -54328,7 +54374,7 @@ var SandBox_component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "754e15ea",
+  "1efcc370",
   null
   
 )

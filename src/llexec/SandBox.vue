@@ -1,6 +1,6 @@
 <template>
   <div class="app-entry-dom" v-if="activeNodes && water">
-    <GraphNode :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
+    <GraphNode :timeinfo="timeinfo" :timeline="timeline" :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
   </div>
 </template>
 
@@ -28,13 +28,59 @@ export default {
   },
   data () {
     return {
+      timeline: {
+        totalTime: 30,
+        tracks: [
+          {
+            _id: '_62003052518',
+            start: 0,
+            end: 20.071031128319383,
+            title: 'fly',
+            trashed: false
+          }
+        ]
+      },
+      getTime: (start) => {
+        let now = window.performance.now() * 0.001
+        return now - start
+      },
+      timeinfo: {
+        start: 0,
+        // totalTime: 30,
+        timelinePlaying: true,
+        timelineControl: 'timer',
+        timelinePercentageLast: 0,
+        timelinePercentage: 0 // can be timeline, render or play
+      },
       execStack: {},
       compoMap: {}
     }
   },
   mounted () {
-    window.addEventListener('message', (omg) => {
-      console.log(omg)
+    let loop = () => {
+      window.requestAnimationFrame(loop)
+      if (this.timeinfo.timelineControl === 'timer' && this.timeinfo.timelinePlaying) {
+        let totalTime = this.timeline.totalTime
+        this.timeinfo.timelinePercentageLast = this.getTime(this.timeinfo.start) / totalTime
+        let lastTime = this.timeinfo.timelinePercentageLast * totalTime
+        this.timeinfo.timelinePercentage = lastTime / totalTime
+        this.timeinfo.timelinePercentage %= 1
+      }
+    }
+    window.requestAnimationFrame(loop)
+
+    window.addEventListener('message', (evt) => {
+      if (window.top && window.top.location.origin === window.location.origin) {
+        let msg = evt.data
+        let type = msg.type
+        let args = msg.data
+
+        if (type === 'sync-all') {
+          console.log(JSON.stringify(args))
+          this.timeline = args.timeline
+          this.timeinfo = args.timeinfo
+        }
+      }
     })
 
     let rAF = () => {

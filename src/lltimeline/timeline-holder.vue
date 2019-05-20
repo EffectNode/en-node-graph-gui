@@ -57,6 +57,7 @@ export default {
     title: {
       default: 'Timeline Control'
     },
+    doSync: {},
     editor: {},
     timeline: {}
   },
@@ -67,6 +68,7 @@ export default {
   },
   data () {
     return {
+      canvas: {},
       baseTime: 30,
       initBaseTime: 30,
       sizer: 50,
@@ -140,13 +142,13 @@ export default {
     'timeline': {
       deep: true,
       handler () {
-        this.editor.$emit('update-canvas', { canvas: this.canvas })
+        this.doSync('update-timleine')
       }
     },
     trackJSON: {
       deep: true,
       handler () {
-        this.editor.$emit('update-canvas', { canvas: this.canvas })
+        this.doSync('update-timleine')
       }
     }
   },
@@ -170,7 +172,7 @@ export default {
         title: 'speed' + trs.length
       }
       trs.push(tr)
-      this.editor.$emit('update-canvas', { canvas: this.canvas })
+      this.doSync('update-timleine')
       this.toucher.scrollTop = this.toucher.scrollHeight
       setTimeout(() => {
         this.toucher.scrollTop = this.toucher.scrollHeight
@@ -202,7 +204,7 @@ export default {
       let idx = trs.findIndex(t => t._id === tr._id)
       if (idx !== -1) {
         trs.splice(idx, 1)
-        this.editor.$emit('update-canvas', { canvas: this.canvas })
+        this.doSync('update-timleine')
       }
       // }
     },
@@ -212,6 +214,7 @@ export default {
       this.editor.timelinePlaying = true
       this.editor.start = window.performance.now() * 0.001 - this.editor.timelinePercentageLast * this.timeline.totalTime
       this.$forceUpdate()
+      this.doSync('play')
     },
     restart () {
       this.editor.timelineControl = 'timer'
@@ -219,16 +222,19 @@ export default {
       this.editor.timelinePlaying = true
       this.editor.start = window.performance.now() * 0.001
       this.$forceUpdate()
+      this.doSync('restart')
     },
     pause () {
       this.editor.timelineControl = 'timer'
       this.editor.timelinePlaying = false
       this.$forceUpdate()
+      this.doSync('pause')
     },
     hover () {
       this.editor.timelineControl = 'hover'
       this.editor.timelinePlaying = false
-      this.editor.$forceUpdate()
+      // this.editor.$forceUpdate()
+      this.doSync('hovering')
     },
     handleHover () {
       this.editor.timelinePercentage = 0
@@ -292,7 +298,7 @@ export default {
     },
     getTemplate () {
       this.$nextTick(() => {
-        this.editor.$emit('update-canvas', { canvas: this.canvas })
+        this.doSync('update-timleine')
       })
       return {
         totalTime: 30,

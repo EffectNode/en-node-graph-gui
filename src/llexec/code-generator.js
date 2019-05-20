@@ -1,6 +1,6 @@
 // import * as Node from '../llsvg/node.js'
 
-export const injector = ({ water = {}, compos = {} }) => {
+export const injector = ({ water = {} }) => {
   const EGRAPH_ID = `_APP_${Number(Math.random() * 100000).toFixed(0)}`
   const JSON_ID = `_JSON_${Number(Math.random() * 100000).toFixed(0)}`
   const APPID_REPLACER = `____APPID____`
@@ -38,10 +38,7 @@ export const injector = ({ water = {}, compos = {} }) => {
   return html
 }
 
-export const nodeToCode = ({ nodes }) => {
-  let water = {
-    nodes
-  }
+export const generate = ({ water }) => {
   return injector({ water })
 }
 
