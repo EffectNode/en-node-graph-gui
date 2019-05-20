@@ -46,7 +46,7 @@ export default {
       },
       timeinfo: {
         start: 0,
-        // totalTime: 30,
+        totalTime: 30,
         timelinePlaying: true,
         timelineControl: 'timer',
         timelinePercentageLast: 0,
@@ -76,7 +76,8 @@ export default {
         let args = msg.data
 
         if (type === 'sync-all') {
-          console.log(JSON.stringify(args))
+          console.log(JSON.stringify(args.timeinfo))
+          // this.nodes = args
           this.timeline = args.timeline
           this.timeinfo = args.timeinfo
         }

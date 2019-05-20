@@ -54,6 +54,10 @@ export default {
         timeline: true,
         inspector: false
       },
+      getTime (start) {
+        let now = window.performance.now() * 0.001
+        return now - start
+      },
       water: {
         nodes: [],
         timeline: {
@@ -68,12 +72,9 @@ export default {
             }
           ]
         },
+
         timeinfo: {
-          $forceUpdate () {},
-          getTime (start) {
-            let now = window.performance.now() * 0.001
-            return now - start
-          },
+          // $forceUpdate () {},
           start: 0,
           totalTime: 30,
           timelinePlaying: true,
@@ -121,17 +122,17 @@ export default {
   watch: {
   },
   mounted () {
-    // let loop = () => {
-    //   window.requestAnimationFrame(loop)
-    //   if (this.timeinfo && this.timeline && this.timeinfo.timelineControl === 'timer' && this.timeinfo.timelinePlaying) {
-    //     let totalTime = this.timeline.totalTime
-    //     this.timeinfo.timelinePercentageLast = this.timeinfo.getTime(this.timeinfo.start) / totalTime
-    //     let lastTime = this.timeinfo.timelinePercentageLast * totalTime
-    //     this.timeinfo.timelinePercentage = lastTime / totalTime
-    //     this.timeinfo.timelinePercentage %= 1
-    //   }
-    // }
-    // window.requestAnimationFrame(loop)
+    let loop = () => {
+      window.requestAnimationFrame(loop)
+      if (this.water.timeinfo && this.water.timeline && this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
+        let totalTime = this.water.timeline.totalTime
+        this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
+        let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
+        this.water.timeinfo.timelinePercentage = lastTime / totalTime
+        this.water.timeinfo.timelinePercentage %= 1
+      }
+    }
+    window.requestAnimationFrame(loop)
 
     window.getNODES = () => {
       return this.nodes

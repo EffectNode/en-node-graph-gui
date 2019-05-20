@@ -101,6 +101,8 @@ export default {
         if (iframe) {
           let toSend = JSON.parse(JSON.stringify(evt.detail))
           // console.log(toSend)
+          delete toSend.nodes
+          // REMOVE NODES
           iframe.contentWindow.postMessage({ type: evt.type, data: toSend })
         }
       }

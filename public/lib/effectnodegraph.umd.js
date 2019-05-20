@@ -5053,19 +5053,19 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=1efcc370&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=7045e068&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"timeinfo":_vm.timeinfo,"timeline":_vm.timeline,"execStack":_vm.execStack,"compoMap":_vm.compoMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=1efcc370&scoped=true&
+// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=7045e068&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=ba3d0ab6&
-var GraphNodevue_type_template_id_ba3d0ab6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.compoMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.compoMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
-var GraphNodevue_type_template_id_ba3d0ab6_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=1a0633ce&
+var GraphNodevue_type_template_id_1a0633ce_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"timeinfo":_vm.timeinfo,"timeline":_vm.timeline,"parentNode":_vm.parentNode,"parentComponent":_vm.compoMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.compoMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
+var GraphNodevue_type_template_id_1a0633ce_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=ba3d0ab6&
+// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=1a0633ce&
 
 // EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
 var runtime = __webpack_require__("96cf");
@@ -54005,6 +54005,8 @@ function () {
 
 /* harmony default export */ var GraphNodevue_type_script_lang_js_ = ({
   props: {
+    timeline: {},
+    timeinfo: {},
     node: {},
     nodes: {},
     compoMap: {},
@@ -54246,8 +54248,8 @@ function normalizeComponent (
 
 var component = normalizeComponent(
   llexec_GraphNodevue_type_script_lang_js_,
-  GraphNodevue_type_template_id_ba3d0ab6_render,
-  GraphNodevue_type_template_id_ba3d0ab6_staticRenderFns,
+  GraphNodevue_type_template_id_1a0633ce_render,
+  GraphNodevue_type_template_id_1a0633ce_staticRenderFns,
   false,
   null,
   null,
@@ -54303,7 +54305,7 @@ var component = normalizeComponent(
       },
       timeinfo: {
         start: 0,
-        // totalTime: 30,
+        totalTime: 30,
         timelinePlaying: true,
         timelineControl: 'timer',
         timelinePercentageLast: 0,
@@ -54337,7 +54339,8 @@ var component = normalizeComponent(
         var args = msg.data;
 
         if (type === 'sync-all') {
-          console.log(JSON.stringify(args));
+          console.log(JSON.stringify(args.timeinfo)); // this.nodes = args
+
           _this.timeline = args.timeline;
           _this.timeinfo = args.timeinfo;
         }
@@ -54383,7 +54386,7 @@ var SandBox_component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "1efcc370",
+  "7045e068",
   null
   
 )
