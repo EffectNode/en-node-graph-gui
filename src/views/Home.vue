@@ -112,7 +112,7 @@ export default {
       this.$refs.editor.$emit('do', {
         action: 'cleanLayout',
         args: {
-          instant: false,
+          instant: true,
           goHome: false,
           resetZoom: false,
           ...args
@@ -159,7 +159,7 @@ export default {
     },
 
     onNodeClick ({ node, nodes }) {
-      console.log(node, nodes)
+      // console.log(node, nodes)
       this.node = node
       this.open.inspector = true
     }

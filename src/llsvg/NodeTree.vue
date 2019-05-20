@@ -315,11 +315,16 @@ export default {
       // g.setEdge("lwilson",   "kbacon");
 
       dagre.layout(g);
-
+      let nodeMap = {}
+      this.nodes.forEach((n) => {
+        nodeMap[n._id] = n
+      })
       g.nodes().forEach((v) => {
-        console.log("Node " + v + ": " + JSON.stringify(g.node(v)));
+        // console.log("Node " + v + ": " + JSON.stringify(g.node(v)));
 
-        let node = this.nodes.find(n => n._id === v)
+        let node = nodeMap[v]
+
+        // let node = this.nodes.find(n => n._id === v)
         let neWNodePos = g.node(v)
         if (instant) {
           this.$nextTick(() => {
@@ -332,8 +337,8 @@ export default {
         }
       });
 
-      if (resetZoom) {
-        this.zoom += 0.01
+      if (resetZoom && this.zoom !== 1) {
+        // this.zoom += 0.00000000000000000000000001
         await this.zoomBa({ to: 1 })
       }
 

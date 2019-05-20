@@ -22,19 +22,19 @@ var runtime = __webpack_require__("96cf");
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/helpers/esm/asyncToGenerator.js
 var asyncToGenerator = __webpack_require__("3b8d");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=2966bd45&scoped=true&
-var SandBoxvue_type_template_id_2966bd45_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"execStack":_vm.execStack,"nodeMap":_vm.nodeMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
-var SandBoxvue_type_template_id_2966bd45_scoped_true_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=754e15ea&scoped=true&
+var SandBoxvue_type_template_id_754e15ea_scoped_true_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"execStack":_vm.execStack,"compoMap":_vm.compoMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
+var SandBoxvue_type_template_id_754e15ea_scoped_true_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=2966bd45&scoped=true&
+// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=754e15ea&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=dc330936&
-var GraphNodevue_type_template_id_dc330936_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
-var GraphNodevue_type_template_id_dc330936_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=ba3d0ab6&
+var GraphNodevue_type_template_id_ba3d0ab6_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.compoMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.compoMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
+var GraphNodevue_type_template_id_ba3d0ab6_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=dc330936&
+// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=ba3d0ab6&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.find.js
 var es6_array_find = __webpack_require__("7514");
@@ -249,7 +249,7 @@ function () {
   props: {
     node: {},
     nodes: {},
-    nodeMap: {},
+    compoMap: {},
     execStack: {
       default: function _default() {
         return {};
@@ -286,8 +286,8 @@ function () {
       var _this2 = this;
 
       var tt = setInterval(function () {
-        var me = _this2.nodeMap[_this2.node._id] = compos;
-        var parent = _this2.nodeMap[_this2.node.to];
+        var me = _this2.compoMap[_this2.node._id] = compos;
+        var parent = _this2.compoMap[_this2.node.to];
 
         if (parent) {
           clearInterval(tt); // me.$emit('addToParent', {
@@ -304,15 +304,15 @@ function () {
     },
     onRemove: function onRemove() {
       var me = this.$refs['me'];
-      var parent = this.nodeMap[this.node.to]; // if (this.nodeMap[this.node._id]) {
-      //   this.nodeMap[this.node._id].$emit('removeFromParent', {
+      var parent = this.compoMap[this.node.to]; // if (this.compoMap[this.node._id]) {
+      //   this.compoMap[this.node._id].$emit('removeFromParent', {
       //     me: me,
       //     parent: parent
       //   })
       // }
 
       if (this.node.to) {
-        this.nodeMap[this.node.to].$emit('removeChild', {
+        this.compoMap[this.node.to].$emit('removeChild', {
           me: parent,
           child: me
         });
@@ -396,8 +396,8 @@ var componentNormalizer = __webpack_require__("2877");
 
 var component = Object(componentNormalizer["a" /* default */])(
   llexec_GraphNodevue_type_script_lang_js_,
-  GraphNodevue_type_template_id_dc330936_render,
-  GraphNodevue_type_template_id_dc330936_staticRenderFns,
+  GraphNodevue_type_template_id_ba3d0ab6_render,
+  GraphNodevue_type_template_id_ba3d0ab6_staticRenderFns,
   false,
   null,
   null,
@@ -438,7 +438,7 @@ var component = Object(componentNormalizer["a" /* default */])(
   data: function data() {
     return {
       execStack: {},
-      nodeMap: {}
+      compoMap: {}
     };
   },
   mounted: function mounted() {
@@ -483,11 +483,11 @@ var SandBoxvue_type_style_index_0_lang_css_ = __webpack_require__("923e");
 
 var SandBox_component = Object(componentNormalizer["a" /* default */])(
   llexec_SandBoxvue_type_script_lang_js_,
-  SandBoxvue_type_template_id_2966bd45_scoped_true_render,
-  SandBoxvue_type_template_id_2966bd45_scoped_true_staticRenderFns,
+  SandBoxvue_type_template_id_754e15ea_scoped_true_render,
+  SandBoxvue_type_template_id_754e15ea_scoped_true_staticRenderFns,
   false,
   null,
-  "2966bd45",
+  "754e15ea",
   null
   
 )

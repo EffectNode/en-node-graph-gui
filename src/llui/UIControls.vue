@@ -27,15 +27,15 @@
       <li><button @click="addLib({ libs: node.library, add: adderLib })">Add</button> <input type="text" v-model="adderLib"></li>
     </ul>
 
-    <select v-if="node.type === 'root'" v-model="node.sceneID" @change="$emit('reload')">
+    <!-- <select v-if="node.type === 'root'" v-model="node.sceneID" @change="$emit('reload')">
       <option :value="node._id" :key="node._id" v-for="node in nodes.filter(t => t.type === 'scene')">{{ node.title }}</option>
     </select>
 
     <select v-if="node.type === 'root'" v-model="node.cameraID" @change="$emit('reload')">
       <option :value="node._id" :key="node._id" v-for="node in nodes.filter(t => t.type === 'camera')">{{ node.title }}</option>
-    </select>
+    </select> -->
 
-    <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code this</button>
+    <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code editor</button>
 <!--
     <br />
     <button v-if="!node.trashed" @click="addEmptyChildTo({ node, nodes })">Add TE Child</button> -->
@@ -226,7 +226,7 @@ export default {
       }
       return this.addChildTo({ node, nodes, args, returnNode })
     },
-    addScene ({ node, nodes }) {
+    addScene ({ node, nodes, returnNode }) {
       let args = {
         title: `Scene`,
         type: `scene`,

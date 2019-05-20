@@ -32,10 +32,15 @@ export default {
   mounted () {
     let rect = this.$parent.$el.getBoundingClientRect()
     this.height = rect.height + 'px'
+
+    window.addEventListener('resize', () => {
+      let rect = this.$parent.$el.getBoundingClientRect()
+      this.height = rect.height + 'px'
+    })
   },
   methods: {
     reload () {
-      this.$emit('reload', { node: this.node })
+      this.$emit('reload')
     },
     update () {
 

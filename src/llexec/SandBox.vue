@@ -1,6 +1,6 @@
 <template>
   <div class="app-entry-dom" v-if="activeNodes && water">
-    <GraphNode :execStack="execStack" :nodeMap="nodeMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
+    <GraphNode :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
   </div>
 </template>
 
@@ -29,7 +29,7 @@ export default {
   data () {
     return {
       execStack: {},
-      nodeMap: {}
+      compoMap: {}
     }
   },
   mounted () {

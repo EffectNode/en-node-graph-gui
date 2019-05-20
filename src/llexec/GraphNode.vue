@@ -1,14 +1,15 @@
 <template>
-  <Component v-if="compo && node" @exec="onExec" :parentNode="parentNode" ref="me" :parentComponent="nodeMap[node.to]" :isRootNode="!!!node.to" :components="nodeMap" :nodes="nodes" :node="node" @ready="onReady" @remove="onRemove" :is="compo"></Component>
+  <Component v-if="compo && node" @exec="onExec" :parentNode="parentNode" ref="me" :parentComponent="compoMap[node.to]" :isRootNode="!!!node.to" :components="compoMap" :nodes="nodes" :node="node" @ready="onReady" @remove="onRemove" :is="compo"></Component>
 </template>
 
 <script>
 import * as VC from './vue-compile'
+
 export default {
   props: {
     node: {},
     nodes: {},
-    nodeMap: {},
+    compoMap: {},
     execStack: {
       default () {
         return {}
@@ -42,8 +43,8 @@ export default {
     },
     onReady (compos) {
       let tt = setInterval(() => {
-        let me = this.nodeMap[this.node._id] = compos
-        let parent = this.nodeMap[this.node.to]
+        let me = this.compoMap[this.node._id] = compos
+        let parent = this.compoMap[this.node.to]
         if (parent) {
           clearInterval(tt)
           // me.$emit('addToParent', {
@@ -59,15 +60,15 @@ export default {
     },
     onRemove () {
       let me = this.$refs['me']
-      let parent = this.nodeMap[this.node.to]
-      // if (this.nodeMap[this.node._id]) {
-      //   this.nodeMap[this.node._id].$emit('removeFromParent', {
+      let parent = this.compoMap[this.node.to]
+      // if (this.compoMap[this.node._id]) {
+      //   this.compoMap[this.node._id].$emit('removeFromParent', {
       //     me: me,
       //     parent: parent
       //   })
       // }
       if (this.node.to) {
-        this.nodeMap[this.node.to].$emit('removeChild', {
+        this.compoMap[this.node.to].$emit('removeChild', {
           me: parent,
           child: me
         })
