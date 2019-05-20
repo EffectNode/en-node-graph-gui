@@ -36,12 +36,17 @@
     </select> -->
 
     <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code editor</button>
-<!--
+
+    <!--
     <br />
     <button v-if="!node.trashed" @click="addEmptyChildTo({ node, nodes })">Add TE Child</button> -->
 
     <br />
     <button v-if="!node.trashed" @click="addObject3DChildTo({ node, nodes })">Add Object3D Child</button>
+
+    <br />
+    <button v-if="!node.trashed" @click="addMatCapMaterial({ node, nodes })">Add MatCap Material</button>
+
     <br />
     <button v-if="!node.trashed" @click="addCamera({ node, nodes })">Add Camera Child</button>
 
@@ -210,6 +215,17 @@ export default {
         type: `geometry`,
         /* eslint-disable */
         src: require('raw-loader!./UINodeTemplates/SphereGeometry.vue.txt').default,
+        /* eslitnt-enable */
+        library: []
+      }
+      return this.addChildTo({ node, nodes, args, returnNode })
+    },
+    addMatCapMaterial ({ node, nodes, returnNode }) {
+      let args = {
+        title: `MatCap Material`,
+        type: `material`,
+        /* eslint-disable */
+        src: require('raw-loader!./UINodeTemplates/MatcapMaterial.vue.txt').default,
         /* eslitnt-enable */
         library: []
       }

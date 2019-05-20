@@ -1,0 +1,66 @@
+<template>
+  <div>
+
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    node: {},
+    parentNode: {},
+    isRootNode: {},
+
+    nodes: {},
+    components: {}
+  },
+  data () {
+    return {
+      material: false
+    }
+  },
+  methods: {
+    init () {
+      let url = ''
+      url = `https://raw.githubusercontent.com/mykimbui/matcap/master/matcap.png`
+      // url = `https://raw.githubusercontent.com/mykimbui/matcap/master/matcap2.png`
+      let matcap = new THREE.TextureLoader().load(url, () => {
+        // matcap.encoding = THREE.sRGBEncoding;
+      })
+      let mat = new THREE.MeshMatcapMaterial({ color: 0xffffff, matcap });
+      this.material = mat
+    }
+  },
+  mounted () {
+    this.init()
+    this.$emit('ready', this)
+  },
+  created () {
+    this.$on('addToParent', ({ parent }) => {
+      // console.log(this.node.title, 'addToParent', parent.node.title)
+    })
+    this.$on('addChild', ({ child }) => {
+      // if (child.node.type === 'map') {
+      //   this.material.map = child.map
+      // }
+      // if (child.node.type === 'geometry') {
+      //   this.material.geometry = child.geometry
+      // }
+      console.log(this.node.title, 'addChild', child.node.title)
+    })
+    this.$on('removeFromParent', ({ parent }) => {
+      // console.log(this.node.title, 'removeFromParent', parent.node.title)
+    })
+    this.$on('removeChild', ({ child }) => {
+      // console.log(this.node.title, 'removeChild', child.node.title)
+    })
+  },
+  beforeDestory () {
+    this.$emit('remove', this)
+  }
+}
+</script>
+
+<style>
+
+</style>
