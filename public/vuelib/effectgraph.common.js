@@ -20000,7 +20000,7 @@ module.exports = function (IS_INCLUDES) {
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony default export */ __webpack_exports__["default"] = ("<script src=\"https://unpkg.com/vue\"></script>\n<script src=\"<!--BASE_URL-->/lib/effectnodegraph.umd.min.js\"></script>\n");
+/* harmony default export */ __webpack_exports__["default"] = ("<script>\n/* eslint-disable */\nwindow.requestIdleCallback =\n  window.requestIdleCallback ||\n  function (cb) {\n    var start = Date.now();\n    return setTimeout(function () {\n      cb({\n        didTimeout: false,\n        timeRemaining: function () {\n          return Math.max(0, 50 - (Date.now() - start));\n        }\n      });\n    }, 1);\n  }\n\nwindow.cancelIdleCallback =\n  window.cancelIdleCallback ||\n  function (id) {\n    clearTimeout(id);\n  }\n</script>\n<script src=\"https://unpkg.com/vue\"></script>\n<script src=\"<!--BASE_URL-->/lib/effectnodegraph.umd.min.js\"></script>\n");
 
 /***/ }),
 

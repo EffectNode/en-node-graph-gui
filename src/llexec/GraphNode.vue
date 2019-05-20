@@ -79,10 +79,10 @@ export default {
         <style>
         </style>
       `
-      setTimeout(async () => {
+      window.requestIdleCallback(async () => {
         this.compo = await VC.makeCompo({ src: node.src || temp, library: node.library || [] })
         this.$forceUpdate()
-      }, 1)
+      })
     },
     init () {
 

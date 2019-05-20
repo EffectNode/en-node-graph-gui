@@ -23,15 +23,17 @@ export default {
     init () {
       let radius = 40
       let tube = 4
-      let radSeg = 30
-      let tubSeg = 200
+      let radSeg = 15
+      let tubSeg = 100
       let arc2PI = Math.PI * 2.0
       this.geometry = new THREE.TorusGeometry(radius, tube, radSeg, tubSeg, arc2PI)
     }
   },
   mounted () {
-    this.init()
-    this.$emit('ready', this)
+    window.requestIdleCallback(() => {
+      this.init()
+      this.$emit('ready', this)
+    })
   },
   created () {
     this.$on('addToParent', ({ parent }) => {

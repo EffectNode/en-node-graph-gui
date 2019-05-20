@@ -29,12 +29,12 @@ var SandBoxvue_type_template_id_353899c0_scoped_true_staticRenderFns = []
 
 // CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=353899c0&scoped=true&
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=c1935aa4&
-var GraphNodevue_type_template_id_c1935aa4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
-var GraphNodevue_type_template_id_c1935aa4_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=69c3a9dc&
+var GraphNodevue_type_template_id_69c3a9dc_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"parentNode":_vm.parentNode,"parentComponent":_vm.nodeMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.nodeMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
+var GraphNodevue_type_template_id_69c3a9dc_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=c1935aa4&
+// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=69c3a9dc&
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es6.array.find.js
 var es6_array_find = __webpack_require__("7514");
@@ -333,7 +333,7 @@ function () {
               case 0:
                 node = _ref.node;
                 temp = "\n        <template>\n          <div class=\"omg-this-compo\" nodeid=\"".concat(node._id, "\"></div>\n        </template>\n        <script>\n        export default {\n        };\n        ", '<', "/script>\n        <style>\n        </style>\n      ");
-                setTimeout(
+                window.requestIdleCallback(
                 /*#__PURE__*/
                 Object(asyncToGenerator["a" /* default */])(
                 /*#__PURE__*/
@@ -359,7 +359,7 @@ function () {
                       }
                     }
                   }, _callee);
-                })), 1);
+                })));
 
               case 3:
               case "end":
@@ -398,8 +398,8 @@ var componentNormalizer = __webpack_require__("2877");
 
 var component = Object(componentNormalizer["a" /* default */])(
   llexec_GraphNodevue_type_script_lang_js_,
-  GraphNodevue_type_template_id_c1935aa4_render,
-  GraphNodevue_type_template_id_c1935aa4_staticRenderFns,
+  GraphNodevue_type_template_id_69c3a9dc_render,
+  GraphNodevue_type_template_id_69c3a9dc_staticRenderFns,
   false,
   null,
   null,
