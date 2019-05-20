@@ -135,7 +135,7 @@ export default {
 <style scoped>
 @keyframes dash {
   to {
-    stroke-dashoffset: 1000;
+    stroke-dashoffset: -1000;
   }
 }
 
