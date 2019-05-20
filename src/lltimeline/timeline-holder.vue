@@ -86,6 +86,17 @@ export default {
     this.toucher = this.$refs['toucher']
 
     this.rect = this.$refs['holder'][0].getBoundingClientRect()
+
+    window.addEventListener('en-timleine-layout', () => {
+      if (this.$refs['holder'][0]) {
+        this.rect = this.$refs['holder'][0].getBoundingClientRect()
+      }
+      if (this.$refs['toucher']) {
+        this.toucherRect = this.$refs['toucher'].getBoundingClientRect()
+        this.syncRect()
+      }
+    })
+
     window.addEventListener('resize', () => {
       if (this.$refs['holder']) {
         this.rect = this.$refs['holder'][0].getBoundingClientRect()
@@ -225,6 +236,8 @@ export default {
       this.editor.totalTime = this.timeline.totalTime
 
       this.$forceUpdate()
+
+      this.parentRect = this.$parent.$parent.$el.getBoundingClientRect()
 
       let dom = this.$refs['toucher']
       let onupdateTick = (evt) => {

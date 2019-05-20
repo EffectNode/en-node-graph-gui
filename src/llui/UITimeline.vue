@@ -53,6 +53,7 @@ export default {
         this.$emit('close')
       }
     })
+    window.dispatchEvent(new Event('en-timleine-layout'))
   },
   methods: {
     handle () {
@@ -66,6 +67,7 @@ export default {
           this.isDown = true
         },
         onMM: (evt) => {
+          window.dispatchEvent(new Event('en-timleine-layout'))
           if (evt.touches && evt.touches[0]) {
             evt.preventDefault()
             h.dx = evt.touches[0].pageX - h.tsx
