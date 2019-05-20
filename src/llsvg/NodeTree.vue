@@ -452,7 +452,7 @@ export default {
     tweenNode (node, toPos) {
       return new Promise((resolve) => {
         new TWEEN.Tween(node.pos) // Create a new tween that modifies 'coords'.
-          .to(toPos, 500) // Move to (300, 200) in 1 second.
+          .to(toPos, 777) // Move to (300, 200) in 1 second.
           .easing(TWEEN.Easing.Elastic.Out) // Use an easing function to make the animation smooth.
           .onUpdate(() => { // Called after tween.js updates 'coords'.
             // Move 'box' to the position described by 'coords' with a CSS translation.

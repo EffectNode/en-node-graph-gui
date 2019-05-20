@@ -1,7 +1,7 @@
 <template>
   <div class="full">
-    <iframe v-if="refresher && isProd" class="full" :width="iframe.width" ref="iframe" :height="iframe.height" frameborder="0" :src="src"></iframe>
-    <DevExec v-else-if="refresher" class="full" :nodes="nodes" ref="devexec"></DevExec>
+    <iframe v-if="refresher" class="full" :width="iframe.width" ref="iframe" :height="iframe.height" frameborder="0" :src="src"></iframe>
+    <!-- <DevExec v-else-if="refresher" class="full" :nodes="nodes" ref="devexec"></DevExec> -->
   </div>
 </template>
 
@@ -28,7 +28,7 @@ export default {
     })
   },
   components: {
-    DevExec: () => import('./DevExec.vue')
+    // DevExec: () => import('./DevExec.vue')
   },
   computed: {
     activeNodes () {
