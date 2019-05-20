@@ -6,6 +6,9 @@
     <div class="uit-icon" @click="toggleZoom()">
       <img src="../icons/magnify.svg" title="map view" alt="map view">
     </div>
+    <div class="uit-icon" @click="toggleTimeline()">
+      <img src="../icons/timer.svg" title="map view" alt="map view">
+    </div>
     <div class="uit-icon" v-if="nodes.some(n => n.trashed)" @click="() => { onToggleRecycleView() }">
       <img v-if="isAtRecycle()" class="isActivated" src="../icons/recycle-on.svg" title="Recycle view" alt="Recycle view">
       <img v-if="!isAtRecycle()"  src="../icons/recycle-off.svg" title="Recycle view" alt="Recycle view">
@@ -28,6 +31,10 @@ export default {
   mounted () {
   },
   methods: {
+    toggleTimeline () {
+      this.$parent.open.timeline = !this.$parent.open.timeline
+      this.$forceUpdate()
+    },
     isAtRecycle () {
       return this.show === 'trashed'
     },

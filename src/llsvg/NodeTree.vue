@@ -99,6 +99,7 @@
 import TWEEN from '@tweenjs/tween.js'
 import { setTimeout, clearTimeout } from 'timers'
 import * as Node from './node.js'
+// import { Promise } from 'q';
 
 var dagre = require('dagre')
 export default {
@@ -333,7 +334,9 @@ export default {
             this.computeLayout()
           })
         } else {
-          this.tweenNode(node, neWNodePos)
+          this.$nextTick(() => {
+            this.tweenNode(node, neWNodePos)
+          })
         }
       });
 
@@ -450,6 +453,9 @@ export default {
       }
     },
     tweenNode (node, toPos) {
+      if (toPos.x === node.pos.x && toPos.y === node.pos.y && toPos.z === node.pos.z) {
+        return Promise.resolve()
+      }
       return new Promise((resolve) => {
         new TWEEN.Tween(node.pos) // Create a new tween that modifies 'coords'.
           .to(toPos, 777) // Move to (300, 200) in 1 second.

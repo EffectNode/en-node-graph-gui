@@ -12,6 +12,11 @@
     <UIPreviewBox v-if="nodes" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :nodes="nodes"></EXEC>
     </UIPreviewBox>
+
+    <UITimeline v-if="open.timeline" @close="open.timeline = false; $forceUpdate()">
+      <UITimelineEngine></UITimelineEngine>
+    </UITimeline>
+
     <UIInspector v-if="open.inspector" @close="onClose">
       <UIControls @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
     </UIInspector>
@@ -36,6 +41,8 @@ export default {
     UICodeControl: require('../llui/UICodeControl.vue').default,
     UIControls: require('../llui/UIControls.vue').default,
     UIInspector: require('../llui/UIInspector.vue').default,
+    UITimeline: require('../llui/UITimeline.vue').default,
+    UITimelineEngine: require('../lltimeline/timeline.vue').default,
     UICoder: require('../llui/UICoder.vue').default,
     UIBtnTools: require('../llui/UIBtnTools.vue').default
   },
@@ -43,6 +50,8 @@ export default {
     return {
       show: 'normal',
       open: {
+        coder: false,
+        timeline: true,
         inspector: false
       },
       view: {
