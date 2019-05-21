@@ -160,10 +160,26 @@ export default {
       return newwater
     }
 
+    window.zip = async ({ obj }) => {
+      let pako = await import('pako')
+      var binaryString = pako.deflate(JSON.stringify(obj), { to: 'string' })
+      binaryString = btoa(binaryString)
+      return binaryString
+    }
+
+    window.unzip = async ({ gzip }) => {
+      let pako = await import('pako')
+      gzip = atob(gzip)
+      var restored = JSON.parse(pako.inflate(gzip, { to: 'string' }))
+      return restored
+    }
+
     console.log(`copy(window.getNODES())`)
     console.log(`copy(encodeURIComponent(JSON.stringify(getNODES())))`)
     console.log(`copy(window.getWater())`)
     console.log(`copy(encodeURIComponent(JSON.stringify(getWater())))`)
+    console.log(`copy(await window.zip({ obj: getWater() }))`)
+    console.log(`copy(await window.unzip({ gzip: 'gzipstring' }))`)
 
     setTimeout(() => {
       this.water = require('../llui/water/water-03.json')

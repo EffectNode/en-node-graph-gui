@@ -3,8 +3,11 @@
     <div class="uit-icon" :class="{ isActivated: show === 'trashed' }" @click="onGoHome()">
       <img src="../icons/home.svg" title="oraganise" alt="oraganise">
     </div>
-    <div class="uit-icon" @click="toggleZoom()">
-      <img src="../icons/magnify.svg" title="map view" alt="map view">
+    <div class="uit-icon" @click="zoomIn()">
+      <img src="../icons/magnify-add.svg" title="map view" alt="map view">
+    </div>
+    <div class="uit-icon" @click="zoomOut()">
+      <img src="../icons/magnify-minus.svg" title="map view" alt="map view">
     </div>
     <div class="uit-icon" @click="toggleTimeline()">
       <img src="../icons/timer.svg" title="map view" alt="map view">
@@ -38,8 +41,13 @@ export default {
     isAtRecycle () {
       return this.show === 'trashed'
     },
-    async toggleZoom () {
-      await this.$parent.$refs['editor'].toggleZoom()
+    async zoomOut () {
+      this.zoom({ delta: 0.2 })
+    },
+    async zoom ({ delta }) {
+      let zoomLevel = this.$parent.$refs['editor'].zoom
+      await this.$parent.$refs['editor'].zoomBa({ to: zoomLevel + delta })
+
       this.nodes.forEach((n) => {
         n.isActive = false
       })
@@ -48,12 +56,19 @@ export default {
       }
       this.$nextTick(() => {
         if (this.$parent.show === 'normal') {
-          this.$parent.$refs['editor'].cleanLayout({ instant: false, goNode: this.nodes.find(n => n.isActive), resetZoom: false })
+          this.$parent.$refs['editor'].cleanLayout({ instant: true, goNode: this.nodes.find(n => n.isActive), resetZoom: false })
         } else {
-          this.$parent.$refs['editor'].cleanLayout({ instant: false, goNode: this.nodes.find(n => n.trashed), resetZoom: false })
+          this.$parent.$refs['editor'].cleanLayout({ instant: true, goNode: this.nodes.find(n => n.trashed), resetZoom: false })
         }
       })
     },
+    async zoomIn () {
+      let zoomLevel = this.$parent.$refs['editor'].zoom
+      if (zoomLevel > 0.3) {
+        this.zoom({ delta: -0.2 })
+      }
+    },
+
     async onGoHome () {
       this.$emit('show', 'normal')
       this.$nextTick(() => {

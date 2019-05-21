@@ -5044,12 +5044,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=a043a1ce&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5ef36a44-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=f048563e&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"timename":_vm.timename,"timetracks":_vm.timetracks,"execStack":_vm.execStack,"compoMap":_vm.compoMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=a043a1ce&scoped=true&
+// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=f048563e&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js
 var get_own_property_descriptor = __webpack_require__("268f");
@@ -5107,12 +5107,12 @@ function _objectSpread(target) {
 
   return target;
 }
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=344f21c4&
-var GraphNodevue_type_template_id_344f21c4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"timetracks":_vm.timetracks,"timename":_vm.timename,"parentNode":_vm.parentNode,"parentComponent":_vm.compoMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.compoMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
-var GraphNodevue_type_template_id_344f21c4_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5ef36a44-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=1eece6f5&
+var GraphNodevue_type_template_id_1eece6f5_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"timetracks":_vm.timetracks,"timename":_vm.timename,"parentNode":_vm.parentNode,"parentComponent":_vm.compoMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.compoMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
+var GraphNodevue_type_template_id_1eece6f5_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=344f21c4&
+// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=1eece6f5&
 
 // EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
 var runtime = __webpack_require__("96cf");
@@ -54023,7 +54023,21 @@ function () {
   beforeDestroy: function beforeDestroy() {
     this.execStack[this.node._id] = false; // window.cancelAnimationFrame(this.rAFID)
   },
-  created: function created() {// let rAF = () => {
+  created: function created() {
+    var _this2 = this;
+
+    var tt = setInterval(function () {
+      var me = _this2.compoMap[_this2.node._id];
+      var parent = _this2.compoMap[_this2.node.to];
+
+      if (parent && me) {
+        clearInterval(tt);
+        parent.$emit('addChild', {
+          child: me,
+          me: parent
+        });
+      }
+    }, 0); // let rAF = () => {
     //   this.rAFID = window.requestAnimationFrame(rAF)
     //   this.execFnc()
     // }
@@ -54034,24 +54048,7 @@ function () {
       this.execStack[this.node._id] = v;
     },
     onReady: function onReady(compos) {
-      var _this2 = this;
-
-      var tt = setInterval(function () {
-        var me = _this2.compoMap[_this2.node._id] = compos;
-        var parent = _this2.compoMap[_this2.node.to];
-
-        if (parent) {
-          clearInterval(tt); // me.$emit('addToParent', {
-          //   parent,
-          //   me
-          // })
-
-          parent.$emit('addChild', {
-            child: me,
-            me: parent
-          });
-        }
-      }, 1);
+      this.compoMap[this.node._id] = compos;
     },
     onRemove: function onRemove() {
       var me = this.$refs['me'];
@@ -54064,58 +54061,38 @@ function () {
 
       if (this.node.to) {
         this.compoMap[this.node.to].$emit('removeChild', {
-          me: parent,
-          child: me
+          child: me,
+          me: parent
         });
       }
     },
     getCompos: function () {
       var _getCompos = _asyncToGenerator(
       /*#__PURE__*/
-      regeneratorRuntime.mark(function _callee2(_ref) {
-        var _this3 = this;
-
+      regeneratorRuntime.mark(function _callee(_ref) {
         var node, temp;
-        return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        return regeneratorRuntime.wrap(function _callee$(_context) {
           while (1) {
-            switch (_context2.prev = _context2.next) {
+            switch (_context.prev = _context.next) {
               case 0:
                 node = _ref.node;
-                temp = "\n        <template>\n          <div class=\"omg-this-compo\" nodeid=\"".concat(node._id, "\"></div>\n        </template>\n        <script>\n        export default {\n        };\n        ", '<', "/script>\n        <style>\n        </style>\n      ");
-                window.requestIdleCallback(
-                /*#__PURE__*/
-                _asyncToGenerator(
-                /*#__PURE__*/
-                regeneratorRuntime.mark(function _callee() {
-                  return regeneratorRuntime.wrap(function _callee$(_context) {
-                    while (1) {
-                      switch (_context.prev = _context.next) {
-                        case 0:
-                          _context.next = 2;
-                          return makeCompo({
-                            src: node.src || temp,
-                            library: node.library || []
-                          });
+                temp = "\n        <template>\n          <div class=\"omg-this-compo\" nodeid=\"".concat(node._id, "\"></div>\n        </template>\n        <script>\n        export default {\n        };\n        ", '<', "/script>\n        <style>\n        </style>\n      "); // window.requestIdleCallback(async () => {
 
-                        case 2:
-                          _this3.compo = _context.sent;
+                _context.next = 4;
+                return makeCompo({
+                  src: node.src || temp,
+                  library: node.library || []
+                });
 
-                          _this3.$forceUpdate();
+              case 4:
+                this.compo = _context.sent;
 
-                        case 4:
-                        case "end":
-                          return _context.stop();
-                      }
-                    }
-                  }, _callee);
-                })));
-
-              case 3:
+              case 5:
               case "end":
-                return _context2.stop();
+                return _context.stop();
             }
           }
-        }, _callee2);
+        }, _callee, this);
       }));
 
       function getCompos(_x) {
@@ -54239,8 +54216,8 @@ function normalizeComponent (
 
 var component = normalizeComponent(
   llexec_GraphNodevue_type_script_lang_js_,
-  GraphNodevue_type_template_id_344f21c4_render,
-  GraphNodevue_type_template_id_344f21c4_staticRenderFns,
+  GraphNodevue_type_template_id_1eece6f5_render,
+  GraphNodevue_type_template_id_1eece6f5_staticRenderFns,
   false,
   null,
   null,
@@ -54330,29 +54307,9 @@ var component = normalizeComponent(
     //   timelinePercentageLast: 0,
     //   timelinePercentage: 0 // can be timeline, render or play
     // }
-    // this.timeputID = setTimeout(() => {
-    //   let start = new Date().getTime()
-    //   this.intervalID = setInterval(() => {
-    //     if (this.water.timeline) {
-    //       this.timelinePercentage = ((new Date().getTime() - start) * 0.001) / this.water.timeline.totalTime % 1
-    //     }
-    //   }, 1000 / 120)
-    // }, 100)
 
     var rAF = function rAF() {
-      _this.rAFID = window.requestAnimationFrame(rAF); // if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
-      //   let totalTime = this.water.timeline.totalTime
-      //   this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
-      //   let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
-      //   this.water.timeinfo.timelinePercentage = lastTime / totalTime
-      //   this.water.timeinfo.timelinePercentage %= 1
-      // }
-      // let start = canvasInit()
-      // this.intervalID = setInterval(() => {
-      //   if (this.canvas.doc.timeline) {
-      //     this.timelinePercentage = ((canvasInit() - start) * 0.001) / this.canvas.doc.timeline.totalTime % 1
-      //   }
-      // }, 1000 / 120)
+      _this.rAFID = window.requestAnimationFrame(rAF); // time name and time track args
 
       _this.makeTimeVars(); // exec stack
 
@@ -54427,7 +54384,7 @@ var SandBox_component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "a043a1ce",
+  "f048563e",
   null
   
 )

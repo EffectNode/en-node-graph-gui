@@ -33,6 +33,18 @@ export default {
     // window.cancelAnimationFrame(this.rAFID)
   },
   created () {
+    let tt = setInterval(() => {
+      let me = this.compoMap[this.node._id]
+      let parent = this.compoMap[this.node.to]
+      if (parent && me) {
+        clearInterval(tt)
+        parent.$emit('addChild', {
+          child: me,
+          me: parent
+        })
+      }
+    }, 0)
+
     // let rAF = () => {
     //   this.rAFID = window.requestAnimationFrame(rAF)
     //   this.execFnc()
@@ -44,21 +56,7 @@ export default {
       this.execStack[this.node._id] = v
     },
     onReady (compos) {
-      let tt = setInterval(() => {
-        let me = this.compoMap[this.node._id] = compos
-        let parent = this.compoMap[this.node.to]
-        if (parent) {
-          clearInterval(tt)
-          // me.$emit('addToParent', {
-          //   parent,
-          //   me
-          // })
-          parent.$emit('addChild', {
-            child: me,
-            me: parent
-          })
-        }
-      }, 1)
+      this.compoMap[this.node._id] = compos
     },
     onRemove () {
       let me = this.$refs['me']
@@ -71,8 +69,8 @@ export default {
       // }
       if (this.node.to) {
         this.compoMap[this.node.to].$emit('removeChild', {
-          me: parent,
-          child: me
+          child: me,
+          me: parent
         })
       }
     },
@@ -88,10 +86,10 @@ export default {
         <style>
         </style>
       `
-      window.requestIdleCallback(async () => {
-        this.compo = await VC.makeCompo({ src: node.src || temp, library: node.library || [] })
-        this.$forceUpdate()
-      })
+      // window.requestIdleCallback(async () => {
+      this.compo = await VC.makeCompo({ src: node.src || temp, library: node.library || [] })
+        // this.$forceUpdate()
+      // })
     },
     init () {
 

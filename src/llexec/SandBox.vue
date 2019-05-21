@@ -81,33 +81,10 @@ export default {
     //   timelinePercentage: 0 // can be timeline, render or play
     // }
 
-    // this.timeputID = setTimeout(() => {
-    //   let start = new Date().getTime()
-    //   this.intervalID = setInterval(() => {
-    //     if (this.water.timeline) {
-    //       this.timelinePercentage = ((new Date().getTime() - start) * 0.001) / this.water.timeline.totalTime % 1
-    //     }
-    //   }, 1000 / 120)
-    // }, 100)
-
     let rAF = () => {
       this.rAFID = window.requestAnimationFrame(rAF)
 
-      // if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
-      //   let totalTime = this.water.timeline.totalTime
-      //   this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
-      //   let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
-      //   this.water.timeinfo.timelinePercentage = lastTime / totalTime
-      //   this.water.timeinfo.timelinePercentage %= 1
-      // }
-
-      // let start = canvasInit()
-      // this.intervalID = setInterval(() => {
-      //   if (this.canvas.doc.timeline) {
-      //     this.timelinePercentage = ((canvasInit() - start) * 0.001) / this.canvas.doc.timeline.totalTime % 1
-      //   }
-      // }, 1000 / 120)
-
+      // time name and time track args
       this.makeTimeVars()
 
       // exec stack
