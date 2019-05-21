@@ -169,8 +169,9 @@ export default {
       this.water = require('../llui/water/water-02.json')
       // always reset timelinfo
       this.water.timeinfo = {
+        ...this.water.timeinfo,
         start: window.performance.now() * 0.001,
-        totalTime: 30,
+        // totalTime: 30,
         timelinePlaying: true,
         timelineControl: 'timer',
         timelinePercentageLast: 0,
@@ -186,7 +187,7 @@ export default {
           this.water.timeinfo.timelinePercentage %= 1
           this.doSync()
         }
-      }, 1000 / 60)
+      }, 1000 / 120)
 
       this.doSync()
 

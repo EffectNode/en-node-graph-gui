@@ -57,9 +57,20 @@ export default {
           // }
 
           // this.$forceUpdate()
+          clearInterval(this.clearTimer)
         }
       }
     })
+
+    this.clearTimer = setInterval(() => {
+      if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
+        let totalTime = this.water.timeline.totalTime
+        this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
+        let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
+        this.water.timeinfo.timelinePercentage = lastTime / totalTime
+        this.water.timeinfo.timelinePercentage %= 1
+      }
+    }, 1000 / 120)
 
     // this.water.timeinfo = {
     //   start: 0,
