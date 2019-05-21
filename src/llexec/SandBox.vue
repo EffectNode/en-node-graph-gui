@@ -1,6 +1,6 @@
 <template>
   <div class="app-entry-dom" v-if="activeNodes && water">
-    <GraphNode :timename="timename" :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
+    <GraphNode :timename="timename" :timetracks="timetracks" :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
   </div>
 </template>
 
@@ -28,6 +28,7 @@ export default {
   },
   data () {
     return {
+      timetracks: [],
       timename: {},
       getTime: (start) => {
         let now = new Date().getTime() * 0.001
@@ -135,12 +136,14 @@ export default {
           wrap.progress = 1
         }
 
-        info[track.title] = wrap.progress
+        info.map[track.title] = wrap.progress
+        info.array.push(wrap)
 
         return info
-      }, {})
+      }, { map: {}, array: [] })
 
-      this.timename = timelineKeynames
+      this.timename = timelineKeynames.map
+      this.timetracks = timelineKeynames.array
 
       // console.log(JSON.stringify(timelineKeynames))
     }

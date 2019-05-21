@@ -150,15 +150,14 @@ export default {
       return this.nodes
     }
     window.getWater = () => {
-      this.water.timeinfo = {
-        ...this.water.timeinfo,
-        start: 0,
-        timelinePlaying: true,
-        timelineControl: 'timer',
-        timelinePercentageLast: 0,
-        timelinePercentage: 0
-      }
-      return this.water
+      let newwater = JSON.parse(JSON.stringify(this.water))
+      newwater.timeinfo.start = 0
+      newwater.timeinfo.timelinePlaying = true
+      newwater.timeinfo.timelineControl = 'timer'
+      newwater.timeinfo.timelinePercentageLast = 0
+      newwater.timeinfo.timelinePercentage = 0
+
+      return newwater
     }
 
     console.log(`copy(window.getNODES())`)
@@ -178,7 +177,7 @@ export default {
         timelinePercentage: 0 // can be timeline, render or play
       }
 
-      setInterval(() => {
+      this.clearTimer = setInterval(() => {
         if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
           let totalTime = this.water.timeline.totalTime
           this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
@@ -214,7 +213,7 @@ export default {
     })
   },
   beforeDestroy () {
-    clearInterval(this.waterTimer)
+    clearInterval(this.clearTimer)
   },
   methods: {
     doSync () {
