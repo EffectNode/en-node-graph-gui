@@ -5053,12 +5053,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=1360988e&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=7006da0d&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"timename":_vm.timename,"execStack":_vm.execStack,"compoMap":_vm.compoMap,"nodes":_vm.activeNodes,"node":node}})}),1):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=1360988e&scoped=true&
+// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=7006da0d&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js
 var get_own_property_descriptor = __webpack_require__("268f");
@@ -54326,15 +54326,14 @@ var component = normalizeComponent(
     //   timelinePercentageLast: 0,
     //   timelinePercentage: 0 // can be timeline, render or play
     // }
-
-    this.timeputID = setTimeout(function () {
-      var start = new Date().getTime();
-      _this.intervalID = setInterval(function () {
-        if (_this.water.timeline) {
-          _this.timelinePercentage = (new Date().getTime() - start) * 0.001 / _this.water.timeline.totalTime % 1;
-        }
-      }, 1000 / 120);
-    }, 100);
+    // this.timeputID = setTimeout(() => {
+    //   let start = new Date().getTime()
+    //   this.intervalID = setInterval(() => {
+    //     if (this.water.timeline) {
+    //       this.timelinePercentage = ((new Date().getTime() - start) * 0.001) / this.water.timeline.totalTime % 1
+    //     }
+    //   }, 1000 / 120)
+    // }, 100)
 
     var rAF = function rAF() {
       _this.rAFID = window.requestAnimationFrame(rAF); // if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
@@ -54395,8 +54394,7 @@ var component = normalizeComponent(
         info[track.title] = wrap.progress;
         return info;
       }, {});
-      this.timename = timelineKeynames;
-      console.log(JSON.stringify(timelineKeynames));
+      this.timename = timelineKeynames; // console.log(JSON.stringify(timelineKeynames))
     }
   }
 });
@@ -54420,7 +54418,7 @@ var SandBox_component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "1360988e",
+  "7006da0d",
   null
   
 )

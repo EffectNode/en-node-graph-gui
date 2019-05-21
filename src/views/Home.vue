@@ -54,7 +54,7 @@ export default {
       },
 
       getTime (start) {
-        let now = new Date().getTime() * 0.001
+        let now = window.performance.now() * 0.001
         return now - start
       },
       water: false,
@@ -132,19 +132,19 @@ export default {
   watch: {
   },
   mounted () {
-    let loop = () => {
-      window.requestAnimationFrame(loop)
-      if (this.timeinfo && this.timeline && this.timeinfo.timelineControl === 'timer' && this.timeinfo.timelinePlaying) {
-        let totalTime = this.timeline.totalTime
-        this.timeinfo.timelinePercentageLast = this.getTime(this.timeinfo.start) / totalTime
-        let lastTime = this.timeinfo.timelinePercentageLast * totalTime
-        this.timeinfo.timelinePercentage = lastTime / totalTime
-        this.timeinfo.timelinePercentage %= 1
+    // let loop = () => {
+    //   window.requestAnimationFrame(loop)
+    //   if (this.timeinfo && this.timeline && this.timeinfo.timelineControl === 'timer' && this.timeinfo.timelinePlaying) {
+    //     let totalTime = this.timeline.totalTime
+    //     this.timeinfo.timelinePercentageLast = this.getTime(this.timeinfo.start) / totalTime
+    //     let lastTime = this.timeinfo.timelinePercentageLast * totalTime
+    //     this.timeinfo.timelinePercentage = lastTime / totalTime
+    //     this.timeinfo.timelinePercentage %= 1
 
-        this.doSync()
-      }
-    }
-    window.requestAnimationFrame(loop)
+    //     this.doSync()
+    //   }
+    // }
+    // window.requestAnimationFrame(loop)
 
     window.getNODES = () => {
       return this.nodes
@@ -162,7 +162,7 @@ export default {
       this.water = require('../llui/water/water-02.json')
       // always reset timelinfo
       this.water.timeinfo = {
-        start: (new Date()).getTime() * 0.001,
+        start: window.performance.now() * 0.001,
         totalTime: 30,
         timelinePlaying: true,
         timelineControl: 'timer',
@@ -170,8 +170,18 @@ export default {
         timelinePercentage: 0 // can be timeline, render or play
       }
 
-      this.doSync()
+      setInterval(() => {
+        if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
+          let totalTime = this.water.timeline.totalTime
+          this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
+          let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
+          this.water.timeinfo.timelinePercentage = lastTime / totalTime
+          this.water.timeinfo.timelinePercentage %= 1
+          this.doSync()
+        }
+      }, 1000 / 60)
 
+      this.doSync()
 
       // this.waterTimer = setInterval(() => {
       //   // this.makeTimeVars()
@@ -201,7 +211,10 @@ export default {
   methods: {
     doSync () {
       window.dispatchEvent(new CustomEvent('sync-all', {
-        detail: this.water
+        detail: {
+          timeinfo: this.water.timeinfo,
+          timeline: this.water.timeline
+        }
       }))
     },
     openCoder () {

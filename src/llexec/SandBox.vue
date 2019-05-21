@@ -69,14 +69,14 @@ export default {
     //   timelinePercentage: 0 // can be timeline, render or play
     // }
 
-    this.timeputID = setTimeout(() => {
-      let start = new Date().getTime()
-      this.intervalID = setInterval(() => {
-        if (this.water.timeline) {
-          this.timelinePercentage = ((new Date().getTime() - start) * 0.001) / this.water.timeline.totalTime % 1
-        }
-      }, 1000 / 120)
-    }, 100)
+    // this.timeputID = setTimeout(() => {
+    //   let start = new Date().getTime()
+    //   this.intervalID = setInterval(() => {
+    //     if (this.water.timeline) {
+    //       this.timelinePercentage = ((new Date().getTime() - start) * 0.001) / this.water.timeline.totalTime % 1
+    //     }
+    //   }, 1000 / 120)
+    // }, 100)
 
     let rAF = () => {
       this.rAFID = window.requestAnimationFrame(rAF)
@@ -142,7 +142,7 @@ export default {
 
       this.timename = timelineKeynames
 
-      console.log(JSON.stringify(timelineKeynames))
+      // console.log(JSON.stringify(timelineKeynames))
     }
   }
 }
