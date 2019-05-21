@@ -87,18 +87,18 @@
       "isActive": false,
       "rect": {
         "x": 420,
-        "y": 60,
+        "y": 64,
         "width": 60,
         "height": 60,
-        "top": 60,
+        "top": 64,
         "right": 480,
-        "bottom": 120,
+        "bottom": 124,
         "left": 420
       },
       "trashed": false,
       "type": "camera",
       "library": [],
-      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timename: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      camera: false\n    }\n  },\n  methods: {\n    init () {\n      let fov = 75\n      let aspect = 9 / 18\n      let near = 0.1\n      let far = 100000000000000\n\n      this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far)\n      this.camera.position.z = 500\n      this.camera.lookAt(0,0,0)\n      \n      this.$emit('exec', () => {\n        let item = this.timetracks.find(t => t.title === this.node.title && t.progress > 0.001 && t.progress < 1)\n        if (item) {\n          this.camera.position.z = -500 + (item.progress) * 1000\n        }\n      });\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n"
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timename: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      camera: false\n    }\n  },\n  methods: {\n    init () {\n      let fov = 75\n      let aspect = 9 / 18\n      let near = 0.1\n      let far = 100000000000000\n\n      this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far)\n      this.camera.position.z = 500\n      this.camera.lookAt(0,0,0)\n      \n      this.$emit('exec', () => {\n        let item = this.timetracks.find(t => t.title === this.node.title && t.progress > 0.001 && t.progress < 1)\n        if (item) {\n          this.camera.position.z = -50 + (item.progress) * 1000\n        }\n      });\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n"
     },
     {
       "_id": "_733283",
@@ -990,36 +990,36 @@
     "tracks": [
       {
         "_id": "_13222724159",
-        "start": 10.463821892393325,
-        "end": 16.966604823747677,
+        "start": 8.460111317254187,
+        "end": 16.02040816326531,
         "title": "Zoom Camera",
         "trashed": false
       },
       {
         "_id": "_97927335642",
         "start": 7.5139146567718,
-        "end": 16.35435992578852,
+        "end": 21.39146567717998,
         "title": "Ring And Ball Scene",
         "trashed": false
       },
       {
         "_id": "_21128698452",
-        "start": 17.142857142857153,
-        "end": 30.01855287569575,
+        "start": 21.87384044526902,
+        "end": 29.99072356215216,
         "title": "Home Scene",
         "trashed": false
       },
       {
         "_id": "_30633603714",
-        "start": 15.862708719851595,
-        "end": 29.935064935064926,
+        "start": 16.36363636363637,
+        "end": 29.962894248608524,
         "title": "Movin Camera",
         "trashed": false
       },
       {
         "_id": "_69100068829",
         "start": 0,
-        "end": 10.899814471243044,
+        "end": 8.673469387755103,
         "title": "Movin Camera",
         "trashed": false
       },
