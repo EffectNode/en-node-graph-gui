@@ -24,16 +24,16 @@
       "hasFound": false,
       "isActive": false,
       "rect": {
-        "x": 60,
-        "y": 310,
+        "x": 177,
+        "y": 251.09999084472656,
         "width": 60,
-        "height": 60,
-        "top": 310,
-        "right": 120,
-        "bottom": 370,
-        "left": 60
+        "height": 59.99998474121094,
+        "top": 251.09999084472656,
+        "right": 237,
+        "bottom": 311.0999755859375,
+        "left": 177
       },
-      "src": "<template>\n  <div class=\"full\" ref=\"mounter\">\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timename: {}\n  },\n  data () {\n    return {\n      cameras: {},\n      scenes: {},\n      \n      sceneID: '',\n      cameraID: '',\n      \n      mouse: { x: 0, y: 0 },\n      renderer: false\n    }\n  },\n  watch: {\n    cameraID () {\n      window.dispatchEvent(new Event('resize'))\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'camera') {\n        this.cameras[child.node._id] = child.camera\n        window.dispatchEvent(new Event('resize'))\n      }\n      if (child.node.type === 'scene') {\n        this.scenes[child.node._id] = child.scene\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestroy () {\n    this.stop()\n    this.$emit('remove', this)\n  },\n  mounted () {\n    let sceneIDs = this.nodes.filter(t => t.type === 'scene').map(t => t._id)\n    let cameraIDs = this.nodes.filter(t => t.type === 'camera').map(t => t._id)\n    this.cameraID = cameraIDs[0]\n    this.sceneID = sceneIDs[1]\n    this.init()\n  },\n  methods: {\n    init () {\n      this.setupRenderer()\n      this.getSizeInfo()\n      this.setupSizer()\n      this.syncSize()\n      this.start()\n      this.$emit('ready', this)\n    },\n    setupRenderer () {\n      this.renderer = new THREE.WebGLRenderer({\n        antialias: true,\n        alpha: true,\n        preserveDrawingBuffer: true\n      })\n      this.renderer.domElement.style.marginBottom = '-6px'\n      this.$refs['mounter'].appendChild(this.renderer.domElement)\n    },\n    setupSizer () {\n      this.getSizeInfo()\n      window.addEventListener('resize', this.getSizeInfo, false)\n    },\n    getSizeInfo () {\n      if (!this.$refs['mounter']) {\n        return\n      }\n      var rect = this.$refs['mounter'].getBoundingClientRect()\n      this.rect = rect\n      this.size = {\n        width: rect.width,\n        height: rect.height,\n        aspect: rect.width / rect.height\n      }\n      this.dpi = 2.0 // window.devicePixelRatio || 1.0\n    },\n    syncSize () {\n      let sync = () => {\n        let { composer, cameras, renderer, size, dpi, control } = this\n        let camera = cameras[this.cameraID]\n        if (control) {\n          control.update()\n        }\n        if (composer) {\n          composer.setSize(size.width * dpi, size.height * dpi)\n        }\n        \n        renderer.setPixelRatio(dpi)\n        renderer.setSize(size.width, size.height)\n        if (camera) {\n          camera.aspect = size.width / size.height\n          camera.updateProjectionMatrix()\n        }\n      }\n      sync()\n      window.addEventListener('resize', sync, false)\n\n      this.$refs['mounter'].addEventListener('mousemove', (evt) => {\n        this.mouse.x = evt.pageX\n        this.mouse.y = evt.pageY\n      }, false)\n    },\n    stop () {\n      window.cancelAnimationFrame(this.rAFID)\n    },\n    start () {\n      let rAF = () => {\n        this.rAFID = window.requestAnimationFrame(rAF)\n        this.render()\n      }\n      this.rAFID = window.requestAnimationFrame(rAF)\n    },\n    resolveSwitchable () {\n     for (var kn in this.timename) {\n        if (this.timename[kn] > 0.001 && this.timename[kn] < 1) {\n          let item = this.nodes.find(n => n.title === kn)\n          if (item && item._id) {\n            if (item.type === 'camera') {\n              this.cameraID = item._id\n              console.log('use cam ->', item.title)\n              if (this.cameraID !== item._id) {\n                window.dispatchEvent(new Event('resize'))\n              }\n            } else if (item.type === 'item') {\n              this.sceneID = item._id\n              if (this.sceneID !== item._id) {\n                console.log('use scene ->', item.title)\n              }\n            }\n          }\n        }\n      }\n    },\n    render () {\n      let { scenes, cameras, renderer, composer } = this\n      this.resolveSwitchable()\n      \n      let scene = scenes[this.sceneID]\n      let camera = cameras[this.cameraID]\n\n      if (scene && camera && renderer && composer) {\n        composer.render()\n      } else if (scene && camera && renderer) {\n        renderer.render(scene, camera)\n      }\n    }\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "src": "<template>\n  <div class=\"full\" ref=\"mounter\">\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timename: {}\n  },\n  data () {\n    return {\n      cameras: {},\n      scenes: {},\n      \n      sceneID: '',\n      cameraID: '',\n      \n      mouse: { x: 0, y: 0 },\n      renderer: false\n    }\n  },\n  watch: {\n    cameraID () {\n      window.dispatchEvent(new Event('resize'))\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'camera') {\n        this.cameras[child.node._id] = child.camera\n        window.dispatchEvent(new Event('resize'))\n      }\n      if (child.node.type === 'scene') {\n        this.scenes[child.node._id] = child.scene\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestroy () {\n    this.stop()\n    this.$emit('remove', this)\n  },\n  mounted () {\n    let sceneIDs = this.nodes.filter(t => t.type === 'scene').map(t => t._id)\n    let cameraIDs = this.nodes.filter(t => t.type === 'camera').map(t => t._id)\n    this.cameraID = cameraIDs[0]\n    this.sceneID = sceneIDs[1]\n    this.init()\n  },\n  methods: {\n    init () {\n      this.setupRenderer()\n      this.getSizeInfo()\n      this.setupSizer()\n      this.syncSize()\n      this.start()\n      this.$emit('ready', this)\n    },\n    setupRenderer () {\n      this.renderer = new THREE.WebGLRenderer({\n        antialias: true,\n        alpha: true,\n        preserveDrawingBuffer: true\n      })\n      this.renderer.domElement.style.marginBottom = '-6px'\n      this.$refs['mounter'].appendChild(this.renderer.domElement)\n    },\n    setupSizer () {\n      this.getSizeInfo()\n      window.addEventListener('resize', this.getSizeInfo, false)\n    },\n    getSizeInfo () {\n      if (!this.$refs['mounter']) {\n        return\n      }\n      var rect = this.$refs['mounter'].getBoundingClientRect()\n      this.rect = rect\n      this.size = {\n        width: rect.width,\n        height: rect.height,\n        aspect: rect.width / rect.height\n      }\n      this.dpi = 2.0 // window.devicePixelRatio || 1.0\n    },\n    syncSize () {\n      let sync = () => {\n        let { composer, cameras, renderer, size, dpi, control } = this\n        let camera = cameras[this.cameraID]\n        if (control) {\n          control.update()\n        }\n        if (composer) {\n          composer.setSize(size.width * dpi, size.height * dpi)\n        }\n        \n        renderer.setPixelRatio(dpi)\n        renderer.setSize(size.width, size.height)\n        if (camera) {\n          camera.aspect = size.width / size.height\n          camera.updateProjectionMatrix()\n        }\n      }\n      sync()\n      window.addEventListener('resize', sync, false)\n\n      this.$refs['mounter'].addEventListener('mousemove', (evt) => {\n        this.mouse.x = evt.pageX\n        this.mouse.y = evt.pageY\n      }, false)\n    },\n    stop () {\n      window.cancelAnimationFrame(this.rAFID)\n    },\n    start () {\n      let rAF = () => {\n        this.rAFID = window.requestAnimationFrame(rAF)\n        this.render()\n      }\n      this.rAFID = window.requestAnimationFrame(rAF)\n    },\n    resolveSwitchable () {\n     for (var kn in this.timename) {\n        if (this.timename[kn] > 0.001 && this.timename[kn] < 1) {\n          let item = this.nodes.find(n => n.title === kn)\n          if (item && item._id) {\n            if (item.type === 'camera') {\n              this.cameraID = item._id\n              console.log('use cam ->', item.title)\n              if (this.cameraID !== item._id) {\n                window.dispatchEvent(new Event('resize'))\n              }\n            } else if (item.type === 'scene') {\n              this.sceneID = item._id\n              if (this.sceneID !== item._id) {\n                console.log('use scene ->', item.title)\n              }\n            }\n          }\n        }\n      }\n    },\n    render () {\n      let { scenes, cameras, renderer, composer } = this\n      this.resolveSwitchable()\n      \n      let scene = scenes[this.sceneID]\n      let camera = cameras[this.cameraID]\n\n      if (scene && camera && renderer && composer) {\n        composer.render()\n      } else if (scene && camera && renderer) {\n        renderer.render(scene, camera)\n      }\n    }\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
       "sceneID": "homepage",
       "cameraID": "_455500"
@@ -57,14 +57,14 @@
       "hasFound": false,
       "isActive": false,
       "rect": {
-        "x": 360,
-        "y": 268.1000061035156,
+        "x": 486,
+        "y": 343,
         "width": 60,
         "height": 60,
-        "top": 268.1000061035156,
-        "right": 420,
-        "bottom": 328.1000061035156,
-        "left": 360
+        "top": 343,
+        "right": 546,
+        "bottom": 403,
+        "left": 486
       },
       "library": [],
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      scene: false\n    }\n  },\n  methods: {\n    init () {\n      this.scene = new THREE.Scene()\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'camera') {\n        this.components[this.node.to].$emit('addChild', { child })\n      }\n      // add here\n      if (child.node.type === 'object3D') {\n        this.scene.add(child.object3D)\n      }\n      if (child.node.type === 'drawable') {\n        this.scene.add(child.drawable)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n"
@@ -150,14 +150,14 @@
       "isActive": false,
       "hasFound": false,
       "rect": {
-        "x": 360,
-        "y": 468.1000061035156,
+        "x": 481,
+        "y": 276.1000061035156,
         "width": 60,
-        "height": 59.999969482421875,
-        "top": 468.1000061035156,
-        "right": 420,
-        "bottom": 528.0999755859375,
-        "left": 360
+        "height": 60,
+        "top": 276.1000061035156,
+        "right": 541,
+        "bottom": 336.1000061035156,
+        "left": 481
       }
     },
     {
@@ -743,12 +743,12 @@
       "hasFound": false,
       "rect": {
         "x": 360,
-        "y": 168.10000610351562,
+        "y": 167.09999084472656,
         "width": 60,
         "height": 60,
-        "top": 168.10000610351562,
+        "top": 167.09999084472656,
         "right": 420,
-        "bottom": 228.10000610351562,
+        "bottom": 227.09999084472656,
         "left": 360
       }
     },
@@ -955,13 +955,13 @@
     },
     {
       "_id": "_100107",
-      "title": "Still Camera",
+      "title": "YoYo Camera",
       "to": "_793268",
       "pos": {
         "x": 420,
         "y": 260
       },
-      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      camera: false\n    }\n  },\n  methods: {\n    init () {\n      let fov = 75\n      let aspect = 9 / 18\n      let near = 0.1\n      let far = 100000000000000\n\n      this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far)\n      this.camera.position.z = 500\n      this.camera.lookAt(0,0,0)\n\n      // this.$emit('exec', () => {\n      //   let time = window.performance.now() * 0.001\n      //   this.camera.position.x = 100 * Math.sin(time)\n      //   this.camera.position.y = 100 * Math.cos(time)\n      // })\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timename: {}\n  },\n  data () {\n    return {\n      camera: false\n    }\n  },\n  methods: {\n    init () {\n      let fov = 75\n      let aspect = 9 / 18\n      let near = 0.1\n      let far = 100000000000000\n\n      this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far)\n      this.camera.position.z = 500\n      this.camera.lookAt(0,0,0)\n\n      this.$emit('exec', () => {\n        this.camera.position.z = (1.0 - this.timename[this.node.title]) * 500\n      })\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
       "type": "camera",
       "size": {
@@ -973,14 +973,14 @@
       "isActive": false,
       "hasFound": false,
       "rect": {
-        "x": 391,
-        "y": 243,
+        "x": 360,
+        "y": 268.1000061035156,
         "width": 60,
         "height": 60,
-        "top": 243,
-        "right": 451,
-        "bottom": 303,
-        "left": 391
+        "top": 268.1000061035156,
+        "right": 420,
+        "bottom": 328.1000061035156,
+        "left": 360
       }
     }
   ],
@@ -989,24 +989,36 @@
     "tracks": [
       {
         "_id": "_13222724159",
-        "start": 9.239332096474966,
-        "end": 19.192949907235597,
+        "start": 19.786641929499073,
+        "end": 29.74025974025971,
         "title": "Zoom Camera",
         "trashed": false
       },
       {
         "_id": "_89870722182",
         "start": 0,
-        "end": 8.701298701298708,
+        "end": 14.267161410018561,
         "title": "Movin Camera",
         "trashed": false
       },
       {
         "_id": "_57954393884",
-        "start": 18.812615955473067,
-        "end": 29.990723562152066,
-        "title": "Still Camera",
+        "start": 14.471243042671583,
+        "end": 20.083487940630768,
+        "title": "YoYo Camera",
         "trashed": false
+      },
+      {
+        "_id": "_24899311932",
+        "start": 0,
+        "end": 14.322820037105757,
+        "title": "Home Scene"
+      },
+      {
+        "_id": "_97927335642",
+        "start": 14.332096474953616,
+        "end": 29.99072356215213,
+        "title": "Ring And Ball Scene"
       }
     ]
   },
