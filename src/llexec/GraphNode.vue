@@ -1,5 +1,5 @@
 <template>
-  <Component v-if="compo && node" :timename="timename" @exec="onExec" :parentNode="parentNode" ref="me" :parentComponent="compoMap[node.to]" :isRootNode="!!!node.to" :components="compoMap" :nodes="nodes" :node="node" @ready="onReady" @remove="onRemove" :is="compo"></Component>
+  <Component v-if="compo && node" :timetracks="timetracks" :timename="timename" @exec="onExec" :parentNode="parentNode" ref="me" :parentComponent="compoMap[node.to]" :isRootNode="!!!node.to" :components="compoMap" :nodes="nodes" :node="node" @ready="onReady" @remove="onRemove" :is="compo"></Component>
 </template>
 
 <script>
@@ -8,6 +8,7 @@ import * as VC from './vue-compile'
 export default {
   props: {
     timename: {},
+    timetracks: {},
     node: {},
     nodes: {},
     compoMap: {},

@@ -166,7 +166,7 @@ export default {
     console.log(`copy(encodeURIComponent(JSON.stringify(getWater())))`)
 
     setTimeout(() => {
-      this.water = require('../llui/water/water-02.json')
+      this.water = require('../llui/water/water-03.json')
       // always reset timelinfo
       this.water.timeinfo = {
         ...this.water.timeinfo,

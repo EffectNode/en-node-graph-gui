@@ -5107,12 +5107,12 @@ function _objectSpread(target) {
 
   return target;
 }
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=f402d8cc&
-var GraphNodevue_type_template_id_f402d8cc_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"timename":_vm.timename,"parentNode":_vm.parentNode,"parentComponent":_vm.compoMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.compoMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
-var GraphNodevue_type_template_id_f402d8cc_staticRenderFns = []
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"37f3048f-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=344f21c4&
+var GraphNodevue_type_template_id_344f21c4_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"timetracks":_vm.timetracks,"timename":_vm.timename,"parentNode":_vm.parentNode,"parentComponent":_vm.compoMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.compoMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
+var GraphNodevue_type_template_id_344f21c4_staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=f402d8cc&
+// CONCATENATED MODULE: ./src/llexec/GraphNode.vue?vue&type=template&id=344f21c4&
 
 // EXTERNAL MODULE: ./node_modules/regenerator-runtime/runtime.js
 var runtime = __webpack_require__("96cf");
@@ -53997,6 +53997,7 @@ function () {
 /* harmony default export */ var GraphNodevue_type_script_lang_js_ = ({
   props: {
     timename: {},
+    timetracks: {},
     node: {},
     nodes: {},
     compoMap: {},
@@ -54238,8 +54239,8 @@ function normalizeComponent (
 
 var component = normalizeComponent(
   llexec_GraphNodevue_type_script_lang_js_,
-  GraphNodevue_type_template_id_f402d8cc_render,
-  GraphNodevue_type_template_id_f402d8cc_staticRenderFns,
+  GraphNodevue_type_template_id_344f21c4_render,
+  GraphNodevue_type_template_id_344f21c4_staticRenderFns,
   false,
   null,
   null,
