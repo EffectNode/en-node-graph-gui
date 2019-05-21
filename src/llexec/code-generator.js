@@ -14,7 +14,6 @@ export const injector = ({ water = {} }) => {
   let app = require('raw-loader!../../public/app.fragment.html').default
   // eslint-disable-next-line import/no-webpack-loader-syntax
   let body = require('raw-loader!../../public/body.fragment.html').default
-  // eslint-disable-next-line import/no-webpack-loader-syntax
 
   if (process.env.NODE_ENV === 'production') {
     head = head.replace(BASEURL_REPLACER, 'https://en-node-graph-gui.netlify.com')
