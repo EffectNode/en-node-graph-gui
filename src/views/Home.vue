@@ -52,6 +52,7 @@ export default {
         timeline: true,
         inspector: false
       },
+
       getTime (start) {
         let now = new Date().getTime() * 0.001
         return now - start
@@ -133,12 +134,14 @@ export default {
   mounted () {
     let loop = () => {
       window.requestAnimationFrame(loop)
-      if (this.water.timeinfo && this.water.timeline && this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
-        let totalTime = this.water.timeline.totalTime
-        this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
-        let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
-        this.water.timeinfo.timelinePercentage = lastTime / totalTime
-        this.water.timeinfo.timelinePercentage %= 1
+      if (this.timeinfo && this.timeline && this.timeinfo.timelineControl === 'timer' && this.timeinfo.timelinePlaying) {
+        let totalTime = this.timeline.totalTime
+        this.timeinfo.timelinePercentageLast = this.getTime(this.timeinfo.start) / totalTime
+        let lastTime = this.timeinfo.timelinePercentageLast * totalTime
+        this.timeinfo.timelinePercentage = lastTime / totalTime
+        this.timeinfo.timelinePercentage %= 1
+
+        this.doSync()
       }
     }
     window.requestAnimationFrame(loop)
@@ -166,11 +169,13 @@ export default {
         timelinePercentageLast: 0,
         timelinePercentage: 0 // can be timeline, render or play
       }
+
       this.doSync()
 
-      this.waterTimer = setInterval(() => {
-        // this.makeTimeVars()
-      })
+
+      // this.waterTimer = setInterval(() => {
+      //   // this.makeTimeVars()
+      // })
     }, 150)
   },
   created () {
@@ -194,35 +199,6 @@ export default {
     clearInterval(this.waterTimer)
   },
   methods: {
-    makeTimeVars () {
-      let currentSecond = (new Date()).getTime() * 0.001 - this.water.timeinfo.start
-      let totalTime = this.water.timeline.totalTime
-      // let timelinePercentage = this.water.timeinfo.timelinePercentage
-      // let currentSecond = totalTime * timelinePercentage
-
-      let timelineKeynames = this.water.timeline.tracks.reduce((info, track) => {
-        let start = track.start
-        let end = track.end
-        let duration = end - start
-        let wrap = {
-          ...track,
-          now: currentSecond / totalTime,
-          progress: (currentSecond - start) / duration
-        }
-        if (currentSecond < start) {
-          wrap.progress = 0.000001
-        }
-        if (currentSecond > end) {
-          wrap.progress = 1
-        }
-
-        info[track.title] = wrap.progress
-
-        return info
-      }, {})
-
-      console.log(JSON.stringify(timelineKeynames))
-    },
     doSync () {
       window.dispatchEvent(new CustomEvent('sync-all', {
         detail: this.water
@@ -233,9 +209,7 @@ export default {
       this.$forceUpdate()
     },
     onReload ({ timeout } = {}) {
-      this.doSync('go')
       setTimeout(() => {
-        this.doSync('go')
         this.$refs.exec.$emit('reload')
       }, timeout || 0)
     },
