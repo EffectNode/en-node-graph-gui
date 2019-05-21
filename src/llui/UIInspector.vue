@@ -156,6 +156,7 @@ export default {
   box-sizing: border-box;
   background-color: #efefef;
   box-shadow: 0px 5px 30px 0px #c7c7c7;
+  z-index: 10;
 }
 .inspector-box-title{
   /* border-radius: calc(60px / 2) calc(60px / 2) 0px 0px; */

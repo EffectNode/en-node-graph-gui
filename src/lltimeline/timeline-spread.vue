@@ -29,12 +29,6 @@ export default {
       dx: 0,
       ax: 0
     }
-    dom.addEventListener('touchstart', (evt) => {
-      if (evt.touches[0]) {
-        md = true
-        state.sx = evt.touches[0].pageX
-      }
-    })
     dom.addEventListener('mousedown', (evt) => {
       md = true
       state.sx = evt.pageX
@@ -45,37 +39,14 @@ export default {
         let deltaX = now - state.sx
         state.dx = deltaX
 
-        // let ratio = this.$parent.$parent.baseTime / this.$parent.$parent.initBaseTime
+        // console.log(deltaX)
 
-        this.$parent.track.start += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
-        this.$parent.track.end += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
-
-        if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
-          this.$parent.track.end -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
-        }
-
-        this.$parent.syncCSS()
-        this.$parent.$forceUpdate()
-        this.$forceUpdate()
-        state.ax += deltaX
-        state.sx = now
-      }
-    })
-    window.addEventListener('touchmove', (evt) => {
-      if (md && evt.touches[0]) {
-        let now = evt.touches[0].pageX
-        let deltaX = now - state.sx
-        state.dx = deltaX
-
-        // let ratio = this.$parent.$parent.baseTime / this.$parent.$parent.initBaseTime
-
-        this.$parent.track.start += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
-        this.$parent.track.end += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
+        this.$parent.track.start += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+        this.$parent.track.end += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
 
         if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
-          this.$parent.track.end -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.baseTime)
+          this.$parent.track.start -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+          this.$parent.track.end -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
         }
 
         this.$parent.syncCSS()
@@ -86,9 +57,6 @@ export default {
       }
     })
     window.addEventListener('mouseup', (evt) => {
-      md = false
-    })
-    window.addEventListener('touchend', (evt) => {
       md = false
     })
   }

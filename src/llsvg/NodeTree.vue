@@ -387,7 +387,7 @@ export default {
         }
       } else {
         let activeNode = this.nodes.find(n => n.isActive)
-        if (activeNode) {
+        if (activeNode && this.$refs[`_node_${activeNode._id}`]) {
           let nodeEl = this.$refs[`_node_${activeNode._id}`][0]
           if (nodeEl) {
             let rect = nodeEl.getRect()

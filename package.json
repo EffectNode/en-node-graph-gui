@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev-both": "concurrently \"npm run dev-web\" \"npm run dev-lib\"",
+    "dev": "concurrently \"npm run dev-web\" \"npm run dev-lib\"",
     "deploy": "npm run deploy-web;",
     "deploy-both": "npm run deploy-web; npm run deploy-lib;",
     "deploy-web": "npm run build-lib; npm run build-vue-lib; npm run build; npm run netlify;  npm run github;",
@@ -14,7 +14,7 @@
     "build-vue-lib": "vue-cli-service build --target lib --name effectgraph ./src/llexec/EXEC.vue --dest ./public/vuelib;",
     "netlify": "netlify deploy --dir=\"./dist\" --prod",
     "dev-web": "vue-cli-service serve",
-    "dev": "vue-cli-service serve",
+    "dev-one": "vue-cli-service serve",
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint"
   },

@@ -1,6 +1,6 @@
 <template>
   <div class="app-entry-dom" v-if="activeNodes && water">
-    <GraphNode :timeinfo="timeinfo" :timeline="timeline" :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
+    <GraphNode :timename="timename" :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
   </div>
 </template>
 
@@ -28,47 +28,16 @@ export default {
   },
   data () {
     return {
-      timeline: {
-        totalTime: 30,
-        tracks: [
-          {
-            _id: '_62003052518',
-            start: 0,
-            end: 20.071031128319383,
-            title: 'fly',
-            trashed: false
-          }
-        ]
-      },
+      timename: {},
       getTime: (start) => {
-        let now = window.performance.now() * 0.001
+        let now = new Date().getTime() * 0.001
         return now - start
-      },
-      timeinfo: {
-        start: 0,
-        totalTime: 30,
-        timelinePlaying: true,
-        timelineControl: 'timer',
-        timelinePercentageLast: 0,
-        timelinePercentage: 0 // can be timeline, render or play
       },
       execStack: {},
       compoMap: {}
     }
   },
   mounted () {
-    let loop = () => {
-      window.requestAnimationFrame(loop)
-      if (this.timeinfo.timelineControl === 'timer' && this.timeinfo.timelinePlaying) {
-        let totalTime = this.timeline.totalTime
-        this.timeinfo.timelinePercentageLast = this.getTime(this.timeinfo.start) / totalTime
-        let lastTime = this.timeinfo.timelinePercentageLast * totalTime
-        this.timeinfo.timelinePercentage = lastTime / totalTime
-        this.timeinfo.timelinePercentage %= 1
-      }
-    }
-    window.requestAnimationFrame(loop)
-
     window.addEventListener('message', (evt) => {
       if (window.top && window.top.location.origin === window.location.origin) {
         let msg = evt.data
@@ -76,16 +45,44 @@ export default {
         let args = msg.data
 
         if (type === 'sync-all') {
-          console.log(JSON.stringify(args.timeinfo))
+          // console.log(JSON.stringify(args.timeinfo))
           // this.nodes = args
-          this.timeline = args.timeline
-          this.timeinfo = args.timeinfo
+          // this.water.timeline = args.timeline
+          this.water.timeline = args.timeline
+          this.water.timeinfo = args.timeinfo
+
+          // for (var kn in args.timeinfo) {
+          //   this.water.timeinfo[kn] = args.timeinfo[kn]
+          // }
+
+          // this.$forceUpdate()
         }
       }
     })
 
+    // this.water.timeinfo = {
+    //   start: 0,
+    //   totalTime: this.water.timeinfo,
+    //   timelinePlaying: true,
+    //   timelineControl: 'timer',
+    //   timelinePercentageLast: 0,
+    //   timelinePercentage: 0 // can be timeline, render or play
+    // }
+
     let rAF = () => {
       this.rAFID = window.requestAnimationFrame(rAF)
+
+      if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
+        let totalTime = this.water.timeline.totalTime
+        this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
+        let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
+        this.water.timeinfo.timelinePercentage = lastTime / totalTime
+        this.water.timeinfo.timelinePercentage %= 1
+      }
+
+      this.makeTimeVars()
+
+      // exec stack
       for (var key in this.execStack) {
         let fn = this.execStack[key]
         if (fn) {
@@ -99,6 +96,38 @@ export default {
     cancelAnimationFrame(this.rAFID)
   },
   methods: {
+    makeTimeVars () {
+      // let currentSecond = ((new Date()).getTime() * 0.001 - this.water.timeinfo.start) % this.water.timeline.totalTime
+
+      let totalTime = this.water.timeline.totalTime
+      let timelinePercentage = this.water.timeinfo.timelinePercentage
+      let currentSecond = totalTime * timelinePercentage
+
+      let timelineKeynames = this.water.timeline.tracks.reduce((info, track) => {
+        let start = track.start
+        let end = track.end
+        let duration = end - start
+        let wrap = {
+          ...track,
+          now: currentSecond / totalTime,
+          progress: (currentSecond - start) / duration
+        }
+        if (currentSecond < start) {
+          wrap.progress = 0.000001
+        }
+        if (currentSecond > end) {
+          wrap.progress = 1
+        }
+
+        info[track.title] = wrap.progress
+
+        return info
+      }, {})
+
+      this.timename = timelineKeynames
+
+      console.log(JSON.stringify(timelineKeynames))
+    }
   }
 }
 </script>

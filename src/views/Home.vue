@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home" v-if="water">
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
@@ -14,11 +14,11 @@
     </UIPreviewBox>
 
     <UITimeline v-if="open.timeline && water" @close="open.timeline = false; $forceUpdate()">
-      <UITimelineHolder :timeline="water.timeline" :doSync="doSync" :editor="water.timeinfo"></UITimelineHolder>
+      <UITimelineHolder :timeline="water.timeline" :doSync="doSync" :editor="water.timeinfo" :timeinfo="water.timeinfo"></UITimelineHolder>
     </UITimeline>
 
-    <UIInspector v-if="open.inspector && water" @close="onClose">
-      <UIControls :water="water" @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
+    <UIInspector v-if="open.inspector && timeline" @close="onClose">
+      <UIControls :timeline="water.timeline" @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
     </UIInspector>
 
     <UICoder v-if="open.coder" @close="open.coder = false; $forceUpdate()">
@@ -29,8 +29,6 @@
 </template>
 
 <script>
-import { setTimeout, setInterval, clearInterval } from 'timers'
-// @ is an alias to /src
 export default {
   name: 'home',
   components: {
@@ -55,34 +53,36 @@ export default {
         inspector: false
       },
       getTime (start) {
-        let now = window.performance.now() * 0.001
+        let now = new Date().getTime() * 0.001
         return now - start
       },
-      water: {
-        nodes: [],
-        timeline: {
-          totalTime: 30,
-          tracks: [
-            {
-              _id: '_62003052518',
-              start: 0,
-              end: 20.071031128319383,
-              title: 'fly',
-              trashed: false
-            }
-          ]
-        },
+      water: false,
 
-        timeinfo: {
-          // $forceUpdate () {},
-          start: 0,
-          totalTime: 30,
-          timelinePlaying: true,
-          timelineControl: 'timer',
-          timelinePercentageLast: 0,
-          timelinePercentage: 0 // can be timeline, render or play
-        }
-      },
+      // defaultWater: () => ({
+      //   nodes: [],
+      //   timeline: {
+      //     totalTime: 30,
+      //     tracks: [
+      //       {
+      //         _id: '_62003052518',
+      //         start: 0,
+      //         end: 20.071031128319383,
+      //         title: 'fly',
+      //         trashed: false
+      //       }
+      //     ]
+      //   },
+
+      //   timeinfo: {
+      //     // $forceUpdate () {},
+      //     start: 0,
+      //     totalTime: 30,
+      //     timelinePlaying: true,
+      //     timelineControl: 'timer',
+      //     timelinePercentageLast: 0,
+      //     timelinePercentage: 0 // can be timeline, render or play
+      //   }
+      // }),
 
       view: {
         x: 0,
@@ -96,28 +96,37 @@ export default {
   computed: {
     nodes: {
       get () {
+        if (!this.water) {
+          return
+        }
         return this.water.nodes
       },
       set (v) {
         this.water.nodes = v
       }
+    },
+    timeline: {
+      get () {
+        if (!this.water) {
+          return
+        }
+        return this.water.timeline
+      },
+      set (v) {
+        this.water.timeline = v
+      }
+    },
+    timeinfo: {
+      get () {
+        if (!this.water) {
+          return
+        }
+        return this.water.timeinfo
+      },
+      set (v) {
+        this.water.timeinfo = v
+      }
     }
-    // timeline: {
-    //   get () {
-    //     return this.water.timeline
-    //   },
-    //   set (v) {
-    //     this.water.timeline = v
-    //   }
-    // },
-    // timeinfo: {
-    //   get () {
-    //     return this.water.timeinfo
-    //   },
-    //   set (v) {
-    //     this.water.timeinfo = v
-    //   }
-    // }
   },
   watch: {
   },
@@ -145,58 +154,23 @@ export default {
     console.log(`copy(encodeURIComponent(JSON.stringify(getNODES())))`)
     console.log(`copy(window.getWater())`)
     console.log(`copy(encodeURIComponent(JSON.stringify(getWater())))`)
-    // let root = [
-    //   {
-    //     '_id': 'root',
-    //     'title': 'Your 3D App',
-    //     'protected': true,
-    //     'cannotDrop': true,
-    //     'acceptDrop': ['pages'],
-    //     'isRoot': true,
-    //     'type': 'root',
-    //     'to': null,
-    //     'pos': {
-    //       'x': 152,
-    //       'y': 61
-    //     }
-    //   }
-    // ]
-    // let nodesForHome = require('../llsvg/nodes.json')
-    // let pages = require('../llsvg/pages.json')
+
     setTimeout(() => {
-      // this.nodes = [
-      //   ...root,
-      //   ...pages,
-      //   ...nodesForHome
-      // ]
-
-      this.nodes = require('../llui/versions/diamond-06.json')
-
-      if (process.env.NODE_ENV === 'development') {
-        // // nodes
-        // let str = localStorage.getItem('nodes')
-        // if (str) {
-        //   this.nodes = JSON.parse(str)
-        // }
-
-        // this.tt = setInterval(() => {
-        //   console.log('saving....')
-        //   localStorage.setItem('nodes', JSON.stringify(this.nodes))
-        // }, 1000)
-
-        // water
-        let waterString = localStorage.getItem('water')
-        if (waterString) {
-          this.water = JSON.parse(waterString)
-        }
-
-        this.waterTimer = setInterval(() => {
-          console.log('SAVING WATER....')
-          localStorage.setItem('water', JSON.stringify(this.water))
-        }, 1000)
+      this.water = require('../llui/water/water-02.json')
+      // always reset timelinfo
+      this.water.timeinfo = {
+        start: (new Date()).getTime() * 0.001,
+        totalTime: 30,
+        timelinePlaying: true,
+        timelineControl: 'timer',
+        timelinePercentageLast: 0,
+        timelinePercentage: 0 // can be timeline, render or play
       }
+      this.doSync()
 
-      // this.$refs.editor.computeLayout({  })
+      this.waterTimer = setInterval(() => {
+        // this.makeTimeVars()
+      })
     }, 150)
   },
   created () {
@@ -220,33 +194,48 @@ export default {
     clearInterval(this.waterTimer)
   },
   methods: {
-    doSync (type) {
-      let sync = false
-      if (type === 'update-timleine') {
-        sync = true
-      } else if (type === 'play') {
-        sync = true
-      } else if (type === 'start') {
-        sync = true
-      } else if (type === 'stop') {
-        sync = true
-      } else if (type === 'restart') {
-        sync = true
-      } else if (type === 'hovering') {
-        sync = true
-      }
-      if (sync) {
-        window.dispatchEvent(new CustomEvent('sync-all', {
-          detail: this.water
-        }))
-      }
+    makeTimeVars () {
+      let currentSecond = (new Date()).getTime() * 0.001 - this.water.timeinfo.start
+      let totalTime = this.water.timeline.totalTime
+      // let timelinePercentage = this.water.timeinfo.timelinePercentage
+      // let currentSecond = totalTime * timelinePercentage
+
+      let timelineKeynames = this.water.timeline.tracks.reduce((info, track) => {
+        let start = track.start
+        let end = track.end
+        let duration = end - start
+        let wrap = {
+          ...track,
+          now: currentSecond / totalTime,
+          progress: (currentSecond - start) / duration
+        }
+        if (currentSecond < start) {
+          wrap.progress = 0.000001
+        }
+        if (currentSecond > end) {
+          wrap.progress = 1
+        }
+
+        info[track.title] = wrap.progress
+
+        return info
+      }, {})
+
+      console.log(JSON.stringify(timelineKeynames))
+    },
+    doSync () {
+      window.dispatchEvent(new CustomEvent('sync-all', {
+        detail: this.water
+      }))
     },
     openCoder () {
       this.open.coder = true
       this.$forceUpdate()
     },
     onReload ({ timeout } = {}) {
+      this.doSync('go')
       setTimeout(() => {
+        this.doSync('go')
         this.$refs.exec.$emit('reload')
       }, timeout || 0)
     },

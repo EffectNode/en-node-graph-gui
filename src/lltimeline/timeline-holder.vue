@@ -7,11 +7,12 @@
           <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
           <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
           <div class="button-pill" @click="restart">Restart</div>
-          <div class="button-pill" @click="baseTime *= 1.25">-</div>
-          <div class="button-pill" @click="baseTime /= 1.25">+</div>
+          <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
+          <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
 
           Max Time (seconds):
           <input type="text" v-model="timeline.totalTime" />
+          Current Time: {{ timeline.totalTime * timeinfo.timelinePercentage }}
         </div>
 
       </div>
@@ -59,6 +60,7 @@ export default {
     },
     doSync: {},
     editor: {},
+    timeinfo: {},
     timeline: {}
   },
   components: {
@@ -209,82 +211,67 @@ export default {
       // }
     },
     play () {
-      this.editor.timelineControl = 'timer'
-      this.editor.timelinePercentageLast = this.editor.timelinePercentage
-      this.editor.timelinePlaying = true
-      this.editor.start = window.performance.now() * 0.001 - this.editor.timelinePercentageLast * this.timeline.totalTime
+      this.timeinfo.timelineControl = 'timer'
+      this.timeinfo.timelinePercentageLast = this.timeinfo.timelinePercentage
+      this.timeinfo.timelinePlaying = true
+      this.timeinfo.start = window.performance.now() * 0.001 - this.timeinfo.timelinePercentageLast * this.timeline.totalTime
       this.$forceUpdate()
       this.doSync('play')
     },
     restart () {
-      this.editor.timelineControl = 'timer'
-      this.editor.timelinePercentageLast = this.editor.timelinePercentage
-      this.editor.timelinePlaying = true
-      this.editor.start = window.performance.now() * 0.001
+      this.timeinfo.timelineControl = 'timer'
+      this.timeinfo.timelinePercentageLast = this.timeinfo.timelinePercentage
+      this.timeinfo.timelinePlaying = true
+      this.timeinfo.start = window.performance.now() * 0.001
       this.$forceUpdate()
       this.doSync('restart')
     },
     pause () {
-      this.editor.timelineControl = 'timer'
-      this.editor.timelinePlaying = false
+      this.timeinfo.timelineControl = 'timer'
+      this.timeinfo.timelinePlaying = false
       this.$forceUpdate()
       this.doSync('pause')
     },
     hover () {
-      this.editor.timelineControl = 'hover'
-      this.editor.timelinePlaying = false
-      // this.editor.$forceUpdate()
+      this.timeinfo.timelineControl = 'hover'
+      this.timeinfo.timelinePlaying = false
+      this.$forceUpdate()
       this.doSync('hovering')
     },
     handleHover () {
-      this.editor.timelinePercentage = 0
-      this.editor.totalTime = this.timeline.totalTime
+      this.timeinfo.timelinePercentage = 0
+      this.timeinfo.totalTime = this.totalTime
 
       this.$forceUpdate()
 
-      this.parentRect = this.$parent.$parent.$el.getBoundingClientRect()
-
       let dom = this.$refs['toucher']
       let onupdateTick = (evt) => {
-        if (this.editor.timelineControl === 'hover') {
+        if (this.timeinfo.timelineControl === 'hover') {
           let now = evt.pageX - this.rect.left + dom.scrollLeft
-          // let width = this.toucherRect.width - this.sizer
           let width = this.toucherRect.width - this.sizer
 
-          width /= this.baseTime / this.initBaseTime
-
-          this.editor.timelinePercentage = Number((now) / (width))
-          this.editor.timelinePercentageLast = this.editor.timelinePercentage
-          this.editor.totalTime = this.timeline.totalTime
+          this.timeinfo.timelinePercentage = Number((now) / (width))
+          this.timeinfo.timelinePercentageLast = this.timeinfo.timelinePercentage
+          this.timeinfo.totalTime = this.totalTime
         }
       }
-
-      let loop = () => {
-        window.requestAnimationFrame(loop)
+      setInterval(() => {
         let width = this.toucherRect.width - this.sizer
-        width /= this.baseTime / this.initBaseTime
-
         if (this.$refs['timetick']) {
-          let ticker = Number(3 + this.editor.timelinePercentage * (width) + 0)
+          let ticker = Number(3 + this.timeinfo.timelinePercentage * (width) + 0)
           if (isNaN(ticker)) {
             ticker = 0
           }
-          let sT = 0
-          // let sT = this.toucher.scrollTop
-          this.$refs['timetick'].style.transform = `translateZ(1px) translateY(${sT.toFixed(1)}px) translateX(${ticker.toFixed(1)}px)`
+          this.$refs['timetick'].style.transform = `translateZ(1px) translateX(${ticker.toFixed(1)}px)`
         }
         if (this.$refs['timetick2']) {
           let tickerMaxTime = Number(0 + (width) + 0)
           if (isNaN(tickerMaxTime)) {
             tickerMaxTime = 0
           }
-          let sT = 0
-          // let sT = this.toucher.scrollTop
-          this.$refs['timetick2'].style.transform = `translateZ(1px) translateY(${sT.toFixed(1)}px) translateX(${tickerMaxTime.toFixed(1)}px)`
+          this.$refs['timetick2'].style.transform = `translateZ(1px) translateX(${tickerMaxTime.toFixed(1)}px)`
         }
-      }
-      requestAnimationFrame(loop)
-
+      }, 1000 / 60)
       dom.addEventListener('mouseneter', (evt) => {
         this.hover()
       })
@@ -358,7 +345,7 @@ export default {
   position: absolute;
   top: 0px;
   left: 0px;
-  z-index: 100;
+  z-index: 1;
   background-color: blue;
   pointer-events: none;
 }
@@ -368,7 +355,7 @@ export default {
   position: absolute;
   top: 0px;
   left: 0px;
-  z-index: 101;
+  z-index: 2;
   background-color: rgb(255, 187, 0);
   pointer-events: none;
 }

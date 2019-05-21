@@ -35,16 +35,12 @@
       <option :value="node._id" :key="node._id" v-for="node in nodes.filter(t => t.type === 'camera')">{{ node.title }}</option>
     </select> -->
 
-    <div class="timeline" v-if="node.type === 'camera' || node.type === 'scene'">
-      <p>
-        Use which Track?
-      </p>
-      <p :key="tt._id" v-for="tt in node.trackIDs">
-        <select v-model="tt.trackID">
-          <option :value="track._id" :key="track._id" v-for="track in tracks">{{ track.title }}</option>
-        </select>
-      </p>
-    </div>
+    <!-- <p>
+      Keyname
+    </p>
+    <p>
+      <input type="text" v-model="node.keyname">
+    </p> -->
 
     <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code editor</button>
     <!--
@@ -94,18 +90,35 @@ export default {
     nodes: {
       required: true
     },
-    water: {
+    timeline: {
       required: true
     }
   },
   data () {
     return {
+      newTrackID: '',
       adderLib: ''
     }
   },
-  methods: {
-    setViewingMe () {
+  watch: {
+  },
+  mounted () {
 
+  },
+  methods: {
+    getTrackTitle ({ trackID }) {
+      let track = this.timeline.tracks.find(t => t._id === trackID)
+      if (track) {
+        return track.title
+      }
+    },
+    addTrack ({ trackID }) {
+      this.node.trackIDs = this.node.trackIDs || []
+      this.node.trackIDs.push({
+        _id: Node.getID(),
+        trackID
+      })
+      this.$forceUpdate()
     },
     removeLib ({ libs, idx, lib }) {
       libs.splice(idx, 1)
