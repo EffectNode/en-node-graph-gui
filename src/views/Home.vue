@@ -150,6 +150,14 @@ export default {
       return this.nodes
     }
     window.getWater = () => {
+      this.water.timeinfo = {
+        ...this.water.timeinfo,
+        start: 0,
+        timelinePlaying: true,
+        timelineControl: 'timer',
+        timelinePercentageLast: 0,
+        timelinePercentage: 0
+      }
       return this.water
     }
 
