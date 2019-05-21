@@ -12,7 +12,7 @@
 
           Max Time (seconds):
           <input type="text" v-model="timeline.totalTime" />
-          Current Time: {{ timeline.totalTime * timeinfo.timelinePercentage }}
+          Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}
         </div>
 
       </div>
