@@ -1,6 +1,6 @@
 <template>
-<div class="box" :style="boxStyle">
-  <div class="inspector-box-title" ref="title" :style="titleStyle">
+<div class="box" :style="boxStyle" :class="{ mini: order.slice().reverse()[0] === 'timeline' }" @click="order.splice(order.indexOf('coder'), 1); order.push('coder'); order.splice(order.indexOf('inspector'), 1); order.push('inspector');">
+  <div class="inspector-box-title" ref="title" :style="titleStyle" >
     <div class="title-text">
       <p>
         Inspector
@@ -22,13 +22,15 @@
 <script>
 export default {
   props: {
+    open: {},
+    order: {}
   },
   data () {
     return {
       anchor: {
         // 10 = margin edge for preview box
         // 10 = margin for ui inspectpor
-        x: 20 + 20 + 0 + 300,
+        x: 20 + 20 + 20 + 400,
         y: 20 + 0
       },
       boxStyle: {},
@@ -37,6 +39,7 @@ export default {
       corssStyle: {}
     }
   },
+
   mounted () {
     let sizer = () => {
       this.sync()
@@ -151,12 +154,15 @@ export default {
 .box{
   /* border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2); */
   width: 400px;
-  height: calc(300px * 18 / 9);
+  height: calc(100% - 20px - 20px);
   border: #dadada solid 1px;
   box-sizing: border-box;
   background-color: #efefef;
   box-shadow: 0px 5px 30px 0px #c7c7c7;
   z-index: 10;
+}
+.box.mini{
+  /* height: calc(400px + 60px); */
 }
 .inspector-box-title{
   /* border-radius: calc(60px / 2) calc(60px / 2) 0px 0px; */

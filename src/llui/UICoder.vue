@@ -1,5 +1,5 @@
 <template>
-<div class="box" :style="boxStyle">
+<div class="box" :style="boxStyle" :class="{ mini: order.slice().reverse()[0] === 'timeline' }" @click="order.splice(order.indexOf('inspector'), 1); order.push('inspector'); order.splice(order.indexOf('coder'), 1); order.push('coder'); ">
   <div class="preview-box-title" ref="title" :style="titleStyle">
     <div class="title-text">
       <p>
@@ -21,10 +21,14 @@
 
 <script>
 export default {
+  props: {
+    open: {},
+    order: {}
+  },
   data () {
     return {
       anchor: {
-        x: 20 + 300 + 400 + 20 + 20 + 0,
+        x: 20 + 400 + 400 + 20 + 20 + 20,
         y: 20 + 0
       },
       boxStyle: {},
@@ -32,6 +36,7 @@ export default {
       contentStyle: {}
     }
   },
+
   mounted () {
     let sizer = () => {
       this.sync()
@@ -140,9 +145,9 @@ export default {
 
 <style scoped>
 .box{
-  width: calc(100% - 300px - 400px - 20px - 20px * 3);
+  width: calc(100% - 400px - 400px - 20px - 20px * 4);
   min-width: calc(500px);
-  height: calc(300px * 16 / 9 + 60px);
+  height: calc(100% - 20px * 2);
 
   /* border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2); */
   border: #dadada solid 1px;
@@ -150,6 +155,9 @@ export default {
   background-color: #efefef;
   box-shadow: 0px 5px 30px 0px #c7c7c7;
   z-index: 10;
+}
+.box.mini{
+  /* height: calc(400px + 60px); */
 }
 .preview-box-title{
   /* border-radius: calc(60px / 2) calc(60px / 2) calc(0px / 2) calc(0px / 2); */

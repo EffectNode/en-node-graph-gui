@@ -1,5 +1,5 @@
 <template>
-<div class="box" :style="boxStyle">
+<div class="box" :style="boxStyle"  @click="order.splice(order.indexOf('timeline'), 1); order.push('timeline');">
   <div class="timleine-box-title" ref="title" :style="titleStyle">
     <div class="title-text">
       <p>
@@ -20,6 +20,8 @@
 <script>
 export default {
   props: {
+    open: {},
+    order: {}
   },
   data () {
     return {
@@ -29,12 +31,14 @@ export default {
         x: 20,
         y: 20
       },
+
       boxStyle: {},
       titleStyle: {},
       contentStyle: {},
       corssStyle: {}
     }
   },
+
   mounted () {
     let sizer = () => {
       this.sync()
@@ -152,7 +156,7 @@ export default {
 <style scoped>
 .box{
   /* border-radius: calc(30px / 2) calc(30px / 2) calc(30px / 2) calc(30px / 2); */
-  width: calc(100% - 300px - 20px - 20px - 20px);
+  width: calc(100% - 20px - 20px - 20px);
   height: calc(376px);
   border: #dadada solid 1px;
   box-sizing: border-box;

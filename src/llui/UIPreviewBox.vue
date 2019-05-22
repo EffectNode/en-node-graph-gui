@@ -1,5 +1,5 @@
 <template>
-<div class="box" :style="boxStyle">
+<div class="box" :style="boxStyle" :class="open"  @click="order.splice(order.indexOf('preview'), 1); order.push('preview');">
   <div class="preview-box-title" ref="title" :style="titleStyle">
     <div class="title-text">
       <p>
@@ -18,10 +18,14 @@
 
 <script>
 export default {
+  props: {
+    open: {},
+    order: {}
+  },
   data () {
     return {
       anchor: {
-        x: 20 + 0,
+        x: 20 + 20 + 0,
         y: 20 + 0
       },
       boxStyle: {},
@@ -29,6 +33,7 @@ export default {
       contentStyle: {}
     }
   },
+
   mounted () {
     let sizer = () => {
       this.sync()
@@ -137,8 +142,8 @@ export default {
 
 <style scoped>
 .box{
-  width: 300px;
-  height: calc(300px * 16 / 9 + 60px);
+  width: 400px;
+  height: calc(400px * 1.0 + 60px);
 
   /* border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2); */
   border: #dadada solid 1px;
@@ -147,6 +152,7 @@ export default {
   box-shadow: 0px 5px 30px 0px #c7c7c7;
   z-index: 10;
 }
+
 .preview-box-title{
   /* border-radius: calc(60px / 2) calc(60px / 2) calc(0px / 2) calc(0px / 2); */
   position: relative;
