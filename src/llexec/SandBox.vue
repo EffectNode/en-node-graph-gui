@@ -1,12 +1,12 @@
 <template>
   <div class="app-entry-dom" v-if="activeNodes && water">
-    <GraphNode :timename="timename" :timetracks="timetracks" :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
+    <GraphNode @all-done="onAllDone" :timename="timename" :timetracks="timetracks" :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
   </div>
 </template>
 
 <script>
 import GraphNode from './GraphNode.vue'
-// import * as Node from '../llsvg/node.js'
+import * as Node from '../llsvg/node.js'
 export default {
   components: {
     GraphNode
@@ -28,6 +28,7 @@ export default {
   },
   data () {
     return {
+      // links: [],
       timetracks: [],
       timename: {},
       getTime: (start) => {
@@ -39,6 +40,10 @@ export default {
     }
   },
   mounted () {
+    // if (this.water) {
+    //   this.links = Node.getLinks({ nodes: this.water.nodes })
+    // }
+
     window.addEventListener('message', (evt) => {
       if (window.top && window.top.location.origin === window.location.origin) {
         let msg = evt.data
@@ -101,6 +106,12 @@ export default {
     cancelAnimationFrame(this.rAFID)
   },
   methods: {
+    onAllDone () {
+      let top = window.top
+      if (top) {
+        top.postMessage({ type: 'all-ready', data: this.water }, window.location.origin)
+      }
+    },
     makeTimeVars () {
       // let currentSecond = ((new Date()).getTime() * 0.001 - this.water.timeinfo.start) % this.water.timeline.totalTime
 

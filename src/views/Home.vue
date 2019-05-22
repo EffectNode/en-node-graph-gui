@@ -210,10 +210,22 @@ export default {
         timelinePercentage: 0 // can be timeline, render or play
       }
 
-      setTimeout(() => {
-        this.water.timeinfo.start = window.performance.now() * 0.001
-        this.water.timeinfo.timelinePlaying = true
-      }, 3000)
+      window.addEventListener('message', (evt) => {
+        let obj = evt.data
+        let type = obj.type
+        if (type === 'all-ready') {
+          console.log('all-ready')
+          setTimeout(() => {
+            this.water.timeinfo.start = window.performance.now() * 0.001
+            this.water.timeinfo.timelinePlaying = true
+          }, 100)
+        }
+      }, false)
+
+      // setTimeout(() => {
+      //   this.water.timeinfo.start = window.performance.now() * 0.001
+      //   this.water.timeinfo.timelinePlaying = true
+      // }, 10000)
 
       this.clearTimer = setInterval(() => {
         if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {

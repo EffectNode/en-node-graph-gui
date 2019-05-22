@@ -42,6 +42,7 @@ export default {
           child: me,
           me: parent
         })
+        this.tryTestComplete()
       }
     }, 0)
 
@@ -54,6 +55,11 @@ export default {
   methods: {
     onExec (v) {
       this.execStack[this.node._id] = v
+    },
+    tryTestComplete () {
+      if (Object.keys(this.compoMap).length === this.nodes.length) {
+        this.$emit('all-done')
+      }
     },
     onReady (compos) {
       this.compoMap[this.node._id] = compos
