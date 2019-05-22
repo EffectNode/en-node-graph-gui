@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { setTimeout } from 'timers';
 export default {
   name: 'home',
   components: {
@@ -197,7 +196,7 @@ export default {
 
       setTimeout(() => {
         this.water.timeinfo.start = window.performance.now() * 0.001
-        this.water.timeinfo.timelinePlaying =  true
+        this.water.timeinfo.timelinePlaying = true
       }, 3000)
 
       this.clearTimer = setInterval(() => {
