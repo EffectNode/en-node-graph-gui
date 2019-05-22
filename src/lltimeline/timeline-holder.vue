@@ -3,10 +3,10 @@
     <div>
       <div>
         <div bg="mint">
-          <div class="button-pill" @touchstart="addTrack()" @click="addTrack()">Add Track</div>
-          <div class="button-pill" v-if="!editor.timelinePlaying" @touchstart="play()" @click="play">Play</div>
-          <div class="button-pill" v-if="editor.timelinePlaying" @touchstart="pause()" @click="pause">Pause</div>
-          <div class="button-pill" @touchstart="restart()" @click="restart">Restart</div>
+          <div class="button-pill" @click="addTrack()">Add Track</div>
+          <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
+          <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
+          <div class="button-pill" @click="restart">Restart</div>
           <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
           <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
 
