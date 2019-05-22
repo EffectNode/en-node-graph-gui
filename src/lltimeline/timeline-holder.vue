@@ -2,7 +2,7 @@
   <div>
     <div>
       <div>
-        <div bg="mint">
+        <div class="mint">
           <div class="button-pill" @click="addTrack()">Add Timeline Track</div>
           <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
           <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
@@ -15,6 +15,7 @@
           <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
           <div class="button-pill" @click="restart">Restart</div>
         </div>
+        <div class="mint-taller"></div>
 
       </div>
     </div>
@@ -408,8 +409,8 @@ export default {
   align-items: center;
   width: calc(25px);
   height: 25px;;
-  background-color: rgb(255, 233, 233);
-  color: red;
+  background-color: rgb(71, 71, 71);
+  color: rgb(255, 70, 70);
   position: absolute;
   top: 0px;
   right: 0px;
@@ -428,6 +429,7 @@ export default {
   border: rgb(107, 107, 107) solid 1px;
   margin: 5px;
   border-radius: 30px;
+  font-size: 12px;
   user-select: none;
   cursor: pointer;
 }
@@ -467,7 +469,9 @@ export default {
   outline: none;
   background-color: transparent;
   color: white;
-  font-size: 17px;
+  font-size: 16px;
+  transform-origin: center left;
+  transform: scale(0.75);
 }
 
 .mini-word{
@@ -482,8 +486,25 @@ export default {
   border: none;
   box-shadow: none;
   width: 25px;
-  font-size: 17px;
+  font-size: 16px;
+  height: 12px;
   text-decoration: underline;
+  transform-origin: center left;
+  transform: scale(0.75) translateY(2px);
+  padding-bottom: 4px;
+  height: calc(12px - 4px);
+}
+
+.mint{
+  position: fixed;
+  bottom: 205px;
+  left: 0px;
+  z-index: 6;
+  background-color: #363636;
+  border-radius: 25px;
+}
+.mint-taller{
+  height: 50px;
 }
 
 </style>

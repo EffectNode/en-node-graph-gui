@@ -54,7 +54,7 @@ export default {
         } else if (!this.dashed) {
           this.stroke = 'rgba(255,255,255,0.35)'
         } else {
-          this.stroke = `url(#${this.uniq}rainbow-gradient)`
+          this.stroke = `url(#${this.uniq}rainbow-gradient-path)`
         }
 
         this.a.rect.x = this.link.fromPos.x
@@ -70,7 +70,7 @@ export default {
     getStyle () {
       return {
         'stroke': this.stroke, // `url(#${this.uniq}kale-salad)`,
-        'stroke-dasharray': this.dashed ? '2px' : '0px',
+        'stroke-dasharray': this.dashed ? '2.5px' : '0px',
         'animation-play-state': this.running ? 'running' : 'paused',
         'animation-direction': this.a.voltage > this.b.voltage ? `normal` : `reverse`
       }

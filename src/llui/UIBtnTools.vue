@@ -9,9 +9,9 @@
     <div class="uit-icon" @click="zoomOut()">
       <img src="../icons/magnify-minus.svg" title="map view" alt="map view">
     </div>
-    <div class="uit-icon" @click="toggleTimeline()">
+    <!-- <div class="uit-icon" @click="toggleTimeline()">
       <img src="../icons/timer.svg" title="map view" alt="map view">
-    </div>
+    </div> -->
     <div class="uit-icon" v-if="nodes.some(n => n.trashed)" @click="() => { onToggleRecycleView() }">
       <img v-if="isAtRecycle()" class="isActivated" src="../icons/recycle-on.svg" title="Recycle view" alt="Recycle view">
       <img v-if="!isAtRecycle()"  src="../icons/recycle-off.svg" title="Recycle view" alt="Recycle view">
@@ -51,6 +51,7 @@ export default {
       this.nodes.forEach((n) => {
         n.isActive = false
       })
+
       if (this.node) {
         this.node.isActive = true
       }
@@ -64,7 +65,7 @@ export default {
     },
     async zoomIn () {
       let zoomLevel = this.$parent.$refs['editor'].zoom
-      if (zoomLevel > 0.3) {
+      if (zoomLevel > 0.6) {
         this.zoom({ delta: -0.2 })
       }
     },

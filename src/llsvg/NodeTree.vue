@@ -10,6 +10,12 @@
             </stop>
         </radialGradient>
 
+        <linearGradient x1="100%" y1="49.9999994%" x2="0%" y2="50%" :id="`${uniq}rainbow-gradient-path`">
+            <stop stop-color="#FF00FF" offset="0%"></stop>
+            <stop stop-color="#00FFFF" offset="50%"></stop>
+            <stop stop-color="#FF00FF" offset="100%"></stop>
+        </linearGradient>
+
         <radialGradient :id="`${uniq}rainbow-gradient-movin`" cx="50%" cy="50%" fx="50%" fy="50%" r="100%">
             <stop stop-color="#00E0FF" offset="0%">
               <animate attributeName="stop-color" values="#00E0FF; #ff00ff; #00E0FF;" dur="2s" repeatCount="indefinite"></animate>
@@ -247,7 +253,7 @@ export default {
       view2.x = this.view.x - rect.left
       view2.y = this.view.y - rect.top
 
-      view2.x += (window.innerWidth - 300) / 2
+      view2.x += (window.innerWidth - 250) / 2
       view2.y += (window.innerHeight - 250) / 2
 
       // view2.x += rect.left * 0.5
@@ -265,7 +271,7 @@ export default {
       // this.$forceUpdate()
 
       return new Promise((resolve) => {
-        new TWEEN.Tween(this.view) // Create a new tween that modifies 'coords'.
+        let tt = new TWEEN.Tween(this.view) // Create a new tween that modifies 'coords'.
           .to(view2, 250) // Move to (300, 200) in 1 second.
           .easing(TWEEN.Easing.Circular.Out) // Use an easing function to make the animation smooth.
           .onUpdate(() => { // Called after tween.js updates 'coords'.
@@ -275,7 +281,9 @@ export default {
           .onComplete(() => {
             resolve()
           })
-          .start()
+        setTimeout(() => {
+          tt.start()
+        }, 10)
       })
     },
     init () {

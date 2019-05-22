@@ -162,10 +162,11 @@ export default {
   box-sizing: border-box;
   background-color: #363636;
 
-  border-top: #8e8e8e solid 1px;
+  border-top: #474747 solid 1px;
   box-sizing: border-box;
-  /* #8e8e8e */
+  /* #474747 */
   /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
+  position: relative;
 }
 .timleine-box-title{
   /* border-radius: calc(30px / 2) calc(30px / 2) 0px 0px; */
@@ -210,7 +211,7 @@ export default {
 }
 
 .timleine-box-content{
-  height: calc(100% - 30px / 2 * 2);
+  height: calc(100%);
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
 }

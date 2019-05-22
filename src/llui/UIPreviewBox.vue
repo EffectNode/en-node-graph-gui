@@ -1,5 +1,5 @@
 <template>
-<div class="box" :style="boxStyle" :class="open"  @click="order.splice(order.indexOf('preview'), 1); order.push('preview');">
+<div class="box" :style="boxStyle" :class="{ full: full }" @click="order.splice(order.indexOf('preview'), 1); order.push('preview');">
   <div class="preview-box-title" ref="title" :style="titleStyle">
     <div class="title-text">
       <p>
@@ -8,6 +8,10 @@
     </div>
     <div class="title-cross">
       <img src="../icons/refresh.svg" @touchstart="run()" @click="run()" alt="">
+    </div>
+    <div class="title-cross-left">
+      <img v-if="full" src="../icons/fullscreen-restore.svg" @touchstart="full = !full" @click="full = !full" alt="">
+      <img v-if="!full" src="../icons/fullscreen-gofull.svg" @touchstart="full = !full" @click="full = !full" alt="">
     </div>
   </div>
   <div class="preview-box-content" :style="contentStyle">
@@ -24,6 +28,7 @@ export default {
   },
   data () {
     return {
+      full: false,
       anchor: {
         x: 0 + 0 + 0,
         y: 0 + 0
@@ -150,8 +155,13 @@ export default {
   background-color: #000000;
   /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
   box-sizing: border-box;
-  border-left: #8e8e8e solid 1px;
+  border-left: #474747 solid 1px;
   z-index: 10;
+}
+.box.full{
+  width: calc(100%);
+  height: calc(100%);
+  border: none;
 }
 
 /* @media screen and (min-width: 1441px) {
@@ -166,7 +176,7 @@ export default {
   position: relative;
   height: 45px;
   color: white;
-  background-color: #8e8e8e;
+  background-color: #474747;
 }
 .title-text{
   position: absolute;
@@ -174,7 +184,7 @@ export default {
   left: 0px;
   height: 100%;
   width: 100%;
-  cursor: move;
+  /* cursor: move; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -195,6 +205,19 @@ export default {
   justify-content: center;
   align-items: center;
 }
+.title-cross-left{
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  height: 45px;
+  width: 45px;
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.title-cross-left img,
 .title-cross img{
   cursor: pointer;
   /* border: black solid 5px; */

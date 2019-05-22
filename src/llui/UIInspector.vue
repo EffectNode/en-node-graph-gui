@@ -162,7 +162,7 @@ export default {
   background-color: #363636;
   /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
   box-sizing: border-box;
-  border-left: #8e8e8e solid 1px;
+  border-left: #474747 solid 1px;
 }
 .box.mini{
   /* height: calc(400px + 45px); */
@@ -172,7 +172,7 @@ export default {
   position: relative;
   height: 45px;
   color: white;
-  background-color: #8e8e8e;
+  background-color: #474747;
 }
 .title-text{
   position: absolute;

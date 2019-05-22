@@ -1,10 +1,10 @@
 <template>
   <g :style="mover">
-    <rect v-if="type === 'box'" ref="node" class="node" :width="60" :height="60" :fill="fill" fill-opacity="0.5"  stroke="none" >
+    <rect v-if="type === 'box'" ref="node" class="node" :width="60" :height="60" :fill="fill"  stroke="none" >
     </rect>
 
     <g v-if="type === 'circle'"  :style="`transform: translate(${size / 2}px, ${size / 2}px)`">
-      <circle ref="node" class="node" :r="size / 2" :fill="fill" fill-opacity="0.5" stroke="none">
+      <circle ref="node" class="node" :r="size / 2" :fill="fill" stroke="none">
       </circle>
     </g>
 
@@ -50,7 +50,7 @@ export default {
   },
   data () {
     return {
-      fill: this.isActive ? `url(#${this.uniq}rainbow-gradient-movin)` : `url(#${this.uniq}rainbow-gradient)`,
+      fill: `url(#${this.uniq}rainbow-gradient)`, // this.isActive ? `url(#${this.uniq}rainbow-gradient-movin)` : `url(#${this.uniq}rainbow-gradient)`,
       showTitle: false || this.isRoot,
       int: 0,
       mover: {},
@@ -70,6 +70,7 @@ export default {
     }
   },
   mounted () {
+    this.sync()
     this.composMap[this.node._id] = this
 
     let tap = 0
