@@ -244,16 +244,22 @@ export default {
     },
     panToCenter ({ rect }) {
       let view2 = {}
-      view2.x = this.view.x - rect.left + 300
-      view2.y = this.view.y - rect.top + 300
+      view2.x = this.view.x - rect.left
+      view2.y = this.view.y - rect.top
 
-      if (rect.width > 767) {
-        view2.x += (rect.width - 300 - 400 - 10 - 10) * 0.5
-        view2.y += rect.height * 0.35
-      } else {
-        view2.x += (rect.width) * 0.5
-        view2.y += rect.height * 0.25
-      }
+      view2.x += (window.innerWidth - 300) / 2
+      view2.y += (window.innerHeight - 250) / 2
+
+      // view2.x += rect.left * 0.5
+      // view2.y += rect.top * 0.5
+
+      // if (rect.width > 767) {
+      //   view2.x += (rect.width) * 0.5
+      //   view2.y += rect.height * 0.35
+      // } else {
+      //   view2.x += (rect.width) * 0.5
+      //   view2.y += rect.height * 0.25
+      // }
 
       // this.computeLayout()
       // this.$forceUpdate()
