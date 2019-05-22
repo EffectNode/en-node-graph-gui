@@ -7,7 +7,7 @@
       </p>
     </div>
     <div class="title-cross">
-      <img src="../icons/refresh.svg" @click="run()" alt="">
+      <img src="../icons/refresh.svg" @touchstart="run()" @click="run()" alt="">
     </div>
   </div>
   <div class="preview-box-content" :style="contentStyle">
