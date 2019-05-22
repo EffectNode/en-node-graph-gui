@@ -103,7 +103,7 @@ export default {
           // console.log(toSend)
           delete toSend.nodes
           // REMOVE NODES
-          iframe.contentWindow.postMessage({ type: evt.type, data: toSend })
+          iframe.contentWindow.postMessage({ type: evt.type, data: toSend }, window.location.origin)
         }
       }
     }, false)
