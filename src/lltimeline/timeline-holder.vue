@@ -22,24 +22,24 @@
       <div class="track-holder" :key="tr._id" v-for="(tr) in tracks" :ref="`holder`">
         <timeline-track :track="tr">
           <timeline-diamond :editor="editor" :mode="'start'" slot="start">
-            <div class="full-center">
+            <div class="no-sel full-center">
               {{ tr.start.toFixed(1) }}s
             </div>
           </timeline-diamond>
           <timeline-spread slot="spread">
-            <div slot="editor" class="spread-edit">
+            <div slot="editor" class="no-sel spread-edit">
               <input type="text" class="text-bucket" v-model="tr.title" style="">
               <div class="remove-spread" @click="tryRemoveTrack(tracks, tr)">
                 <span v-if="!tr.trashed" >X</span>
                 <span v-if="tr.trashed" >Confirm</span>
               </div>
             </div>
-            <div slot="dragger" class="full-center">
+            <div slot="dragger" class="no-sel full-center">
               {{ (tr.end - tr.start).toFixed(1) }}s
             </div>
           </timeline-spread>
           <timeline-diamond :editor="editor" :mode="'end'" slot="end">
-            <div class="full-center">
+            <div class="no-sel full-center">
               {{ tr.end.toFixed(1) }}s
             </div>
           </timeline-diamond>
@@ -282,6 +282,21 @@ export default {
         this.play()
       })
       window.addEventListener('mousemove', onupdateTick)
+
+      let isDown = false
+      dom.addEventListener('touchstart', evt => {
+        isDown = true
+      })
+      window.addEventListener('touchmove', (evt) => {
+        if (isDown && evt.touches[0]) {
+          this.hover()
+          onupdateTick({ pageX: evt.touches[0].pageX })
+        }
+      })
+      window.addEventListener('touchend', (evt) => {
+        isDown = false
+        this.play()
+      })
     },
     getTemplate () {
       this.$nextTick(() => {
@@ -402,5 +417,9 @@ export default {
   border: rgb(163, 163, 163) solid 1px;
   margin: 5px;
   border-radius: 30px;
+}
+.no-sel{
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 </style>
