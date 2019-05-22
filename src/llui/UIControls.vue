@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="uicontrols">
     <!-- <p>
       ID
     </p> -->
@@ -362,6 +362,8 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.uicontrols{
+  color: white;
+}
 </style>

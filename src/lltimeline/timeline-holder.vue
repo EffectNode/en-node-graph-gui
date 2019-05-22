@@ -250,8 +250,8 @@ export default {
       let onupdateTick = (evt) => {
         if (this.timeinfo.timelineControl === 'hover') {
           let now = evt.pageX - this.rect.left + dom.scrollLeft
-          let width = 1440
-          // let width = this.toucherRect.width - this.sizer
+          // let width = 1440
+          let width = this.toucherRect.width - this.sizer
 
           this.timeinfo.timelinePercentage = Number((now) / (width))
           this.timeinfo.timelinePercentageLast = this.timeinfo.timelinePercentage
@@ -259,8 +259,8 @@ export default {
         }
       }
       setInterval(() => {
-        let width = 1440
-        // let width = this.toucherRect.width - this.sizer
+        // let width = 1440
+        let width = this.toucherRect.width - this.sizer
         if (this.$refs['timetick']) {
           let ticker = Number(0.1 + this.timeinfo.timelinePercentage * (width) + 0)
           if (isNaN(ticker)) {
@@ -355,11 +355,16 @@ export default {
 .track-holder{
   position: relative;
   width: 100%;
+  margin-bottom: 2px;
   /* margin-bottom: 1px; */
-  background-color: #363636;
-  border-bottom: 1px solid #444444;
-  box-sizing: border-box;
+  /* background-color: #696969; */
+  /* border-bottom: 1px solid transparent; */
+  /* box-sizing: border-box; */
 }
+
+/*
+#676767
+*/
 .timetick{
   width: 2px;
   height: 100%;
@@ -403,14 +408,15 @@ export default {
   align-items: center;
   width: calc(25px);
   height: 25px;;
-  background-color: rgb(255, 185, 185);
-  color: white;
+  background-color: rgb(255, 233, 233);
+  color: red;
   position: absolute;
   top: 0px;
   right: 0px;
   font-size: 12px;
 }
 .remove-spread.confirm{
+  color: white;
   background-color: rgb(240, 44, 44);
 }
 
@@ -435,7 +441,7 @@ export default {
 .moveme{
   width: 25px;
   height: 25px;
-  background-color: rgb(46, 46, 46);
+  background-color: #676767;
   display: inline-block;
 }
 .nameme{
@@ -459,6 +465,8 @@ export default {
   border: none;
   appearance: none;
   outline: none;
+  background-color: transparent;
+  color: white;
   font-size: 17px;
 }
 

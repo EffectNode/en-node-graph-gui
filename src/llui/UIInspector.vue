@@ -7,7 +7,7 @@
       </p>
     </div>
     <div class="title-cross" @click="$emit('close')" @touchend="$emit('close')">
-      <img src="../icons/cross.svg" :style="corssStyle" alt="">
+      <!-- <img src="../icons/cross.svg" :style="corssStyle" alt=""> -->
     </div>
   </div>
   <div class="inspector-box-content" :style="contentStyle">
@@ -30,8 +30,8 @@ export default {
       anchor: {
         // 10 = margin edge for preview box
         // 10 = margin for ui inspectpor
-        x: 20 + 20 + 20 + 400,
-        y: 20 + 0
+        x: 0,
+        y: 0
       },
       boxStyle: {},
       titleStyle: {},
@@ -45,7 +45,7 @@ export default {
       this.sync()
     }
     sizer()
-    this.handle()
+    // this.handle()
     this.$on('move', ({ dx, dy }) => {
       this.anchor.x -= dx
       this.anchor.y -= -dy
@@ -122,7 +122,7 @@ export default {
       if (window.innerWidth > 767) {
         this.boxStyle = {
           position: 'absolute',
-          top: `${this.anchor.y}px`,
+          bottom: `${this.anchor.y}px`,
           right: `${this.anchor.x}px`
         }
         this.titleStyle = {
@@ -133,8 +133,8 @@ export default {
       } else {
         this.boxStyle = {
           position: 'absolute',
-          top: `0px`,
-          left: `0px`,
+          bottom: `0px`,
+          right: `0px`,
           width: `100%`,
           height: `60%`
         }
@@ -152,23 +152,27 @@ export default {
 
 <style scoped>
 .box{
-  /* border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2); */
-  width: 400px;
-  height: calc(100% - 20px - 20px);
-  border: #dadada solid 1px;
-  box-sizing: border-box;
-  background-color: #efefef;
-  /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
+  /* border-radius: calc(45px / 2) calc(45px / 2) calc(45px / 2) calc(45px / 2); */
+  width: calc(320px);
+  height: calc(100% - 320px - 45px);
   z-index: 10;
+
+  /* border: #7a7a7a solid 1px; */
+  box-sizing: border-box;
+  background-color: #363636;
+  /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
+  box-sizing: border-box;
+  border-left: #8e8e8e solid 1px;
 }
 .box.mini{
-  /* height: calc(400px + 60px); */
+  /* height: calc(400px + 45px); */
 }
 .inspector-box-title{
-  /* border-radius: calc(60px / 2) calc(60px / 2) 0px 0px; */
+  /* border-radius: calc(45px / 2) calc(45px / 2) 0px 0px; */
   position: relative;
-  height: 60px;
-  background-color: #e7e7e7;
+  height: 45px;
+  color: white;
+  background-color: #8e8e8e;
 }
 .title-text{
   position: absolute;
@@ -176,7 +180,7 @@ export default {
   left: 0px;
   height: 100%;
   width: 100%;
-  cursor: move;
+  /* cursor: move; */
   display: flex;
   justify-content: center;
   align-items: center;
@@ -190,8 +194,8 @@ export default {
   position: absolute;
   top: 0px;
   right: 0px;
-  height: 60px;
-  width: 60px;
+  height: 45px;
+  width: 45px;
 
   display: flex;
   justify-content: center;
@@ -207,11 +211,11 @@ export default {
 }
 
 .marginer{
-  margin: calc(60px / 2);
+  margin: calc(45px / 2);
 }
 
 .inspector-box-content{
-  height: calc(100% - 60px / 2 * 2);
+  height: calc(100% - 45px / 2 * 2);
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
 }

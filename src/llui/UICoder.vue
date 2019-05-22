@@ -28,8 +28,8 @@ export default {
   data () {
     return {
       anchor: {
-        x: 20 + 400 + 400 + 20 + 20 + 20,
-        y: 20 + 0
+        x: 320,
+        y: 0 + 0
       },
       boxStyle: {},
       titleStyle: {},
@@ -42,7 +42,7 @@ export default {
       this.sync()
     }
     sizer()
-    this.handle()
+    // this.handle()
     this.$on('move', ({ dx, dy }) => {
       this.anchor.x -= dx
       this.anchor.y -= -dy
@@ -145,25 +145,25 @@ export default {
 
 <style scoped>
 .box{
-  width: calc(100% - 400px - 400px - 20px - 20px * 4);
+  width: calc(100% - 320px);
   min-width: calc(500px);
   height: calc(100% - 20px * 2);
 
-  /* border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2); */
-  border: #dadada solid 1px;
+  /* border-radius: calc(45px / 2) calc(45px / 2) calc(45px / 2) calc(45px / 2); */
+  /* border: #dadada solid 1px; */
   box-sizing: border-box;
-  background-color: #efefef;
+  background-color: #363636;
   /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
   z-index: 10;
 }
 .box.mini{
-  /* height: calc(400px + 60px); */
+  /* height: calc(400px + 45px); */
 }
 .preview-box-title{
-  /* border-radius: calc(60px / 2) calc(60px / 2) calc(0px / 2) calc(0px / 2); */
+  /* border-radius: calc(45px / 2) calc(45px / 2) calc(0px / 2) calc(0px / 2); */
   position: relative;
-  height: 60px;
-  background-color: #e7e7e7;
+  height: 45px;
+  background-color: #8e8e8e;
 }
 .title-text{
   position: absolute;
@@ -185,8 +185,8 @@ export default {
   position: absolute;
   top: 0px;
   left: 0px;
-  height: 60px;
-  width: 60px;
+  height: 45px;
+  width: 45px;
 
   display: flex;
   justify-content: center;
@@ -197,8 +197,8 @@ export default {
   position: absolute;
   top: 0px;
   right: 0px;
-  height: 60px;
-  width: 60px;
+  height: 45px;
+  width: 45px;
 
   display: flex;
   justify-content: center;
@@ -222,7 +222,7 @@ export default {
   height: 24px;
 }
 .preview-box-content{
-  height: calc(100% - 60px);
+  height: calc(100% - 45px);
   overflow: hidden;
 }
 </style>

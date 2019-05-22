@@ -18,8 +18,8 @@
       <UITimelineHolder :timeline="water.timeline" :doSync="doSync" :editor="water.timeinfo" :timeinfo="water.timeinfo"></UITimelineHolder>
     </UITimeline>
 
-    <UIInspector :order="order" :style="{ zIndex: order.indexOf('inspector') + 20 }" :open="open" v-if="open.inspector && timeline" @close="onClose">
-      <UIControls :timeline="water.timeline" @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
+    <UIInspector :order="order" :style="{ zIndex: order.indexOf('inspector') + 20 }" :open="open" @close="onClose">
+      <UIControls v-if="open.inspector && timeline" :timeline="water.timeline" @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
     </UIInspector>
 
     <UICoder :order="order" :style="{ zIndex: order.indexOf('coder') + 20 }" :open="open" v-if="open.coder" @close="open.coder = false; $forceUpdate()">
@@ -318,36 +318,8 @@ export default {
   overflow: hidden;
 }
 
-/* #nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-} */
-
-/* .svg-box{
-  position: absolute;
-  top: 0px;
-  left: 0px;
-  width: 100%;
-  height: 60%;
-}
-
-@media screen and (min-width: 767px) {
-  .svg-box{
-    height: 100%;
-    width: 100%;
-  }
-} */
-
 .nodetree{
-  width: calc(100%);
-  height: calc(100% - 300px);
+  width: calc(100% - 320px);
+  height: calc(100% - 250px);
 }
 </style>

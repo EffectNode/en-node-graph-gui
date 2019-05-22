@@ -47,7 +47,7 @@ export default {
 
         // console.log(deltaX)
         let ww = this.$parent.rect.width
-        ww = 1440
+        // ww = 1440
 
         this.$parent.track.start += Number(deltaX / ww * this.$parent.$parent.totalTime)
         this.$parent.track.end += Number(deltaX / ww * this.$parent.$parent.totalTime)
@@ -72,7 +72,7 @@ export default {
 
         // console.log(deltaX)
         let ww = this.$parent.rect.width
-        ww = 1440
+        // ww = 1440
         this.$parent.track.start += Number(deltaX / ww * this.$parent.$parent.totalTime)
         this.$parent.track.end += Number(deltaX / ww * this.$parent.$parent.totalTime)
 

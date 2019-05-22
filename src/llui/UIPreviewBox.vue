@@ -145,11 +145,12 @@ export default {
   width: calc(320px);
   height: calc(320px * 1.0 + 45px);
 
-  /* border-radius: calc(45px / 2) calc(45px / 2) calc(45px / 2) calc(45px / 2); */
-  /* border: #dadada solid 1px; */
+  /* border: #7a7a7a solid 1px; */
   box-sizing: border-box;
-  background-color: #ffffff;
+  background-color: #000000;
   /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
+  box-sizing: border-box;
+  border-left: #8e8e8e solid 1px;
   z-index: 10;
 }
 
@@ -161,10 +162,11 @@ export default {
 } */
 
 .preview-box-title{
-  /* border-radius: calc(45px / 2) calc(45px / 2) calc(0px / 2) calc(0px / 2); */
+  /* border-radius: calc(45px / 2) calc(45px / 2) 0px 0px; */
   position: relative;
   height: 45px;
-  background-color: #e7e7e7;
+  color: white;
+  background-color: #8e8e8e;
 }
 .title-text{
   position: absolute;

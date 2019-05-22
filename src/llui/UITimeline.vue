@@ -156,11 +156,15 @@ export default {
 <style scoped>
 .box{
   /* border-radius: calc(30px / 2) calc(30px / 2) calc(30px / 2) calc(30px / 2); */
-  width: calc(100% - 20px * 0 - 20px * 0 - 20px * 0);
-  height: calc(300px);
+  width: calc(100% - 320px);
+  height: calc(250px);
   /* border: #7a7a7a solid 1px; */
   box-sizing: border-box;
   background-color: #363636;
+
+  border-top: #8e8e8e solid 1px;
+  box-sizing: border-box;
+  /* #8e8e8e */
   /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
 }
 .timleine-box-title{
