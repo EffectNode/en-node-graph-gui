@@ -147,7 +147,7 @@ export default {
 .box{
   width: calc(100% - 320px);
   min-width: calc(500px);
-  height: calc(100% - 20px * 2);
+  height: calc(100% - 250px);
 
   /* border-radius: calc(45px / 2) calc(45px / 2) calc(45px / 2) calc(45px / 2); */
   /* border: #dadada solid 1px; */

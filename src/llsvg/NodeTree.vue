@@ -244,7 +244,7 @@ export default {
     },
     panToCenter ({ rect }) {
       let view2 = {}
-      view2.x = this.view.x - rect.left + 50
+      view2.x = this.view.x - rect.left + 300
       view2.y = this.view.y - rect.top + 300
 
       if (rect.width > 767) {
