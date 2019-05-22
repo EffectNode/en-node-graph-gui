@@ -138,7 +138,8 @@ export default {
   display: inline-block;
   width: 50px;
   height: 25px;
-  background-color: #bababa;
+  background-color: #272727;
+  color: white;
 }
 .nosel{
   user-select: none;

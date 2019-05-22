@@ -104,7 +104,7 @@ export default {
   display: inline-block;
   width: calc(100% - 25px * 2);
   height: 25px;
-  background-color: #e9e9e99d;
+  background-color: hsl(0, 0%, 40%);
   -webkit-tap-highlight-color: transparent;
 }
 .dragger{

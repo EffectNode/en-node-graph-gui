@@ -42,7 +42,7 @@
           </timeline-spread>
           <timeline-diamond :editor="editor" :mode="'end'" slot="end">
             <div class="no-sel mini-word full-center">
-              {{ tr.start.toFixed(1) }}s
+              {{ tr.end.toFixed(1) }}s
             </div>
           </timeline-diamond>
         </timeline-track>
