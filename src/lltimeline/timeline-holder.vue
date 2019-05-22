@@ -258,7 +258,7 @@ export default {
       setInterval(() => {
         let width = this.toucherRect.width - this.sizer
         if (this.$refs['timetick']) {
-          let ticker = Number(3 + this.timeinfo.timelinePercentage * (width) + 0)
+          let ticker = Number(0.1 + this.timeinfo.timelinePercentage * (width) + 0)
           if (isNaN(ticker)) {
             ticker = 0
           }
