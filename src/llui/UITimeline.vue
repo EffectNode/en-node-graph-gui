@@ -1,6 +1,6 @@
 <template>
 <div class="box" :style="boxStyle"  @click="order.splice(order.indexOf('timeline'), 1); order.push('timeline');">
-  <div class="timleine-box-title" ref="title" :style="titleStyle">
+  <!-- <div class="timleine-box-title" ref="title" :style="titleStyle">
     <div class="title-text">
       <p>
         Timleine
@@ -9,7 +9,7 @@
     <div class="title-cross" @click="$emit('close')" @touchend="$emit('close')">
       <img src="../icons/cross.svg" :style="corssStyle" alt="">
     </div>
-  </div>
+  </div> -->
   <div class="timleine-box-content" :style="contentStyle">
     <slot>
     </slot>
@@ -28,8 +28,8 @@ export default {
       anchor: {
         // 10 = margin edge for preview box
         // 10 = margin for ui inspectpor
-        x: 20,
-        y: 20
+        x: 0,
+        y: 0
       },
 
       boxStyle: {},
@@ -44,7 +44,7 @@ export default {
       this.sync()
     }
     sizer()
-    this.handle()
+    // this.handle()
     this.$on('move', ({ dx, dy }) => {
       this.anchor.x -= dx
       this.anchor.y -= -dy
@@ -137,9 +137,9 @@ export default {
         this.boxStyle = {
           position: 'absolute',
           bottom: `0px`,
-          left: `0px`,
-          width: `100%`,
-          height: `60%`
+          left: `0px`
+          // width: `100%`,
+          // height: `60%`
         }
         this.titleStyle = {
           // display: `none`
@@ -156,12 +156,12 @@ export default {
 <style scoped>
 .box{
   /* border-radius: calc(30px / 2) calc(30px / 2) calc(30px / 2) calc(30px / 2); */
-  width: calc(100% - 20px - 20px - 20px);
-  height: calc(376px);
-  border: #dadada solid 1px;
+  width: calc(100% - 20px * 0 - 20px * 0 - 20px * 0);
+  height: calc(300px);
+  /* border: #7a7a7a solid 1px; */
   box-sizing: border-box;
-  background-color: #efefef;
-  box-shadow: 0px 5px 30px 0px #c7c7c7;
+  background-color: #363636;
+  /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
 }
 .timleine-box-title{
   /* border-radius: calc(30px / 2) calc(30px / 2) 0px 0px; */
@@ -175,7 +175,7 @@ export default {
   left: 0px;
   height: 100%;
   width: 100%;
-  cursor: move;
+  /* cursor: move; */
   display: flex;
   justify-content: center;
   align-items: center;

@@ -46,13 +46,15 @@ export default {
         state.dx = deltaX
 
         // console.log(deltaX)
+        let ww = this.$parent.rect.width
+        ww = 1440
 
-        this.$parent.track.start += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
-        this.$parent.track.end += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+        this.$parent.track.start += Number(deltaX / ww * this.$parent.$parent.totalTime)
+        this.$parent.track.end += Number(deltaX / ww * this.$parent.$parent.totalTime)
 
         if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
-          this.$parent.track.end -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+          this.$parent.track.start -= Number(deltaX / ww * this.$parent.$parent.totalTime)
+          this.$parent.track.end -= Number(deltaX / ww * this.$parent.$parent.totalTime)
         }
 
         this.$parent.syncCSS()
@@ -69,13 +71,14 @@ export default {
         state.dx = deltaX
 
         // console.log(deltaX)
-
-        this.$parent.track.start += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
-        this.$parent.track.end += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+        let ww = this.$parent.rect.width
+        ww = 1440
+        this.$parent.track.start += Number(deltaX / ww * this.$parent.$parent.totalTime)
+        this.$parent.track.end += Number(deltaX / ww * this.$parent.$parent.totalTime)
 
         if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
-          this.$parent.track.end -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+          this.$parent.track.start -= Number(deltaX / ww * this.$parent.$parent.totalTime)
+          this.$parent.track.end -= Number(deltaX / ww * this.$parent.$parent.totalTime)
         }
 
         this.$parent.syncCSS()
@@ -99,8 +102,8 @@ export default {
 .spread{
   cursor: move;
   display: inline-block;
-  width: calc(100% - 50px * 2);
-  height: 50px;
+  width: calc(100% - 25px * 2);
+  height: 25px;
   background-color: #e9e9e99d;
   -webkit-tap-highlight-color: transparent;
 }

@@ -1,7 +1,7 @@
 <template>
   <div class="full">
     <!-- preserveAspectRatio="preserveAspectRatio" -->
-    <svg ref="svg" :height="win.height" :width="win.width" :viewBox="viewBox">
+    <svg ref="svg" class="svgnodetree" :height="win.height" :width="win.width" :viewBox="viewBox">
       <defs>
         <radialGradient :id="`${uniq}rainbow-gradient`" cx="50%" cy="50%" fx="50%" fy="50%" r="100%">
             <stop stop-color="#00ffff" offset="0%">
@@ -86,7 +86,7 @@
         </g>
 
         <g :key="link.from + link.to + ii" v-for="(link, ii) in links">
-          <NodePath :link="link" :uniq="uniq"></NodePath>
+          <NodePath :open="open" :link="link" :uniq="uniq"></NodePath>
         </g>
 
       </g>
@@ -104,6 +104,7 @@ import * as Node from './node.js'
 var dagre = require('dagre')
 export default {
   props: {
+    open: {},
     show: {
       default: 'normal'
     },
@@ -136,7 +137,7 @@ export default {
       // xMinYMax slice
       // xMinYMid slice
       // preserveAspectRatio: `xMinYMax slice`,
-      zoom: 1,
+      zoom: 0.5,
       viewBox: `0 0 500 500`,
       view,
       rect: {
@@ -185,6 +186,22 @@ export default {
     requestAnimationFrame(animate)
   },
   watch: {
+    open: {
+      deep: true,
+      handler () {
+        if (this.open.coder || this.open.inspector) {
+          this.links.forEach((link) => {
+            link.running = false
+            link.dashed = false
+          })
+        } else {
+          this.links.forEach((link) => {
+            link.running = true
+            link.dashed = true
+          })
+        }
+      }
+    },
     view: {
       deep: true,
       handler () {
@@ -227,15 +244,15 @@ export default {
     },
     panToCenter ({ rect }) {
       let view2 = {}
-      view2.x = this.view.x - rect.left
-      view2.y = this.view.y - rect.top
+      view2.x = this.view.x - rect.left + 50
+      view2.y = this.view.y - rect.top + 300
 
-      if (window.innerWidth > 767) {
-        view2.x += (window.innerWidth - 300 - 400 - 10 - 10) * 0.5
-        view2.y += window.innerHeight * 0.35
+      if (rect.width > 767) {
+        view2.x += (rect.width - 300 - 400 - 10 - 10) * 0.5
+        view2.y += rect.height * 0.35
       } else {
-        view2.x += (window.innerWidth) * 0.5
-        view2.y += window.innerHeight * 0.25
+        view2.x += (rect.width) * 0.5
+        view2.y += rect.height * 0.25
       }
 
       // this.computeLayout()
@@ -351,7 +368,7 @@ export default {
           link.dashed = false
         })
         setTimeout(() => {
-          this.links.forEach((link) => {
+          this.links.forEach((link, i) => {
             link.running = true
             link.dashed = true
           })
@@ -577,5 +594,7 @@ export default {
 </script>
 
 <style scoped>
-
+.svgnodetree{
+  background-color: #212121;
+}
 </style>

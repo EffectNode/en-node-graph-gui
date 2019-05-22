@@ -8,7 +8,7 @@
       </circle>
     </g>
 
-    <text style="user-select: none;" :x="size / 2" y="-5" text-anchor="middle">{{ title }}</text>
+    <text class="font" style="user-select: none;" :x="size / 2" y="-5" text-anchor="middle">{{ title }}</text>
   </g>
 </template>
 
@@ -249,5 +249,9 @@ export default {
 <style scoped>
 .node{
   cursor: pointer;
+}
+.font{
+  fill: white;
+  color: white;
 }
 </style>

@@ -4,16 +4,17 @@
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
     </div> -->
-
-    <NodeTree v-if="nodes" :show="show" @dropped="onReload({ timeout: 600 })" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
-    </NodeTree>
+    <div class="nodetree">
+      <NodeTree @open="open" v-if="nodes" :show="show" @dropped="onReload({ timeout: 600 })" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
+      </NodeTree>
+    </div>
 
     <UIBtnTools v-if="nodes" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
     <UIPreviewBox :order="order" :style="{ zIndex: order.indexOf('preview') + 20 }" :open="open" v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
     </UIPreviewBox>
 
-    <UITimeline :order="order" :style="{ zIndex: order.indexOf('timeline') + 20 }" :open="open" v-if="open.timeline && water" @close="open.timeline = false; $forceUpdate()">
+    <UITimeline :order="order" :style="{ zIndex: order.indexOf('timeline') + 20 }" :open="open" v-if="water" @close="open.timeline = false; $forceUpdate()">
       <UITimelineHolder :timeline="water.timeline" :doSync="doSync" :editor="water.timeinfo" :timeinfo="water.timeinfo"></UITimelineHolder>
     </UITimeline>
 
@@ -330,7 +331,7 @@ export default {
   color: #42b983;
 } */
 
-.svg-box{
+/* .svg-box{
   position: absolute;
   top: 0px;
   left: 0px;
@@ -343,5 +344,10 @@ export default {
     height: 100%;
     width: 100%;
   }
+} */
+
+.nodetree{
+  width: calc(100%);
+  height: calc(100% - 300px);
 }
 </style>

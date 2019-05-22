@@ -25,8 +25,8 @@ export default {
   data () {
     return {
       anchor: {
-        x: 20 + 20 + 0,
-        y: 20 + 0
+        x: 0 + 0 + 0,
+        y: 0 + 0
       },
       boxStyle: {},
       titleStyle: {},
@@ -39,7 +39,7 @@ export default {
       this.sync()
     }
     sizer()
-    this.handle()
+    // this.handle()
     this.$on('move', ({ dx, dy }) => {
       this.anchor.x -= dx
       this.anchor.y -= -dy
@@ -142,28 +142,28 @@ export default {
 
 <style scoped>
 .box{
-  width: 280px;
-  height: calc(280px * 1.0 + 60px);
+  width: calc(320px);
+  height: calc(320px * 1.0 + 45px);
 
-  /* border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2); */
-  border: #dadada solid 1px;
+  /* border-radius: calc(45px / 2) calc(45px / 2) calc(45px / 2) calc(45px / 2); */
+  /* border: #dadada solid 1px; */
   box-sizing: border-box;
-  background-color: #efefef;
-  box-shadow: 0px 5px 30px 0px #c7c7c7;
+  background-color: #ffffff;
+  /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
   z-index: 10;
 }
 
-@media screen and (min-width: 1441px) {
+/* @media screen and (min-width: 1441px) {
   .box{
     width: 400px;
-    height: calc(400px * 1.0 + 60px);
+    height: calc(400px * 1.0 + 45px);
   }
-}
+} */
 
 .preview-box-title{
-  /* border-radius: calc(60px / 2) calc(60px / 2) calc(0px / 2) calc(0px / 2); */
+  /* border-radius: calc(45px / 2) calc(45px / 2) calc(0px / 2) calc(0px / 2); */
   position: relative;
-  height: 60px;
+  height: 45px;
   background-color: #e7e7e7;
 }
 .title-text{
@@ -186,8 +186,8 @@ export default {
   position: absolute;
   top: 0px;
   left: 0px;
-  height: 60px;
-  width: 60px;
+  height: 45px;
+  width: 45px;
 
   display: flex;
   justify-content: center;
@@ -202,7 +202,7 @@ export default {
   height: 24px;
 }
 .preview-box-content{
-  height: calc(100% - 60px);
+  height: calc(100% - 45px);
   overflow: hidden;
 }
 </style>

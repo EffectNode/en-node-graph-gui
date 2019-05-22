@@ -153,7 +153,7 @@ export default {
   border: #dadada solid 1px;
   box-sizing: border-box;
   background-color: #efefef;
-  box-shadow: 0px 5px 30px 0px #c7c7c7;
+  /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
   z-index: 10;
 }
 .box.mini{

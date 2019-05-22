@@ -5,6 +5,7 @@
 <script>
 export default {
   props: {
+    open: {},
     link: {},
     uniq: {}
   },
@@ -48,8 +49,10 @@ export default {
         this.running = this.link.running
         this.dashed = this.link.dashed
 
-        if (!this.dashed) {
-          this.stroke = 'rgba(0,0,0,0.15)'
+        if (this.open && this.open.coder) {
+          this.stroke = 'rgba(255,255,255,0.35)'
+        } else if (!this.dashed) {
+          this.stroke = 'rgba(255,255,255,0.35)'
         } else {
           this.stroke = `url(#${this.uniq}rainbow-gradient)`
         }

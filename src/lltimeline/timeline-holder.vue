@@ -3,16 +3,17 @@
     <div>
       <div>
         <div bg="mint">
-          <div class="button-pill" @click="addTrack()">Add Track</div>
+          <div class="button-pill" @click="addTrack()">Add Timeline Track</div>
+          <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
+          <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
+          <div class="button-pill">
+            Max Time (seconds):
+            <input class="inpill-input" type="text" v-model="timeline.totalTime" />
+            Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}
+          </div>
           <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
           <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
           <div class="button-pill" @click="restart">Restart</div>
-          <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
-          <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
-
-          Max Time (seconds):
-          <input type="text" v-model="timeline.totalTime" />
-          Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}
         </div>
 
       </div>
@@ -22,25 +23,26 @@
       <div class="track-holder" :key="tr._id" v-for="(tr) in tracks" :ref="`holder`">
         <timeline-track :track="tr">
           <timeline-diamond :editor="editor" :mode="'start'" slot="start">
-            <div class="no-sel full-center">
+            <div class="no-sel mini-word full-center">
               {{ tr.start.toFixed(1) }}s
             </div>
           </timeline-diamond>
           <timeline-spread slot="spread">
-            <div slot="editor" class="no-sel spread-edit">
-              <input type="text" class="text-bucket" v-model="tr.title" style="">
-              <div class="remove-spread" @click="tryRemoveTrack(tracks, tr)">
-                <span v-if="!tr.trashed" >X</span>
-                <span v-if="tr.trashed" >Confirm</span>
+            <div slot="dragger">
+              <div class="">
+                <div class="nameme">
+                  <input type="text" class="text-bucket" v-model="tr.title" style="">
+                  <div class="remove-spread" :class="{ confirm: tr.trashed }" @click="tryRemoveTrack(tracks, tr)">
+                    <span v-if="!tr.trashed">X</span>
+                    <span v-if="tr.trashed">X</span>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div slot="dragger" class="no-sel full-center">
-              {{ (tr.end - tr.start).toFixed(1) }}s
             </div>
           </timeline-spread>
           <timeline-diamond :editor="editor" :mode="'end'" slot="end">
-            <div class="no-sel full-center">
-              {{ tr.end.toFixed(1) }}s
+            <div class="no-sel mini-word full-center">
+              {{ tr.start.toFixed(1) }}s
             </div>
           </timeline-diamond>
         </timeline-track>
@@ -73,7 +75,7 @@ export default {
       canvas: {},
       baseTime: 30,
       initBaseTime: 30,
-      sizer: 50,
+      sizer: 25,
       toucher: false
     }
   },
@@ -248,7 +250,8 @@ export default {
       let onupdateTick = (evt) => {
         if (this.timeinfo.timelineControl === 'hover') {
           let now = evt.pageX - this.rect.left + dom.scrollLeft
-          let width = this.toucherRect.width - this.sizer
+          let width = 1440
+          // let width = this.toucherRect.width - this.sizer
 
           this.timeinfo.timelinePercentage = Number((now) / (width))
           this.timeinfo.timelinePercentageLast = this.timeinfo.timelinePercentage
@@ -256,7 +259,8 @@ export default {
         }
       }
       setInterval(() => {
-        let width = this.toucherRect.width - this.sizer
+        let width = 1440
+        // let width = this.toucherRect.width - this.sizer
         if (this.$refs['timetick']) {
           let ticker = Number(0.1 + this.timeinfo.timelinePercentage * (width) + 0)
           if (isNaN(ticker)) {
@@ -350,9 +354,11 @@ export default {
 }
 .track-holder{
   position: relative;
-  width: 300px;
-  margin-bottom: 1px;
-  background-color: #eeeeee;
+  width: 100%;
+  /* margin-bottom: 1px; */
+  background-color: #363636;
+  border-bottom: 1px solid #444444;
+  box-sizing: border-box;
 }
 .timetick{
   width: 2px;
@@ -387,39 +393,89 @@ export default {
   align-items: center;
 }
 
-.text-bucket{
-  width: calc(100% - 70px);
-  height: 50%;
-  box-shadow: none;
-  border: none;
-  appearance: none;
-  outline: none;
-  padding: 2px;
-  font-size: 18px;
-}
-
 .spread-edit{
   display: flex;
 }
 .remove-spread{
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   justify-content: center;
   align-items: center;
-  width: calc(70px);
-  background-color: rgb(190, 94, 94);
+  width: calc(25px);
+  height: 25px;;
+  background-color: rgb(255, 185, 185);
   color: white;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  font-size: 12px;
+}
+.remove-spread.confirm{
+  background-color: rgb(240, 44, 44);
 }
 
 .button-pill{
   display: inline-block;
   padding: 5px 10px;
-  border: rgb(163, 163, 163) solid 1px;
+  background-color: rgb(102, 102, 102);
+  color: white;
+  border: rgb(107, 107, 107) solid 1px;
   margin: 5px;
   border-radius: 30px;
+  user-select: none;
+  cursor: pointer;
+}
+.button-pill.noclick{
+  cursor: auto;
 }
 .no-sel{
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
+.moveme{
+  width: 25px;
+  height: 25px;
+  background-color: rgb(46, 46, 46);
+  display: inline-block;
+}
+.nameme{
+  width: calc(100%);
+  height: 25px;
+  position: relative;
+  overflow: hidden;
+  display: inline-block;
+}
+
+.text-bucket{
+  cursor: move;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: calc(100% - 25px - 5px);
+  height: 25px;
+  padding-left: 5px;
+  line-height: 25px;
+  box-shadow: none;
+  border: none;
+  appearance: none;
+  outline: none;
+  font-size: 17px;
+}
+
+.mini-word{
+  font-size: 10px;
+}
+
+.inpill-input{
+  background: transparent;
+  outline: transparent 1px;
+  appearance: none;
+  color: white;
+  border: none;
+  box-shadow: none;
+  width: 25px;
+  font-size: 17px;
+  text-decoration: underline;
+}
+
 </style>

@@ -13,7 +13,7 @@ export default {
   data () {
     return {
       styler: {
-        width: `${this.$parent.$parent.sizer}px`,
+        width: `${this.$parent.$parent.sizer * 2}px`,
         height: `${this.$parent.$parent.sizer}px`
       }
     }
@@ -41,17 +41,17 @@ export default {
         let now = evt.touches[0].pageX
         let deltaX = now - state.sx
         state.dx = deltaX
-
+        let ww = 1440
         // let ratio = this.$parent.$parent.totalTime / this.$parent.$parent.initBaseTime
         if (this.mode === 'start') {
-          this.$parent.track.start += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+          this.$parent.track.start += Number(deltaX / (this.$parent.rect.width * 0 + ww) * this.$parent.$parent.totalTime)
         } else if (this.mode === 'end') {
-          this.$parent.track.end += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+          this.$parent.track.end += Number(deltaX / (this.$parent.rect.width * 0 + ww) * this.$parent.$parent.totalTime)
         }
 
         if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
-          this.$parent.track.end -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+          this.$parent.track.start -= Number(deltaX / (this.$parent.rect.width * 0 + ww) * this.$parent.$parent.totalTime)
+          this.$parent.track.end -= Number(deltaX / (this.$parent.rect.width * 0 + ww) * this.$parent.$parent.totalTime)
         }
 
         this.$parent.syncCSS()
@@ -66,17 +66,18 @@ export default {
         let now = evt.pageX
         let deltaX = now - state.sx
         state.dx = deltaX
+        let ww = 1440
 
         // let ratio = this.$parent.$parent.totalTime / this.$parent.$parent.initBaseTime
         if (this.mode === 'start') {
-          this.$parent.track.start += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+          this.$parent.track.start += Number(deltaX / (this.$parent.rect.width * 0 + ww) * this.$parent.$parent.totalTime)
         } else if (this.mode === 'end') {
-          this.$parent.track.end += Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+          this.$parent.track.end += Number(deltaX / (this.$parent.rect.width * 0 + ww) * this.$parent.$parent.totalTime)
         }
 
         if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
-          this.$parent.track.end -= Number(deltaX / this.$parent.rect.width * this.$parent.$parent.totalTime)
+          this.$parent.track.start -= Number(deltaX / (this.$parent.rect.width * 0 + ww) * this.$parent.$parent.totalTime)
+          this.$parent.track.end -= Number(deltaX / (this.$parent.rect.width * 0 + ww) * this.$parent.$parent.totalTime)
         }
 
         this.$parent.syncCSS()
@@ -136,7 +137,7 @@ export default {
   cursor: -webkit-grab;
   display: inline-block;
   width: 50px;
-  height: 50px;
+  height: 25px;
   background-color: #bababa;
 }
 .nosel{

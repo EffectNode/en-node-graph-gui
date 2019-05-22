@@ -37,7 +37,8 @@ export default {
       let duration = Number(this.track.end) - Number(this.track.start)
       let totalTime = this.$parent.totalTime
       this.styler = {}
-      let width = this.$parent.toucherRect.width - 50
+      // let width = this.$parent.toucherRect.width - 25
+      let width = 1440
       this.styler.width = `${(width) * duration / totalTime}px`
       this.styler.marginLeft = `${(width) * Number(this.track.start) / totalTime}px`
       // console.log(this.track)
@@ -51,7 +52,7 @@ export default {
 .track{
   display: flex;
   justify-content: space-between;
-  height: 50px;
+  height: 25px;
   background-color: rgba(0,0,0,0.1);
   border-radius: 25px;
   overflow: hidden;
