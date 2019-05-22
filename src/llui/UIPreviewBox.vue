@@ -142,8 +142,8 @@ export default {
 
 <style scoped>
 .box{
-  width: 400px;
-  height: calc(400px * 1.0 + 60px);
+  width: 280px;
+  height: calc(280px * 1.0 + 60px);
 
   /* border-radius: calc(60px / 2) calc(60px / 2) calc(60px / 2) calc(60px / 2); */
   border: #dadada solid 1px;
@@ -151,6 +151,13 @@ export default {
   background-color: #efefef;
   box-shadow: 0px 5px 30px 0px #c7c7c7;
   z-index: 10;
+}
+
+@media screen and (min-width: 1441px) {
+  .box{
+    width: 400px;
+    height: calc(400px * 1.0 + 60px);
+  }
 }
 
 .preview-box-title{
