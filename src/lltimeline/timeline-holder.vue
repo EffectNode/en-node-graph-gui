@@ -10,7 +10,8 @@
           <div class="button-pill">
             <span>Max Time (seconds):</span>
             <input class="inpill-input" type="text" v-model="timeline.totalTime" />
-            <div class="inpill-input-box"></div>
+          </div>
+          <div class="button-pill">
             <span>Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}</span>
           </div>
           <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
@@ -375,21 +376,21 @@ export default {
 .timetick{
   width: 2px;
   height: 250px;
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   left: 0px;
   z-index: -1;
-  background-color: blue;
+  background-color: rgb(0, 140, 255);
   pointer-events: none;
 }
 .timetick2{
   width: 2px;
   height: 250px;
-  position: absolute;
+  position: fixed;
   bottom: 0px;
   left: 0px;
   z-index: -1;
-  background-color: rgb(255, 187, 0);
+  background-color: rgb(255, 230, 0);
   pointer-events: none;
 }
 
@@ -479,17 +480,15 @@ export default {
   color: white;
   font-size: 12px;
 }
-.inpill-input-box{
+/* .inpill-input-box{
   display: inline-block;
   width: 20px;
   height: 12px;
-}
+} */
 .inpill-input{
-  position: absolute;
-  top: 6px;
-  left: 260px;
-  width: calc(100% - 25px - 5px);
-  height: 25px;
+  display: inline-block;
+  width: 15px;
+  height: 15px;
   padding: 0px;
   padding-left: 5px;
 

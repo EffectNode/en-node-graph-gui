@@ -143,7 +143,7 @@ export default {
       // xMinYMax slice
       // xMinYMid slice
       // preserveAspectRatio: `xMinYMax slice`,
-      zoom: 0.5,
+      zoom: 1.0,
       viewBox: `0 0 500 500`,
       view,
       rect: {

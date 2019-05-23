@@ -252,6 +252,7 @@ export default {
   cursor: pointer;
 }
 .font{
+  pointer-events: none;
   fill: white;
   color: white;
 }

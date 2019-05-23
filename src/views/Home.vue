@@ -1,5 +1,5 @@
 <template>
-  <div class="home" v-if="water">
+  <div class="home">
     <!-- <div id="nav">
       <router-link to="/">Home</router-link> |
       <router-link to="/about">About</router-link> |
@@ -34,7 +34,6 @@ export default {
   name: 'home',
   components: {
     EXEC: () => import('../llexec/EXEC.vue'),
-
     NodeTree: () => import('../llsvg/NodeTree.vue'),
     UIPreviewBox: () => import('../llui/UIPreviewBox.vue'),
     UICodeControl: () => import('../llui/UICodeControl.vue'),
