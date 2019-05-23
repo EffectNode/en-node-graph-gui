@@ -152,11 +152,11 @@ export default {
 
   /* border: #7a7a7a solid 1px; */
   box-sizing: border-box;
-  background-color: #000000;
   /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
   box-sizing: border-box;
   border-left: #474747 solid 1px;
   z-index: 10;
+  background: white;
 }
 .box.full{
   width: calc(100%);

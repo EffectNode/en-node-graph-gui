@@ -6,6 +6,9 @@
     <div class="uit-icon" @click="zoomIn()">
       <img src="../icons/magnify-add.svg" title="map view" alt="map view">
     </div>
+    <div class="uit-icon" @click="zoomRestore()">
+      <img src="../icons/magnify.svg" title="map view" alt="map view">
+    </div>
     <div class="uit-icon" @click="zoomOut()">
       <img src="../icons/magnify-minus.svg" title="map view" alt="map view">
     </div>
@@ -42,11 +45,11 @@ export default {
       return this.show === 'trashed'
     },
     async zoomOut () {
-      this.zoom({ delta: 0.2 })
-    },
-    async zoom ({ delta }) {
       let zoomLevel = this.$parent.$refs['editor'].zoom
-      await this.$parent.$refs['editor'].zoomBa({ to: zoomLevel + delta })
+      this.zoom({ to: zoomLevel + 0.2 })
+    },
+    async zoom ({ to }) {
+      await this.$parent.$refs['editor'].zoomBa({ to })
 
       this.nodes.forEach((n) => {
         n.isActive = false
@@ -63,10 +66,21 @@ export default {
         }
       })
     },
+    async zoomRestore () {
+      this.zoom({ to: 1 })
+    },
     async zoomIn () {
       let zoomLevel = this.$parent.$refs['editor'].zoom
       if (zoomLevel > 0.8) {
-        this.zoom({ delta: -0.2 })
+        this.zoom({ to: zoomLevel - 0.2 })
+      } else {
+        this.nodes.forEach((n) => {
+          n.isActive = false
+        })
+
+        if (this.node) {
+          this.node.isActive = true
+        }
       }
     },
 
