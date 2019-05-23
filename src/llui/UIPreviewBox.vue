@@ -7,11 +7,11 @@
       </p>
     </div>
     <div class="title-cross">
-      <img src="../icons/refresh.svg" @touchstart="run()" @click="run()" alt="">
+      <img src="../icons/refresh.svg" @click="run()" alt="">
     </div>
     <div class="title-cross-left">
-      <img v-if="full" src="../icons/fullscreen-restore.svg" @touchstart="full = !full" @click="full = !full" alt="">
-      <img v-if="!full" src="../icons/fullscreen-gofull.svg" @touchstart="full = !full" @click="full = !full" alt="">
+      <img v-if="full" src="../icons/fullscreen-restore.svg" @click="full = !full" alt="">
+      <img v-if="!full" src="../icons/fullscreen-gofull.svg" @click="full = !full" alt="">
     </div>
   </div>
   <div class="preview-box-content" :style="contentStyle">

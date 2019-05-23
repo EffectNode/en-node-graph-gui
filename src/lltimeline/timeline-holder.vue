@@ -8,10 +8,10 @@
           <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
           <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
           <div class="button-pill">
-            Max Time (seconds):
+            <span>Max Time (seconds):</span>
             <input class="inpill-input" type="text" v-model="timeline.totalTime" />
             <div class="inpill-input-box"></div>
-            Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}
+            <span>Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}</span>
           </div>
           <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
           <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
