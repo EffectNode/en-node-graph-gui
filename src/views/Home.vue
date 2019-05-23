@@ -33,17 +33,17 @@
 export default {
   name: 'home',
   components: {
-    EXEC: require('../llexec/EXEC.vue').default,
+    EXEC: () => import('../llexec/EXEC.vue'),
 
-    NodeTree: require('../llsvg/NodeTree.vue').default,
-    UIPreviewBox: require('../llui/UIPreviewBox.vue').default,
-    UICodeControl: require('../llui/UICodeControl.vue').default,
-    UIControls: require('../llui/UIControls.vue').default,
-    UIInspector: require('../llui/UIInspector.vue').default,
-    UITimeline: require('../llui/UITimeline.vue').default,
-    UITimelineHolder: require('../lltimeline/timeline-holder.vue').default,
-    UICoder: require('../llui/UICoder.vue').default,
-    UIBtnTools: require('../llui/UIBtnTools.vue').default
+    NodeTree: () => import('../llsvg/NodeTree.vue'),
+    UIPreviewBox: () => import('../llui/UIPreviewBox.vue'),
+    UICodeControl: () => import('../llui/UICodeControl.vue'),
+    UIControls: () => import('../llui/UIControls.vue'),
+    UIInspector: () => import('../llui/UIInspector.vue'),
+    UITimeline: () => import('../llui/UITimeline.vue'),
+    UITimelineHolder: () => import('../lltimeline/timeline-holder.vue'),
+    UICoder: () => import('../llui/UICoder.vue'),
+    UIBtnTools: () => import('../llui/UIBtnTools.vue')
   },
   data () {
     return {
@@ -197,8 +197,8 @@ export default {
     console.log(`copy(await window.zip({ obj: getWater() }))`)
     console.log(`copy(await window.unzip({ gzip: 'gzipstring' }))`)
 
-    setTimeout(() => {
-      this.water = require('../llui/water/water-03.json')
+    setTimeout(async () => {
+      this.water = await import('../llui/water/water-03.json')
       // always reset timelinfo
       this.water.timeinfo = {
         ...this.water.timeinfo,
@@ -325,6 +325,7 @@ export default {
 
 <style lang="css" scoped>
 .home{
+  background-color: #212121;
   height: 100%;
   width: 100%;
   overflow: hidden;
