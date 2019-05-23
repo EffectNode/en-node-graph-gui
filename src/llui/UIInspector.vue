@@ -132,6 +132,7 @@ export default {
         }
       } else {
         this.boxStyle = {
+          display: 'none',
           position: 'absolute',
           bottom: `0px`,
           right: `0px`,

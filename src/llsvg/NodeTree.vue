@@ -373,7 +373,11 @@ export default {
 
       if (resetZoom && this.zoom !== 1) {
         // this.zoom += 0.00000000000000000000000001
-        await this.zoomBa({ to: 1 })
+        let to = 3
+        if (window.innerWidth >= 767) {
+          to = 1
+        }
+        await this.zoomBa({ to })
       }
 
       if (!instant) {

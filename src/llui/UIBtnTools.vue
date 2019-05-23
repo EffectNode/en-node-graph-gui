@@ -67,7 +67,11 @@ export default {
       })
     },
     async zoomRestore () {
-      this.zoom({ to: 1 })
+      let to = 3
+      if (window.innerWidth >= 767) {
+        to = 1
+      }
+      this.zoom({ to })
     },
     async zoomIn () {
       let zoomLevel = this.$parent.$refs['editor'].zoom
@@ -117,8 +121,11 @@ export default {
   /* width: calc(60px * 2); */
   display: flex;
   border-radius: 50px;
-  background-color: #212121;
+  background-color: rgba(33, 33, 33, 0.459);
   box-shadow: 0px 0px 10px 0px #212121;
+
+  user-select: none;
+  touch-action: none;
 }
 .uit-icon{
   display: inline-block;

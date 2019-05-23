@@ -1,23 +1,20 @@
 <template>
   <div>
     <div>
-      <div>
-        <div class="mint">
-          <div class="button-pill" @click="addTrack()">Add Timeline Track</div>
-          <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
-          <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
-          <div class="button-pill">
-            Max Time (seconds):
-            <input class="inpill-input" type="text" v-model="timeline.totalTime" />
-            Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}
-          </div>
-          <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
-          <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
-          <div class="button-pill" @click="restart">Restart</div>
+      <div class="mint">
+        <div class="button-pill" @click="addTrack()">Add Timeline Track</div>
+        <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
+        <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
+        <div class="button-pill">
+          Max Time (seconds):
+          <input class="inpill-input" type="text" v-model="timeline.totalTime" />
+          Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}
         </div>
-        <div class="mint-taller"></div>
-
+        <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
+        <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
+        <div class="button-pill" @click="restart">Restart</div>
       </div>
+      <div class="mint-taller"></div>
     </div>
     <div class="timeline" ref="toucher" v-bind="timeline = timeline || getTemplate()">
       <div class="wider"></div>
@@ -497,15 +494,18 @@ export default {
 }
 
 .mint{
-  position: absolute;
-  bottom: 205px;
-  left: 0px;
-  z-index: 6;
-  background-color: #363636;
+  /* position: absolute; */
+  /* bottom: 205px; */
+  /* left: 0px; */
+  display: inline-block;
+  /* z-index: 6; */
+  background-color: #444444;
   border-radius: 25px;
+  margin: 4px;
+  transform: translateZ(1px);
 }
-.mint-taller{
+/* .mint-taller{
   height: 50px;
-}
+} */
 
 </style>

@@ -331,7 +331,13 @@ export default {
 }
 
 .nodetree{
-  width: calc(100% - 320px);
-  height: calc(100% - 250px);
+  width: 100%;
+  height: 60%;
+}
+@media screen and (min-width: 767px) {
+  .nodetree{
+    width: calc(100% - 320px);
+    height: calc(100% - 250px);
+  }
 }
 </style>

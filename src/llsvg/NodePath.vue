@@ -46,15 +46,22 @@ export default {
     link: {
       deep: true,
       handler () {
-        this.running = this.link.running
-        this.dashed = this.link.dashed
+        // mobile
+        this.running = false
+        this.dashed = false
+        this.stroke = `url(#${this.uniq}rainbow-gradient-path)`
 
-        if (this.open && this.open.coder) {
-          this.stroke = 'rgba(255,255,255,0.35)'
-        } else if (!this.dashed) {
-          this.stroke = 'rgba(255,255,255,0.35)'
-        } else {
-          this.stroke = `url(#${this.uniq}rainbow-gradient-path)`
+        // desktop
+        if (window.innerWidth > 767) {
+          this.running = this.link.running
+          this.dashed = this.link.dashed
+          if (this.open && this.open.coder) {
+            this.stroke = 'rgba(255,255,255,0.35)'
+          } else if (!this.dashed) {
+            this.stroke = 'rgba(255,255,255,0.35)'
+          } else {
+            this.stroke = `url(#${this.uniq}rainbow-gradient-path)`
+          }
         }
 
         this.a.rect.x = this.link.fromPos.x
