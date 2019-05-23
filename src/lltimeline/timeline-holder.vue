@@ -97,7 +97,7 @@ export default {
     this.rect = this.$refs['holder'][0].getBoundingClientRect()
 
     window.addEventListener('en-timleine-layout', () => {
-      if (this.$refs['holder'][0]) {
+      if (this.$refs['holder'][0] && this.$refs['holder'][0]) {
         this.rect = this.$refs['holder'][0].getBoundingClientRect()
       }
       if (this.$refs['toucher']) {
@@ -107,7 +107,7 @@ export default {
     })
 
     window.addEventListener('resize', () => {
-      if (this.$refs['holder']) {
+      if (this.$refs['holder'] && this.$refs['holder'][0]) {
         this.rect = this.$refs['holder'][0].getBoundingClientRect()
         this.syncRect()
       }
