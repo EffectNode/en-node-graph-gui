@@ -198,7 +198,8 @@ export default {
     console.log(`copy(await window.unzip({ gzip: 'gzipstring' }))`)
 
     setTimeout(async () => {
-      this.water = await import('../llui/water/water-03.json')
+      let water = await import('../llui/water/water-03.json')
+      this.water = water.default
       // always reset timelinfo
       this.water.timeinfo = {
         ...this.water.timeinfo,
