@@ -1,54 +1,59 @@
 <template>
   <div>
-    <div>
-      <div class="mint">
-        <div class="button-pill" @click="addTrack()">Add Timeline Track</div>
-        <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
-        <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
-        <div class="button-pill">
-          Max Time (seconds):
-          <input class="inpill-input" type="text" v-model="timeline.totalTime" />
-          Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}
+    <!-- content -->
+    <div class="time-scroller">
+      <div>
+        <div class="mint">
+          <div class="button-pill" @click="addTrack()">Add Timeline Track</div>
+          <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
+          <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
+          <div class="button-pill">
+            Max Time (seconds):
+            <input class="inpill-input" type="text" v-model="timeline.totalTime" />
+            <div class="inpill-input-box"></div>
+            Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}
+          </div>
+          <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
+          <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
+          <div class="button-pill" @click="restart">Restart</div>
         </div>
-        <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
-        <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
-        <div class="button-pill" @click="restart">Restart</div>
+        <div class="mint-taller"></div>
       </div>
-      <div class="mint-taller"></div>
-    </div>
-    <div class="timeline" ref="toucher" v-bind="timeline = timeline || getTemplate()">
-      <div class="wider"></div>
-      <div class="track-holder" :key="tr._id" v-for="(tr) in tracks" :ref="`holder`">
-        <timeline-track :track="tr">
-          <timeline-diamond :editor="editor" :mode="'start'" slot="start">
-            <div class="no-sel mini-word full-center">
-              {{ tr.start.toFixed(1) }}s
-            </div>
-          </timeline-diamond>
-          <timeline-spread slot="spread">
-            <div slot="dragger">
-              <div class="">
-                <div class="nameme">
-                  <input type="text" class="text-bucket" v-model="tr.title" style="">
-                  <div class="remove-spread" :class="{ confirm: tr.trashed }" @click="tryRemoveTrack(tracks, tr)">
-                    <span v-if="!tr.trashed">X</span>
-                    <span v-if="tr.trashed">X</span>
+      <div class="timeline" ref="toucher" v-bind="timeline = timeline || getTemplate()">
+        <div class="wider"></div>
+        <div class="track-holder" :key="tr._id" v-for="(tr) in tracks" :ref="`holder`">
+          <timeline-track :track="tr">
+            <timeline-diamond :editor="editor" :mode="'start'" slot="start">
+              <div class="no-sel mini-word full-center">
+                {{ tr.start.toFixed(1) }}s
+              </div>
+            </timeline-diamond>
+            <timeline-spread slot="spread">
+              <div slot="dragger">
+                <div class="">
+                  <div class="nameme">
+                    <input type="text" class="text-bucket" v-model="tr.title" style="">
+                    <div class="remove-spread" :class="{ confirm: tr.trashed }" @click="tryRemoveTrack(tracks, tr)">
+                      <span v-if="!tr.trashed">X</span>
+                      <span v-if="tr.trashed">X</span>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </timeline-spread>
-          <timeline-diamond :editor="editor" :mode="'end'" slot="end">
-            <div class="no-sel mini-word full-center">
-              {{ tr.end.toFixed(1) }}s
-            </div>
-          </timeline-diamond>
-        </timeline-track>
-        <div class="line"></div>
+            </timeline-spread>
+            <timeline-diamond :editor="editor" :mode="'end'" slot="end">
+              <div class="no-sel mini-word full-center">
+                {{ tr.end.toFixed(1) }}s
+              </div>
+            </timeline-diamond>
+          </timeline-track>
+          <div class="line"></div>
+        </div>
       </div>
-      <div class="timetick" ref="timetick"></div>
-      <div class="timetick2" ref="timetick2"></div>
     </div>
+    <div class="timetick" ref="timetick"></div>
+    <div class="timetick2" ref="timetick2"></div>
+    <!-- scroller -->
   </div>
 </template>
 
@@ -341,11 +346,11 @@ export default {
 <style scoped>
 .timeline{
   width: 100%;
-  height: 100%;
-  min-height: 275px;
+  height: 203px;
   max-width: 100%;
-  overflow-x: scroll;
   position: relative;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 .wider{
   width: 300px;
@@ -360,26 +365,30 @@ export default {
   /* box-sizing: border-box; */
 }
 
+.time-scroller{
+  height: 100%;
+}
+
 /*
 #676767
 */
 .timetick{
   width: 2px;
-  height: 100%;
+  height: 250px;
   position: absolute;
-  top: 0px;
+  bottom: 0px;
   left: 0px;
-  z-index: 1;
+  z-index: -1;
   background-color: blue;
   pointer-events: none;
 }
 .timetick2{
   width: 2px;
-  height: 100%;
+  height: 250px;
   position: absolute;
-  top: 0px;
+  bottom: 0px;
   left: 0px;
-  z-index: 2;
+  z-index: -1;
   background-color: rgb(255, 187, 0);
   pointer-events: none;
 }
@@ -458,40 +467,63 @@ export default {
   left: 0px;
   width: calc(100% - 25px - 5px);
   height: 25px;
+  padding: 0px;
   padding-left: 5px;
-  line-height: 25px;
+
+  line-height: 12px;
   box-shadow: none;
   border: none;
   appearance: none;
   outline: none;
   background-color: transparent;
   color: white;
-  font-size: 16px;
+  font-size: 12px;
 }
-
-@media screen and (min-wdidth ) {
-
+.inpill-input-box{
+  display: inline-block;
+  width: 20px;
+  height: 12px;
 }
+.inpill-input{
+  position: absolute;
+  top: 6px;
+  left: 260px;
+  width: calc(100% - 25px - 5px);
+  height: 25px;
+  padding: 0px;
+  padding-left: 5px;
 
+  line-height: 12px;
+  box-shadow: none;
+  border: none;
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  text-decoration: underline;
+  color: white;
+  font-size: 12px;
+}
 .mini-word{
   font-size: 10px;
 }
-
+/*
 .inpill-input{
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   background: transparent;
   outline: transparent 1px;
   appearance: none;
   color: white;
   border: none;
   box-shadow: none;
+  padding: 0px;
+  font-size: 12px;
+  margin: 0px;
   width: 25px;
-  font-size: 16px;
-  height: 12px;
+  height: 25px;
   text-decoration: underline;
-  transform-origin: center left;
-  padding-bottom: 4px;
-  height: calc(12px - 4px);
-}
+} */
 
 .mint{
   /* position: absolute; */
@@ -503,6 +535,7 @@ export default {
   border-radius: 25px;
   margin: 4px;
   transform: translateZ(1px);
+  position: relative;
 }
 /* .mint-taller{
   height: 50px;

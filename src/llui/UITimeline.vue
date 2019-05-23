@@ -212,7 +212,8 @@ export default {
 
 .timleine-box-content{
   height: calc(100%);
-  overflow: scroll;
-  -webkit-overflow-scrolling: touch;
+  overflow: hidden;
+  /* overflow: scroll; */
+  /* -webkit-overflow-scrolling: touch; */
 }
 </style>
