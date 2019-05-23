@@ -147,20 +147,6 @@ export default {
     // }
   },
   mounted () {
-    // let loop = () => {
-    //   window.requestAnimationFrame(loop)
-    //   if (this.timeinfo && this.timeline && this.timeinfo.timelineControl === 'timer' && this.timeinfo.timelinePlaying) {
-    //     let totalTime = this.timeline.totalTime
-    //     this.timeinfo.timelinePercentageLast = this.getTime(this.timeinfo.start) / totalTime
-    //     let lastTime = this.timeinfo.timelinePercentageLast * totalTime
-    //     this.timeinfo.timelinePercentage = lastTime / totalTime
-    //     this.timeinfo.timelinePercentage %= 1
-
-    //     this.doSync()
-    //   }
-    // }
-    // window.requestAnimationFrame(loop)
-
     window.getNODES = () => {
       return this.nodes
     }
