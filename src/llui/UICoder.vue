@@ -163,7 +163,8 @@ export default {
   /* border-radius: calc(45px / 2) calc(45px / 2) calc(0px / 2) calc(0px / 2); */
   position: relative;
   height: 45px;
-  background-color: #8e8e8e;
+  background-color: #474747;
+  color: white;
 }
 .title-text{
   position: absolute;

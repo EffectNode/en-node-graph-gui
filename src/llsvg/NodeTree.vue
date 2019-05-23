@@ -306,11 +306,11 @@ export default {
       /* eslint-disable */
       // Set an object for the graph label
       g.setGraph({
-        marginx: 30,
-        marginy: 30,
+        marginx: 50,
+        marginy: 50,
         // working
         // rankdir: 'BT',
-        nodesep: 40,
+        nodesep: 50,
         ranksep: 120,
         rankdir: 'RL',
         // https://github.com/dagrejs/dagre/wiki#using-dagre

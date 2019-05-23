@@ -1,7 +1,7 @@
 <template>
   <div class="corner-layer">
     <div class="uit-icon" :class="{ isActivated: show === 'trashed' }" @click="onGoHome()">
-      <img src="../icons/home.svg" title="oraganise" alt="oraganise">
+      <img src="../icons/pin.svg" title="oraganise" alt="oraganise">
     </div>
     <div class="uit-icon" @click="zoomIn()">
       <img src="../icons/magnify-add.svg" title="map view" alt="map view">
@@ -65,7 +65,7 @@ export default {
     },
     async zoomIn () {
       let zoomLevel = this.$parent.$refs['editor'].zoom
-      if (zoomLevel > 0.6) {
+      if (zoomLevel > 0.8) {
         this.zoom({ delta: -0.2 })
       }
     },
@@ -98,10 +98,13 @@ export default {
 <style>
 .corner-layer{
   position: absolute;
-  top: 0px;
-  left: 0px;
+  top: 10px;
+  left: 10px;
   /* width: calc(60px * 2); */
   display: flex;
+  border-radius: 50px;
+  background-color: #212121;
+  box-shadow: 0px 0px 10px 0px #212121;
 }
 .uit-icon{
   display: inline-block;
