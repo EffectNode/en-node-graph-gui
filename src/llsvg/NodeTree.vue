@@ -371,13 +371,13 @@ export default {
         }
       });
 
-      if (resetZoom && this.zoom !== 1) {
+      let zoomTo = 3
+      if (window.innerWidth >= 767) {
+        zoomTo = 1
+      }
+      if (resetZoom && this.zoom !== zoomTo) {
         // this.zoom += 0.00000000000000000000000001
-        let to = 3
-        if (window.innerWidth >= 767) {
-          to = 1
-        }
-        await this.zoomBa({ to })
+        await this.zoomBa({ to: zoomTo })
       }
 
       if (!instant) {

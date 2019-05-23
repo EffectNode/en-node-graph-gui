@@ -1,6 +1,6 @@
 <template>
   <div class="app-entry-dom" v-if="activeNodes && water">
-    <GraphNode @all-done="onAllDone" :timename="timename" :timetracks="timetracks" :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
+    <GraphNode @all-done="onAllDone" :time="water.timeinfo.timelinePercentage * water.timeinfo.totalTime" :progress="water.timeinfo.timelinePercentage" :timename="timename" :timetracks="timetracks" :execStack="execStack" :compoMap="compoMap" :nodes="activeNodes" :node="node" :key="node._id" v-for="node in activeNodes"></GraphNode>
   </div>
 </template>
 

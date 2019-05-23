@@ -46,7 +46,7 @@ export default {
     },
     async zoomOut () {
       let zoomLevel = this.$parent.$refs['editor'].zoom
-      this.zoom({ to: zoomLevel + 0.2 })
+      this.zoom({ to: zoomLevel + 0.33 })
     },
     async zoom ({ to }) {
       await this.$parent.$refs['editor'].zoomBa({ to })
@@ -76,7 +76,7 @@ export default {
     async zoomIn () {
       let zoomLevel = this.$parent.$refs['editor'].zoom
       if (zoomLevel > 0.8) {
-        this.zoom({ to: zoomLevel - 0.2 })
+        this.zoom({ to: zoomLevel - 0.33 })
       } else {
         this.nodes.forEach((n) => {
           n.isActive = false
