@@ -470,8 +470,10 @@ export default {
   background-color: transparent;
   color: white;
   font-size: 16px;
-  transform-origin: center left;
-  transform: scale(0.75);
+}
+
+@media screen and (min-wdidth ) {
+
 }
 
 .mini-word{
@@ -490,13 +492,12 @@ export default {
   height: 12px;
   text-decoration: underline;
   transform-origin: center left;
-  transform: scale(0.75) translateY(2px);
   padding-bottom: 4px;
   height: calc(12px - 4px);
 }
 
 .mint{
-  position: fixed;
+  position: absolute;
   bottom: 205px;
   left: 0px;
   z-index: 6;
