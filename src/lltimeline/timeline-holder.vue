@@ -266,16 +266,16 @@ export default {
         this.timeinfo.totalTime = this.totalTime
         if (this.timeinfo.timelineControl === 'hover') {
           now = evt.pageX - this.rect.left + dom.scrollLeft
-        }
-        // let width = 1440
-        let baseTime = this.BASE_TIME
-        let per30 = this.BASE_WIDTH
-        let width = per30 * this.timeinfo.totalTime / baseTime
-        // let width = this.toucherRect.width - this.sizer
+          // let width = 1440
+          let baseTime = this.BASE_TIME
+          let per30 = this.BASE_WIDTH
+          let width = per30 * this.timeinfo.totalTime / baseTime
+          // let width = this.toucherRect.width - this.sizer
 
-        this.timeinfo.timelinePercentage = Number((now) / (width))
-        this.timeinfo.timelinePercentageLast = this.timeinfo.timelinePercentage
-        this.timeinfo.elapsed = this.timeinfo.timelinePercentage * this.timeinfo.totalTime
+          this.timeinfo.timelinePercentage = Number((now) / (width))
+          this.timeinfo.timelinePercentageLast = this.timeinfo.timelinePercentage
+          this.timeinfo.elapsed = this.timeinfo.timelinePercentage * this.timeinfo.totalTime
+        }
       }
       setInterval(() => {
         let baseTime = this.BASE_TIME
