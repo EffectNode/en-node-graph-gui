@@ -215,7 +215,8 @@ export default {
       //   this.water.timeinfo.timelinePlaying = true
       // }, 10000)
 
-      this.clearTimer = setInterval(() => {
+      let rAF2 = () => {
+        this.clearTimer = requestAnimationFrame(rAF2)
         if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
           let totalTime = this.water.timeline.totalTime
           this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
@@ -229,9 +230,27 @@ export default {
           }
           this.doSync()
         }
-      }, 1000 / 120)
-
+      }
+      this.clearTimer = requestAnimationFrame(rAF2)
       this.doSync()
+
+      // this.clearTimer = setInterval(() => {
+      //   if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
+      //     let totalTime = this.water.timeline.totalTime
+      //     this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
+      //     let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
+      //     this.water.timeinfo.timelinePercentage = lastTime / totalTime
+      //     if (this.water.timeinfo.loop) {
+      //       this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start) % this.water.timeinfo.totalTime
+      //       this.water.timeinfo.timelinePercentage %= 1
+      //     } else {
+      //       this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start)
+      //     }
+      //     this.doSync()
+      //   }
+      // }, 1000 / 120)
+
+      // this.doSync()
 
       // this.waterTimer = setInterval(() => {
       //   // this.makeTimeVars()
@@ -256,7 +275,7 @@ export default {
     })
   },
   beforeDestroy () {
-    clearInterval(this.clearTimer)
+    cancelAnimationFrame(this.clearTimer)
   },
   methods: {
     sendTop (v) {

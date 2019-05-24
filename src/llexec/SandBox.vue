@@ -62,12 +62,12 @@ export default {
           // }
 
           // this.$forceUpdate()
-          clearInterval(this.clearTimer)
+          cancelAnimationFrame(this.clearTimer)
         }
       }
     })
-
-    this.clearTimer = setInterval(() => {
+    let rAF2 = () => {
+      this.clearTimer = requestAnimationFrame(rAF2)
       if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
         let totalTime = this.water.timeline.totalTime
         this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
@@ -75,7 +75,8 @@ export default {
         this.water.timeinfo.timelinePercentage = lastTime / totalTime
         this.water.timeinfo.timelinePercentage %= 1
       }
-    }, 1000 / 120)
+    }
+    this.clearTimer = requestAnimationFrame(rAF2)
 
     // this.water.timeinfo = {
     //   start: 0,
