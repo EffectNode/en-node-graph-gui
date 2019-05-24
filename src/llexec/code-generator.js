@@ -15,6 +15,11 @@ export const injector = ({ water = {} }) => {
   // eslint-disable-next-line import/no-webpack-loader-syntax
   let body = require('raw-loader!../../public/body.fragment.html').default
 
+  // eslint-disable-next-line import/no-webpack-loader-syntax
+  // let enigraph = require('raw-loader!../../public/lib/effectnodegraph.umd.min.js').default
+  // console.log(enigraph)
+
+  // this can let other domain use this...
   if (process.env.NODE_ENV === 'production') {
     head = head.replace(BASEURL_REPLACER, 'https://en-node-graph-gui.netlify.com')
   } else {

@@ -22683,7 +22683,11 @@ var injector = function injector(_ref) {
   var app = __webpack_require__("b0b3").default; // eslint-disable-next-line import/no-webpack-loader-syntax
 
 
-  var body = __webpack_require__("b23a").default;
+  var body = __webpack_require__("b23a").default; // eslint-disable-next-line import/no-webpack-loader-syntax
+  // let enigraph = require('raw-loader!../../public/lib/effectnodegraph.umd.min.js').default
+  // console.log(enigraph)
+  // this can let other domain use this...
+
 
   if (true) {
     head = head.replace(BASEURL_REPLACER, 'https://en-node-graph-gui.netlify.com');

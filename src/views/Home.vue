@@ -35,14 +35,14 @@ export default {
   components: {
     EXEC: () => import('../llexec/EXEC.vue'),
     NodeTree: () => import('../llsvg/NodeTree.vue'),
-    UIPreviewBox: () => import('../llui/UIPreviewBox.vue'),
-    UICodeControl: () => import('../llui/UICodeControl.vue'),
+    UIPreviewBox: () => import(/* weboackChunkName: "uibox" */'../llui/UIPreviewBox.vue'),
+    UICodeControl: () => import(/* webpackChunkName: "coder" */'../llui/UICodeControl.vue'),
     UIControls: () => import('../llui/UIControls.vue'),
-    UIInspector: () => import('../llui/UIInspector.vue'),
-    UITimeline: () => import('../llui/UITimeline.vue'),
+    UIInspector: () => import(/* weboackChunkName: "uibox" */'../llui/UIInspector.vue'),
+    UITimeline: () => import(/* weboackChunkName: "uibox" */'../llui/UITimeline.vue'),
     UITimelineHolder: () => import('../lltimeline/timeline-holder.vue'),
-    UICoder: () => import('../llui/UICoder.vue'),
-    UIBtnTools: () => import('../llui/UIBtnTools.vue')
+    UICoder: () => import(/* webpackChunkName: "coder" */'../llui/UICoder.vue'),
+    UIBtnTools: () => import(/* weboackChunkName: "uibox" */'../llui/UIBtnTools.vue')
   },
   data () {
     return {
