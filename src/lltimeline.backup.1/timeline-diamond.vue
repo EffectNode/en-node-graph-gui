@@ -21,10 +21,6 @@ export default {
   mounted () {
     let dom = this.$el
     let md = false
-
-    let baseTime = this.$parent.$parent.BASE_TIME
-    let width = this.$parent.$parent.BASE_WIDTH
-
     let state = {
       sx: 0,
       dx: 0,
@@ -46,16 +42,16 @@ export default {
         let deltaX = now - state.sx
         state.dx = deltaX
         // let ww = 1440
-        // let ratio = baseTime / this.$parent.$parent.initBaseTime
+        // let ratio = this.$parent.$parent.totalTime / this.$parent.$parent.initBaseTime
         if (this.mode === 'start') {
-          this.$parent.track.start += Number(deltaX / (width) * baseTime)
+          this.$parent.track.start += Number(deltaX / (this.$parent.rect.width) * this.$parent.$parent.totalTime)
         } else if (this.mode === 'end') {
-          this.$parent.track.end += Number(deltaX / (width) * baseTime)
+          this.$parent.track.end += Number(deltaX / (this.$parent.rect.width) * this.$parent.$parent.totalTime)
         }
 
         if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / (width) * baseTime)
-          this.$parent.track.end -= Number(deltaX / (width) * baseTime)
+          this.$parent.track.start -= Number(deltaX / (this.$parent.rect.width) * this.$parent.$parent.totalTime)
+          this.$parent.track.end -= Number(deltaX / (this.$parent.rect.width) * this.$parent.$parent.totalTime)
         }
 
         this.$parent.syncCSS()
@@ -72,16 +68,16 @@ export default {
         state.dx = deltaX
         // let ww = 1440
 
-        // let ratio = baseTime / this.$parent.$parent.initBaseTime
+        // let ratio = this.$parent.$parent.totalTime / this.$parent.$parent.initBaseTime
         if (this.mode === 'start') {
-          this.$parent.track.start += Number(deltaX / (width) * baseTime)
+          this.$parent.track.start += Number(deltaX / (this.$parent.rect.width) * this.$parent.$parent.totalTime)
         } else if (this.mode === 'end') {
-          this.$parent.track.end += Number(deltaX / (width) * baseTime)
+          this.$parent.track.end += Number(deltaX / (this.$parent.rect.width) * this.$parent.$parent.totalTime)
         }
 
         if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / (width) * baseTime)
-          this.$parent.track.end -= Number(deltaX / (width) * baseTime)
+          this.$parent.track.start -= Number(deltaX / (this.$parent.rect.width) * this.$parent.$parent.totalTime)
+          this.$parent.track.end -= Number(deltaX / (this.$parent.rect.width) * this.$parent.$parent.totalTime)
         }
 
         this.$parent.syncCSS()

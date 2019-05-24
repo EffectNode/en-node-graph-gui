@@ -190,6 +190,8 @@ export default {
         ...this.water.timeinfo,
         start: window.performance.now() * 0.001,
         // totalTime: 30,
+        loop: true,
+        elapsed: 0,
         timelinePlaying: false,
         timelineControl: 'timer',
         timelinePercentageLast: 0,
@@ -219,7 +221,10 @@ export default {
           this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
           let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
           this.water.timeinfo.timelinePercentage = lastTime / totalTime
-          this.water.timeinfo.timelinePercentage %= 1
+          if (this.water.timeinfo.loop) {
+            this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start) % this.water.timeinfo.totalTime
+            this.water.timeinfo.timelinePercentage %= 1
+          }
           this.doSync()
         }
       }, 1000 / 120)

@@ -35,17 +35,12 @@ export default {
     },
     syncCSS () {
       let duration = Number(this.track.end) - Number(this.track.start)
-
-      let baseTime = this.$parent.BASE_TIME
-      let width = this.$parent.BASE_WIDTH
-
-      // let baseTime = 30
-      // let width = 1024 - 25
-
+      let totalTime = this.$parent.totalTime
       this.styler = {}
+      let width = this.$parent.toucherRect.width - 25
       // let width = 1440
-      this.styler.width = `${(width) * duration / baseTime}px`
-      this.styler.marginLeft = `${(width) * Number(this.track.start) / baseTime}px`
+      this.styler.width = `${(width) * duration / totalTime}px`
+      this.styler.marginLeft = `${(width) * Number(this.track.start) / totalTime}px`
       // console.log(this.track)
       this.$forceUpdate()
     }

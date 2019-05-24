@@ -8,11 +8,11 @@
           <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
           <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
           <div class="button-pill">
-            <span>Movie Duration:</span>
+            <span>Max Time (seconds):</span>
             <input class="inpill-input" type="text" v-model="timeline.totalTime" />
           </div>
           <div class="button-pill">
-            <span>Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2).padStart(6, '0') }}</span>
+            <span>Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2) }}</span>
           </div>
           <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
           <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
@@ -75,14 +75,7 @@ export default {
     'timeline-diamond': require('./timeline-diamond.vue').default
   },
   data () {
-    let BASE_WIDTH = window.innerWidth - 400 - 25
-    if (BASE_WIDTH < 767) {
-      BASE_WIDTH = 767
-    }
     return {
-      BASE_TIME: 30,
-      BASE_WIDTH,
-
       canvas: {},
       baseTime: 30,
       initBaseTime: 30,
@@ -251,9 +244,6 @@ export default {
       this.$forceUpdate()
       this.doSync('hovering')
     },
-    getTime (start) {
-      return window.performance.now() * 0.001 - start
-    },
     handleHover () {
       this.timeinfo.timelinePercentage = 0
       this.timeinfo.totalTime = this.totalTime
@@ -261,40 +251,29 @@ export default {
       this.$forceUpdate()
 
       let dom = this.$refs['toucher']
-      let now = 0
       let onupdateTick = (evt) => {
-        this.timeinfo.totalTime = this.totalTime
         if (this.timeinfo.timelineControl === 'hover') {
-          now = evt.pageX - this.rect.left + dom.scrollLeft
-        }
-        // let width = 1440
-        let baseTime = this.BASE_TIME
-        let per30 = this.BASE_WIDTH
-        let width = per30 * this.timeinfo.totalTime / baseTime
-        // let width = this.toucherRect.width - this.sizer
+          let now = evt.pageX - this.rect.left + dom.scrollLeft
+          // let width = 1440
+          let width = this.toucherRect.width - this.sizer
 
-        this.timeinfo.timelinePercentage = Number((now) / (width))
-        this.timeinfo.timelinePercentageLast = this.timeinfo.timelinePercentage
-        this.timeinfo.elapsed = this.timeinfo.timelinePercentage * this.timeinfo.totalTime
+          this.timeinfo.timelinePercentage = Number((now) / (width))
+          this.timeinfo.timelinePercentageLast = this.timeinfo.timelinePercentage
+          this.timeinfo.totalTime = this.totalTime
+        }
       }
       setInterval(() => {
-        let baseTime = this.BASE_TIME
-        let per30 = this.BASE_WIDTH
-        let ticker1Width = per30 * this.totalTime / baseTime
-        let ticker2Width = per30 * this.totalTime / baseTime
-        let widthPercentage = this.timeinfo.elapsed / this.timeinfo.totalTime
-
         // let width = 1440
-        // let width = this.toucherRect.width - this.sizer
+        let width = this.toucherRect.width - this.sizer
         if (this.$refs['timetick']) {
-          let ticker = Number(widthPercentage * (ticker1Width) + 0)
+          let ticker = Number(0.1 + this.timeinfo.timelinePercentage * (width) + 0)
           if (isNaN(ticker)) {
             ticker = 0
           }
           this.$refs['timetick'].style.transform = `translateZ(1px) translateX(${ticker.toFixed(1)}px)`
         }
         if (this.$refs['timetick2']) {
-          let tickerMaxTime = Number(0 + (ticker2Width) + 0)
+          let tickerMaxTime = Number(0 + (width) + 0)
           if (isNaN(tickerMaxTime)) {
             tickerMaxTime = 0
           }
@@ -373,7 +352,6 @@ export default {
   position: relative;
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
-  overflow-x: scroll;
 }
 .wider{
   width: 300px;

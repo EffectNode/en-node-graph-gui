@@ -24,9 +24,6 @@ export default {
   mounted () {
     let dom = this.$refs['dragger']
     let md = false
-    let baseTime = this.$parent.BASE_TIME
-    let width = this.$parent.BASE_WIDTH
-
     let state = {
       sx: 0,
       dx: 0,
@@ -49,15 +46,15 @@ export default {
         state.dx = deltaX
 
         // console.log(deltaX)
-        let ww = width
+        let ww = this.$parent.rect.width
         // ww = 1440
 
-        this.$parent.track.start += Number(deltaX / ww * baseTime)
-        this.$parent.track.end += Number(deltaX / ww * baseTime)
+        this.$parent.track.start += Number(deltaX / ww * this.$parent.$parent.totalTime)
+        this.$parent.track.end += Number(deltaX / ww * this.$parent.$parent.totalTime)
 
         if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / ww * baseTime)
-          this.$parent.track.end -= Number(deltaX / ww * baseTime)
+          this.$parent.track.start -= Number(deltaX / ww * this.$parent.$parent.totalTime)
+          this.$parent.track.end -= Number(deltaX / ww * this.$parent.$parent.totalTime)
         }
 
         this.$parent.syncCSS()
@@ -74,14 +71,14 @@ export default {
         state.dx = deltaX
 
         // console.log(deltaX)
-        let ww = width
+        let ww = this.$parent.rect.width
         // ww = 1440
-        this.$parent.track.start += Number(deltaX / ww * baseTime)
-        this.$parent.track.end += Number(deltaX / ww * baseTime)
+        this.$parent.track.start += Number(deltaX / ww * this.$parent.$parent.totalTime)
+        this.$parent.track.end += Number(deltaX / ww * this.$parent.$parent.totalTime)
 
         if (this.$parent.track.start < 0) {
-          this.$parent.track.start -= Number(deltaX / ww * baseTime)
-          this.$parent.track.end -= Number(deltaX / ww * baseTime)
+          this.$parent.track.start -= Number(deltaX / ww * this.$parent.$parent.totalTime)
+          this.$parent.track.end -= Number(deltaX / ww * this.$parent.$parent.totalTime)
         }
 
         this.$parent.syncCSS()
