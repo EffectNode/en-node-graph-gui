@@ -1,11 +1,11 @@
 <template>
-  <div id="app">
+  <div id="enigma">
     <router-view />
   </div>
 </template>
 
 <style>
-body, html, #app, .full{
+body, html, #enigma, .full{
   width: 100%;
   height: 100%;
 }
@@ -15,7 +15,7 @@ html{
 body{
   margin: 0px;
 }
-#app {
+#enigma {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
