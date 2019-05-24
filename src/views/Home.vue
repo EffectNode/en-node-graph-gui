@@ -224,6 +224,8 @@ export default {
           if (this.water.timeinfo.loop) {
             this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start) % this.water.timeinfo.totalTime
             this.water.timeinfo.timelinePercentage %= 1
+          } else {
+            this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start)
           }
           this.doSync()
         }

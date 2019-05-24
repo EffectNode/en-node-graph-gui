@@ -17,6 +17,8 @@
           <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
           <div class="button-pill" v-if="editor.timelinePlaying" @click="pause">Pause</div>
           <div class="button-pill" @click="restart">Restart</div>
+          <div class="button-pill" v-if="timeinfo.loop" @click="timeinfo.loop = !timeinfo.loop">Loop Mode</div>
+          <div class="button-pill" v-if="!timeinfo.loop" @click="timeinfo.loop = !timeinfo.loop">Endless Mode</div>
         </div>
         <div class="mint-taller"></div>
       </div>
