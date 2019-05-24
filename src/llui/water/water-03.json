@@ -40,7 +40,7 @@
     },
     {
       "_id": "homepage",
-      "title": "Home Scene",
+      "title": "Dome Scene",
       "protected": true,
       "type": "scene",
       "to": "_29338",
@@ -57,14 +57,14 @@
       "hasFound": false,
       "isActive": false,
       "rect": {
-        "x": 525,
-        "y": 401,
-        "width": 60,
+        "x": 454.3139953613281,
+        "y": 218.9990234375,
+        "width": 59.999969482421875,
         "height": 60,
-        "top": 401,
-        "right": 585,
-        "bottom": 461,
-        "left": 525
+        "top": 218.9990234375,
+        "right": 514.31396484375,
+        "bottom": 278.9990234375,
+        "left": 454.3139953613281
       },
       "library": [],
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      scene: false\n    }\n  },\n  methods: {\n    init () {\n      this.scene = new THREE.Scene()\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'camera') {\n        this.components[this.node.to].$emit('addChild', { child })\n      }\n      // add here\n      if (child.node.type === 'object3D') {\n        this.scene.add(child.object3D)\n      }\n      if (child.node.type === 'drawable') {\n        this.scene.add(child.drawable)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n"
@@ -86,14 +86,14 @@
       "hasFound": false,
       "isActive": false,
       "rect": {
-        "x": 448,
-        "y": 186,
+        "x": 440,
+        "y": 80,
         "width": 60,
         "height": 60,
-        "top": 186,
-        "right": 508,
-        "bottom": 246,
-        "left": 448
+        "top": 80,
+        "right": 500,
+        "bottom": 140,
+        "left": 440
       },
       "trashed": false,
       "type": "camera",
@@ -489,7 +489,7 @@
         "x": 620,
         "y": 410
       },
-      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timetracks: {},\n    timename: {},\n    tmeinfo: {}\n  },\n  data () {\n    return {\n      material: false\n    }\n  },\n  methods: {\n    init () {\n      let EventDispatcher = THREE.EventDispatcher\n            \n      class Plane {\n        constructor ({ link, at }) {\n          let size = 230\n          this.geo = new THREE.PlaneBufferGeometry(size, size, 128, 128)\n          let texture = new THREE.TextureLoader().load(link)\n          this.material = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, map: texture, side: THREE.BackSide })\n          this.mesh = new THREE.Mesh(this.geo, this.material)\n      \n          this.group = new THREE.Object3D()\n          this.group.add(this.mesh)\n          if (at === 'px') {\n            this.group.position.x = size * 0.5 * 1.0\n            this.group.rotation.y = Math.PI * 0.5 * 1.0\n          } else if (at === 'nx') {\n            this.group.position.x = size * 0.5 * -1.0\n            this.group.rotation.y = Math.PI * 0.5 * -1.0\n          } else if (at === 'py') {\n            this.group.position.y = size * 0.5 * 1.0\n            this.group.rotation.x = Math.PI * 0.5 * -1.0\n          } else if (at === 'ny') {\n            this.group.position.y = size * 0.5 * -1.0\n            this.group.rotation.x = Math.PI * 0.5 * 1.0\n          } if (at === 'pz') {\n            this.group.position.z = size * 0.5 * 1.0\n            this.group.rotation.y = Math.PI * 0.5 * 4.0\n          } else if (at === 'nz') {\n            this.group.position.z = size * 0.5 * -1.0\n            this.group.rotation.y = Math.PI * 0.5 * -2.0\n          }\n        }\n      }\n      \n      class Sky {\n        constructor ({ links }) {\n          let group = new THREE.Object3D()\n          this.group = group\n      \n          this.fliper = new THREE.Object3D()\n          this.fliper.rotation.z = Math.PI\n          this.fliper.rotation.y = Math.PI\n          this.group.add(this.fliper)\n      \n          var at = [\n            'px',\n            'nx',\n      \n            'py',\n            'ny',\n      \n            'pz',\n            'nz'\n          ]\n      \n          this.planes = links.map((link, i) => {\n            let plane = new Plane({\n              link,\n              at: at[i]\n            })\n            return plane\n          })\n      \n          this.planes.forEach((plane) => {\n            this.fliper.add(plane.group)\n            return plane\n          })\n        }\n      }\n      \n      class Sphere {\n        constructor ({ envMap }) {\n          // // Create car\n          var geo = new THREE.SphereBufferGeometry(100, 100, 64, 64)\n          var material = new THREE.MeshBasicMaterial({ color: 0xffffff, envMap, side: THREE.BackSide })\n          var mesh = new THREE.Mesh(geo, material)\n          this.mesh = mesh\n          this.group = new THREE.Object3D()\n          this.group.add(mesh)\n        }\n      }\n      \n      class Universe extends EventDispatcher {\n        constructor ({ renderer, scene, links, resolution = 512 }) {\n          super()\n          this.renderer = renderer\n          this.scene = new THREE.Scene()\n      \n          this.group = new THREE.Object3D()\n      \n          // background skybox\n          this.backGroundGroup = new THREE.Object3D()\n          this.group.add(this.backGroundGroup)\n      \n          // visible object\n          this.foreGroundGroup = new THREE.Object3D()\n          this.group.add(this.foreGroundGroup)\n          \n      \n          this.sky = new Sky({\n            links\n          })\n          this.backGroundGroup.add(this.sky.group)\n\n\n      \n          this.cubecam = new THREE.CubeCamera(1, 3000, resolution)\n          this.group.add(this.cubecam)\n      \n          this.sphere = new Sphere({\n            envMap: this.cubecam.renderTarget.texture\n          })\n      \n          this.foreGroundGroup.add(this.sphere.group)\n      \n          this.animate = () => {\n      \n          }\n          this.scene.add(this.group)\n          \n          this.preCapture = () => {\n            this.backGroundGroup.visible = true\n            this.foreGroundGroup.visible = false\n          }\n          this.capture = () => {\n            this.animate()\n            this.cubecam.update(this.renderer, this.scene)\n          }\n          this.postCapture = () => {\n            this.backGroundGroup.visible = false\n            this.foreGroundGroup.visible = true\n          }\n        }\n      }\n      \n      let rootnode = this.nodes.find(no => no.type === 'root')\n      let rootCompo = this.components[rootnode._id]\n      \n      let pAPIs = new Universe({\n        renderer: rootCompo.renderer,\n        // scene: this.engine.scene,\n        links: [\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/zngndtrninocunhymquz.png`,\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/kpyurwejhva9yd65fsjk.png`,\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/qrdjxy3xe5bxbuotsshz.png`,\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/resdrnerd9n3fhjuxltv.png`,\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/ta8ggppgiyiuwykkmnjc.png`,\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/epuaxw3fkdvftl5pmfwv.png`\n          \n          // this.textures.px,\n          // this.textures.nx,\n          // this.textures.py,\n          // this.textures.ny,\n          // this.textures.pz,\n          // this.textures.nz          \n          \n          // require('../Universe/img/mplus-cubemap/v1/px.jpg'),\n          // require('../Universe/img/mplus-cubemap/v1/nx.jpg'),\n\n          // require('../Universe/img/mplus-cubemap/v1/py.jpg'),\n          // require('../Universe/img/mplus-cubemap/v1/ny.jpg'),\n\n          // require('../Universe/img/mplus-cubemap/v1/pz.jpg'),\n          // require('../Universe/img/mplus-cubemap/v1/nz.jpg')\n\n          // require('../Universe/img/home/px.jpg'),\n          // require('../Universe/img/home/nx.jpg'),\n\n          // require('../Universe/img/home/py.jpg'),\n          // require('../Universe/img/home/ny.jpg'),\n\n          // require('../Universe/img/home/pz.jpg'),\n          // require('../Universe/img/home/nz.jpg')\n        ],\n        resolution: 1024\n      });\n      \n      this.drawable = pAPIs.foreGroundGroup\n      \n      this.$emit('exec', () => {\n        pAPIs.preCapture();\n        pAPIs.capture();\n        pAPIs.postCapture();\n        \n        let item = this.timetracks.find(t => t.title === this.node.title && t.progress > 0.001 && t.progress < 1)\n        \n        if (item) {\n          // dome\n          pAPIs.sky.group.rotation.y = item.progress * 3.141592 * 2\n          // zoom\n          pAPIs.foreGroundGroup.position.z = item.progress * 500\n        }\n      });\n      \n      // let mat = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });\n      // this.material = mat\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    // this.$on('addToParent', ({ parent }) => {\n    //   // console.log(this.node.title, 'addToParent', parent.node.title)\n    // })\n    this.$on('addChild', ({ child }) => {\n      // if (child.node.type === 'map') {\n      //   this.material.map = child.map\n      // }\n      // if (child.node.type === 'geometry') {\n      //   this.material.geometry = child.geometry\n      // }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    // this.$on('removeFromParent', ({ parent }) => {\n    //   // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    // })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timetracks: {},\n    timename: {},\n    tmeinfo: {}\n  },\n  data () {\n    return {\n      material: false\n    }\n  },\n  methods: {\n    init () {\n      let EventDispatcher = THREE.EventDispatcher\n            \n      class Plane {\n        constructor ({ link, at }) {\n          let size = 230\n          this.geo = new THREE.PlaneBufferGeometry(size, size, 128, 128)\n          let texture = new THREE.TextureLoader().load(link)\n          this.material = new THREE.MeshBasicMaterial({ color: 0xffffff, transparent: true, map: texture, side: THREE.BackSide })\n          this.mesh = new THREE.Mesh(this.geo, this.material)\n      \n          this.group = new THREE.Object3D()\n          this.group.add(this.mesh)\n          if (at === 'px') {\n            this.group.position.x = size * 0.5 * 1.0\n            this.group.rotation.y = Math.PI * 0.5 * 1.0\n          } else if (at === 'nx') {\n            this.group.position.x = size * 0.5 * -1.0\n            this.group.rotation.y = Math.PI * 0.5 * -1.0\n          } else if (at === 'py') {\n            this.group.position.y = size * 0.5 * 1.0\n            this.group.rotation.x = Math.PI * 0.5 * -1.0\n          } else if (at === 'ny') {\n            this.group.position.y = size * 0.5 * -1.0\n            this.group.rotation.x = Math.PI * 0.5 * 1.0\n          } if (at === 'pz') {\n            this.group.position.z = size * 0.5 * 1.0\n            this.group.rotation.y = Math.PI * 0.5 * 4.0\n          } else if (at === 'nz') {\n            this.group.position.z = size * 0.5 * -1.0\n            this.group.rotation.y = Math.PI * 0.5 * -2.0\n          }\n        }\n      }\n      \n      class Sky {\n        constructor ({ links }) {\n          let group = new THREE.Object3D()\n          this.group = group\n      \n          this.fliper = new THREE.Object3D()\n          this.fliper.rotation.z = Math.PI\n          this.fliper.rotation.y = Math.PI\n          this.group.add(this.fliper)\n      \n          var at = [\n            'px',\n            'nx',\n      \n            'py',\n            'ny',\n      \n            'pz',\n            'nz'\n          ]\n      \n          this.planes = links.map((link, i) => {\n            let plane = new Plane({\n              link,\n              at: at[i]\n            })\n            return plane\n          })\n      \n          this.planes.forEach((plane) => {\n            this.fliper.add(plane.group)\n            return plane\n          })\n        }\n      }\n      \n      class Sphere {\n        constructor ({ envMap }) {\n          // // Create car\n          var geo = new THREE.SphereBufferGeometry(100, 100, 64, 64)\n          var material = new THREE.MeshBasicMaterial({ color: 0xffffff, envMap, side: THREE.BackSide })\n          var mesh = new THREE.Mesh(geo, material)\n          this.mesh = mesh\n          this.group = new THREE.Object3D()\n          this.group.add(mesh)\n        }\n      }\n      \n      class Universe extends EventDispatcher {\n        constructor ({ renderer, scene, links, resolution = 512 }) {\n          super()\n          this.renderer = renderer\n          this.scene = new THREE.Scene()\n      \n          this.group = new THREE.Object3D()\n      \n          // background skybox\n          this.backGroundGroup = new THREE.Object3D()\n          this.group.add(this.backGroundGroup)\n      \n          // visible object\n          this.foreGroundGroup = new THREE.Object3D()\n          this.group.add(this.foreGroundGroup)\n          \n      \n          this.sky = new Sky({\n            links\n          })\n          this.backGroundGroup.add(this.sky.group)\n\n\n      \n          this.cubecam = new THREE.CubeCamera(1, 3000, resolution)\n          this.group.add(this.cubecam)\n      \n          this.sphere = new Sphere({\n            envMap: this.cubecam.renderTarget.texture\n          })\n      \n          this.foreGroundGroup.add(this.sphere.group)\n      \n          this.animate = () => {\n      \n          }\n          this.scene.add(this.group)\n          \n          this.preCapture = () => {\n            this.backGroundGroup.visible = true\n            this.foreGroundGroup.visible = false\n          }\n          this.capture = () => {\n            this.animate()\n            this.cubecam.update(this.renderer, this.scene)\n          }\n          this.postCapture = () => {\n            this.backGroundGroup.visible = false\n            this.foreGroundGroup.visible = true\n          }\n        }\n      }\n      \n      let rootnode = this.nodes.find(no => no.type === 'root')\n      let rootCompo = this.components[rootnode._id]\n      \n      let pAPIs = new Universe({\n        renderer: rootCompo.renderer,\n        // scene: this.engine.scene,\n        links: [\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/zngndtrninocunhymquz.png`,\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/kpyurwejhva9yd65fsjk.png`,\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/qrdjxy3xe5bxbuotsshz.png`,\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/resdrnerd9n3fhjuxltv.png`,\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/ta8ggppgiyiuwykkmnjc.png`,\n          `https://res.cloudinary.com/htdjnmcsz/image/upload/v1557820567/epuaxw3fkdvftl5pmfwv.png`\n          \n          // this.textures.px,\n          // this.textures.nx,\n          // this.textures.py,\n          // this.textures.ny,\n          // this.textures.pz,\n          // this.textures.nz          \n          \n          // require('../Universe/img/mplus-cubemap/v1/px.jpg'),\n          // require('../Universe/img/mplus-cubemap/v1/nx.jpg'),\n\n          // require('../Universe/img/mplus-cubemap/v1/py.jpg'),\n          // require('../Universe/img/mplus-cubemap/v1/ny.jpg'),\n\n          // require('../Universe/img/mplus-cubemap/v1/pz.jpg'),\n          // require('../Universe/img/mplus-cubemap/v1/nz.jpg')\n\n          // require('../Universe/img/home/px.jpg'),\n          // require('../Universe/img/home/nx.jpg'),\n\n          // require('../Universe/img/home/py.jpg'),\n          // require('../Universe/img/home/ny.jpg'),\n\n          // require('../Universe/img/home/pz.jpg'),\n          // require('../Universe/img/home/nz.jpg')\n        ],\n        resolution: 1024\n      });\n      \n      this.drawable = pAPIs.foreGroundGroup\n      \n      this.$emit('exec', () => {\n        pAPIs.preCapture();\n        pAPIs.capture();\n        pAPIs.postCapture();\n        \n        let item = this.timetracks.find(t => t.title === this.node.title + '-Zoom' && t.progress > 0.001 && t.progress < 1)\n        \n        if (item) {\n          // dome\n          pAPIs.sky.group.rotation.y = item.progress * 3.141592 * 2\n          // zoom\n          pAPIs.foreGroundGroup.position.z = item.progress * 500\n        }\n      });\n      \n      // let mat = new THREE.MeshBasicMaterial({ color: 0xff0000, wireframe: true });\n      // this.material = mat\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    // this.$on('addToParent', ({ parent }) => {\n    //   // console.log(this.node.title, 'addToParent', parent.node.title)\n    // })\n    this.$on('addChild', ({ child }) => {\n      // if (child.node.type === 'map') {\n      //   this.material.map = child.map\n      // }\n      // if (child.node.type === 'geometry') {\n      //   this.material.geometry = child.geometry\n      // }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    // this.$on('removeFromParent', ({ parent }) => {\n    //   // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    // })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
       "type": "drawable",
       "size": {
@@ -499,16 +499,16 @@
       "isOverlapping": false,
       "isOverlappingWith": false,
       "isActive": false,
-      "hasFound": true,
+      "hasFound": false,
       "rect": {
-        "x": 731,
-        "y": 311.5,
+        "x": 896.6580810546875,
+        "y": 82.02798461914062,
         "width": 60,
         "height": 60,
-        "top": 311.5,
-        "right": 791,
-        "bottom": 371.5,
-        "left": 731
+        "top": 82.02798461914062,
+        "right": 956.6580810546875,
+        "bottom": 142.02798461914062,
+        "left": 896.6580810546875
       }
     },
     {
@@ -697,7 +697,7 @@
       "to": "root",
       "pos": {
         "x": 260,
-        "y": 465
+        "y": 520
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      this.components[this.node.to].$emit('addChild', { child })\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -711,14 +711,14 @@
       "hasFound": false,
       "isActive": false,
       "rect": {
-        "x": 304,
-        "y": 35,
+        "x": 535,
+        "y": 388,
         "width": 60,
         "height": 60,
-        "top": 35,
-        "right": 364,
-        "bottom": 95,
-        "left": 304
+        "top": 388,
+        "right": 595,
+        "bottom": 448,
+        "left": 535
       }
     },
     {
@@ -851,14 +851,14 @@
       "hasFound": false,
       "isActive": false,
       "rect": {
-        "x": 426,
-        "y": 372,
+        "x": 598.989990234375,
+        "y": 262.989990234375,
         "width": 60,
         "height": 60,
-        "top": 372,
-        "right": 486,
-        "bottom": 432,
-        "left": 426
+        "top": 262.989990234375,
+        "right": 658.989990234375,
+        "bottom": 322.989990234375,
+        "left": 598.989990234375
       }
     },
     {
@@ -890,65 +890,164 @@
         "bottom": 635,
         "left": 977
       }
+    },
+    {
+      "_id": "_871971",
+      "title": "OMG Scene",
+      "to": "_29338",
+      "pos": {
+        "x": 440,
+        "y": 685
+      },
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      scene: false\n    }\n  },\n  methods: {\n    init () {\n      this.scene = new THREE.Scene()\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      // if camera then pass to parent\n      if (child.node.type === 'camera') {\n        this.components[this.node.to].$emit('addChild', { child })\n      }\n\n      // add here\n      if (child.node.type === 'object3D') {\n        this.scene.add(child.object3D)\n      }\n      if (child.node.type === 'drawable') {\n        this.scene.add(child.drawable)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "library": [],
+      "type": "scene",
+      "size": {
+        "width": 60,
+        "height": 60
+      },
+      "isOverlapping": false,
+      "isOverlappingWith": false,
+      "hasFound": false,
+      "isActive": false,
+      "rect": {
+        "x": 715.45703125,
+        "y": 334.2991638183594,
+        "width": 60,
+        "height": 60,
+        "top": 334.2991638183594,
+        "right": 775.45703125,
+        "bottom": 394.2991638183594,
+        "left": 715.45703125
+      }
+    },
+    {
+      "_id": "_292479",
+      "title": "Mesh",
+      "to": "_871971",
+      "pos": {
+        "x": 620,
+        "y": 685
+      },
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      geo: false,\n      mat: false,\n      drawable: false\n    }\n  },\n  methods: {\n    init () {\n      // let geo = new THREE.BoxBufferGeometry(100, 100, 100, 20, 20);\n      // let mat = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.1 });\n      this.drawable = new THREE.Mesh()\n      this.drawable.visible = false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'material') {\n        this.drawable.material = child.material\n        this.material = child.material\n      }\n      if (child.node.type === 'geometry') {\n        this.drawable.geometry = child.geometry\n        this.geometry = child.geometry\n      }\n      if (this.geometry && this.material) {\n        this.drawable.visible = true\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "library": [],
+      "type": "drawable",
+      "size": {
+        "width": 60,
+        "height": 60
+      },
+      "isOverlapping": false,
+      "isOverlappingWith": false,
+      "isActive": false,
+      "hasFound": false,
+      "rect": {
+        "x": 590.0615234375,
+        "y": 357.2950439453125,
+        "width": 60,
+        "height": 60,
+        "top": 357.2950439453125,
+        "right": 650.0615234375,
+        "bottom": 417.2950439453125,
+        "left": 590.0615234375
+      }
+    },
+    {
+      "_id": "_993197",
+      "title": "OMGMat",
+      "to": "_292479",
+      "pos": {
+        "x": 800,
+        "y": 630
+      },
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      material: false\n    }\n  },\n  methods: {\n    init () {\n      \n      let uniforms = {\n        ttD: {\n          value: new THREE.TextureLoader().load('https://res.cloudinary.com/htdjnmcsz/image/upload/v1557959138/xnxf7docmrpfrbmuwevi.png')\n        },\n        blur: {\n          value: new THREE.Vector2(0, 0)\n        }\n      }\n      \n      this.$emit('exec', () => {\n        uniforms.blur.value.x = 30.0 * Math.random()\n        uniforms.blur.value.y = 30.0 * Math.random()\n      });\n      \n      \n      let mat = new THREE.ShaderMaterial({\n        transparent: true,\n        uniforms,\n        vertexShader: `\n          #include <common>\n          varying vec2 vUv;\n          void main()\t{\n            vUv = uv;\n            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n          }\n        `,\n        fragmentShader: `\n          vec4 blur9(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {\n            vec4 color = vec4(0.0);\n            vec2 off1 = vec2(1.3846153846) * direction;\n            vec2 off2 = vec2(3.2307692308) * direction;\n            color += texture2D(image, uv) * 0.2270270270;\n            color += texture2D(image, uv + (off1 / resolution)) * 0.3162162162;\n            color += texture2D(image, uv - (off1 / resolution)) * 0.3162162162;\n            color += texture2D(image, uv + (off2 / resolution)) * 0.0702702703;\n            color += texture2D(image, uv - (off2 / resolution)) * 0.0702702703;\n            return color;\n          }\n          \n          uniform sampler2D ttD;\n          uniform vec2 blur;\n          varying vec2 vUv;\n          void main (void) {\n            // vec4 cColor = texture2D(ttD, vUv);\n            vec4 cColor = vec4(0.0);\n            \n            cColor = blur9(ttD, vUv, vec2(1024.0, 1024.0), vec2(blur.xy));\n            gl_FragColor = vec4(cColor.rgba);\n          }\n        `\n      });\n      this.material = mat\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      // if (child.node.type === 'map') {\n      //   this.material.map = child.map\n      // }\n      // if (child.node.type === 'geometry') {\n      //   this.material.geometry = child.geometry\n      // }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "library": [],
+      "type": "material",
+      "size": {
+        "width": 60,
+        "height": 60
+      },
+      "isOverlapping": false,
+      "isOverlappingWith": false,
+      "isActive": false,
+      "hasFound": false,
+      "rect": {
+        "x": 716.41455078125,
+        "y": 379.1903991699219,
+        "width": 60,
+        "height": 60,
+        "top": 379.1903991699219,
+        "right": 776.41455078125,
+        "bottom": 439.1903991699219,
+        "left": 716.41455078125
+      }
+    },
+    {
+      "_id": "_471476",
+      "title": "Plane Geometry",
+      "to": "_292479",
+      "pos": {
+        "x": 800,
+        "y": 740
+      },
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      geometry: false\n    }\n  },\n  methods: {\n    init () {\n      this.geometry = new THREE.PlaneBufferGeometry(300, 300, 32, 32)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "library": [],
+      "type": "geometry",
+      "size": {
+        "width": 60,
+        "height": 60
+      },
+      "isOverlapping": false,
+      "isOverlappingWith": false,
+      "isActive": false,
+      "hasFound": false,
+      "rect": {
+        "x": 714.3114013671875,
+        "y": 342.9898986816406,
+        "width": 60,
+        "height": 60,
+        "top": 342.9898986816406,
+        "right": 774.3114013671875,
+        "bottom": 402.9898986816406,
+        "left": 714.3114013671875
+      }
     }
   ],
   "timeline": {
     "totalTime": 30,
     "tracks": [
       {
-        "_id": "_13222724159",
-        "start": 10.718214558550695,
-        "end": 18.204231692677073,
-        "title": "Zoom Camera",
-        "trashed": false
-      },
-      {
-        "_id": "_97927335642",
-        "start": 10.668326421477687,
-        "end": 21.39146567717998,
-        "title": "Ring And Ball Scene",
-        "trashed": false
-      },
-      {
         "_id": "_21128698452",
-        "start": 20.81501691585725,
-        "end": 29.99072356215216,
-        "title": "Home Scene",
-        "trashed": false
-      },
-      {
-        "_id": "_30633603714",
-        "start": 18.04010695187169,
-        "end": 29.962894248608524,
-        "title": "Wondering Camera",
+        "start": 0.018204166853264453,
+        "end": 30.038532327092444,
+        "title": "Still Camera",
         "trashed": false
       },
       {
         "_id": "_69100068829",
         "start": 0,
-        "end": 11.21424478882462,
-        "title": "Still Camera",
+        "end": 10.019025665318631,
+        "title": "Ring And Ball Scene",
         "trashed": false
       },
       {
         "_id": "_94999156642",
-        "start": 0,
-        "end": 11.257339299356108,
-        "title": "Home Scene",
+        "start": 9.466135458167328,
+        "end": 20.890805434814315,
+        "title": "Dome Scene",
         "trashed": false
       },
       {
         "_id": "_6370932991",
-        "start": 0,
-        "end": 11.24264705882353,
-        "title": "Dome",
+        "start": 9.537848605577686,
+        "end": 21.617149050855396,
+        "title": "Dome-Zoom",
         "trashed": false
       },
       {
-        "_id": "_96964570509",
-        "start": 20.82185731435436,
-        "end": 29.99264705882353,
-        "title": "Dome",
+        "_id": "_32591376593",
+        "start": 20.96414342629482,
+        "end": 29.89641434262952,
+        "title": "OMG Scene",
         "trashed": false
       }
     ]
@@ -959,6 +1058,8 @@
     "timelinePlaying": true,
     "timelineControl": "timer",
     "timelinePercentageLast": 0,
-    "timelinePercentage": 0
+    "timelinePercentage": 0,
+    "loop": true,
+    "elapsed": 3.951048147410006
   }
 }

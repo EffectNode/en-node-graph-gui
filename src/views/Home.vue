@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import { setInterval } from 'timers';
 export default {
   name: 'home',
   components: {
@@ -210,10 +211,25 @@ export default {
         }
       }, false)
 
-      // setTimeout(() => {
-      //   this.water.timeinfo.start = window.performance.now() * 0.001
-      //   this.water.timeinfo.timelinePlaying = true
-      // }, 10000)
+      if (process.env.NODE_ENV === 'development') {
+        let waterStr = localStorage.getItem('water-OMGOMG')
+        if (waterStr) {
+          try {
+            water = JSON.parse(waterStr)
+          } catch (e) {
+            console.log(e)
+          }
+        } else {
+
+        }
+        // apple //
+        setInterval(() => {
+          console.log('.... saving .....')
+          localStorage.setItem('water-OMGOMG', JSON.stringify(window.getWater()))
+        }, 2000)
+        // orange //
+      }
+
 
       let rAF2 = () => {
         this.clearTimer = requestAnimationFrame(rAF2)
@@ -233,28 +249,6 @@ export default {
       }
       this.clearTimer = requestAnimationFrame(rAF2)
       this.doSync()
-
-      // this.clearTimer = setInterval(() => {
-      //   if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
-      //     let totalTime = this.water.timeline.totalTime
-      //     this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
-      //     let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
-      //     this.water.timeinfo.timelinePercentage = lastTime / totalTime
-      //     if (this.water.timeinfo.loop) {
-      //       this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start) % this.water.timeinfo.totalTime
-      //       this.water.timeinfo.timelinePercentage %= 1
-      //     } else {
-      //       this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start)
-      //     }
-      //     this.doSync()
-      //   }
-      // }, 1000 / 120)
-
-      // this.doSync()
-
-      // this.waterTimer = setInterval(() => {
-      //   // this.makeTimeVars()
-      // })
     }, 150)
   },
   created () {
