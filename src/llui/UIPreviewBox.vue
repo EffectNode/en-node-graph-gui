@@ -40,6 +40,11 @@ export default {
   },
 
   mounted () {
+    window.addEventListener('keydown', (evt) => {
+      if (evt.keyCode + '' === '27') {
+        this.full = false
+      }
+    })
     let sizer = () => {
       this.sync()
     }

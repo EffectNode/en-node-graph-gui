@@ -30,23 +30,23 @@
 </template>
 
 <script>
-import { setInterval } from 'timers';
 export default {
   name: 'home',
   components: {
-    EXEC: () => import('../llexec/EXEC.vue'),
-    NodeTree: () => import('../llsvg/NodeTree.vue'),
+    EXEC: () => import(/* webpackChunkName: "engine" */'../llexec/EXEC.vue'),
+    NodeTree: () => import(/* webpackChunkName: "engine" */'../llsvg/NodeTree.vue'),
     UIPreviewBox: () => import(/* webpackChunkName: "uibox" */'../llui/UIPreviewBox.vue'),
-    UICodeControl: () => import(/* webpackChunkName: "coder" */'../llui/UICodeControl.vue'),
-    UIControls: () => import('../llui/UIControls.vue'),
+    UICodeControl: () => import(/* webpackChunkName: "engine" */'../llui/UICodeControl.vue'),
+    UIControls: () => import(/* webpackChunkName: "engine" */'../llui/UIControls.vue'),
     UIInspector: () => import(/* webpackChunkName: "uibox" */'../llui/UIInspector.vue'),
     UITimeline: () => import(/* webpackChunkName: "uibox" */'../llui/UITimeline.vue'),
-    UITimelineHolder: () => import('../lltimeline/timeline-holder.vue'),
-    UICoder: () => import(/* webpackChunkName: "coder" */'../llui/UICoder.vue'),
+    UITimelineHolder: () => import(/* webpackChunkName: "engine" */'../lltimeline/timeline-holder.vue'),
+    UICoder: () => import(/* webpackChunkName: "engine" */'../llui/UICoder.vue'),
     UIBtnTools: () => import(/* webpackChunkName: "uibox" */'../llui/UIBtnTools.vue')
   },
   data () {
     return {
+      clearTimer: 0,
       order: [
         'coder',
         'timeline',
@@ -216,6 +216,7 @@ export default {
         if (waterStr) {
           try {
             water = JSON.parse(waterStr)
+            this.water = water
           } catch (e) {
             console.log(e)
           }
@@ -223,13 +224,12 @@ export default {
 
         }
         // apple //
-        setInterval(() => {
+        this.autoSaveTimer = setInterval(() => {
           console.log('.... saving .....')
           localStorage.setItem('water-OMGOMG', JSON.stringify(window.getWater()))
         }, 2000)
         // orange //
       }
-
 
       let rAF2 = () => {
         this.clearTimer = requestAnimationFrame(rAF2)
@@ -269,6 +269,7 @@ export default {
     })
   },
   beforeDestroy () {
+    clearInterval(this.autoSaveTimer)
     cancelAnimationFrame(this.clearTimer)
   },
   methods: {

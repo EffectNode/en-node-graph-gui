@@ -893,7 +893,7 @@
     },
     {
       "_id": "_871971",
-      "title": "OMG Scene",
+      "title": "Shake Scene",
       "to": "_29338",
       "pos": {
         "x": 440,
@@ -911,14 +911,14 @@
       "hasFound": false,
       "isActive": false,
       "rect": {
-        "x": 715.45703125,
-        "y": 334.2991638183594,
+        "x": 448,
+        "y": 363,
         "width": 60,
         "height": 60,
-        "top": 334.2991638183594,
-        "right": 775.45703125,
-        "bottom": 394.2991638183594,
-        "left": 715.45703125
+        "top": 363,
+        "right": 508,
+        "bottom": 423,
+        "left": 448
       }
     },
     {
@@ -953,13 +953,13 @@
     },
     {
       "_id": "_993197",
-      "title": "OMGMat",
+      "title": "Shake Material",
       "to": "_292479",
       "pos": {
         "x": 800,
         "y": 630
       },
-      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      material: false\n    }\n  },\n  methods: {\n    init () {\n      \n      let uniforms = {\n        ttD: {\n          value: new THREE.TextureLoader().load('https://res.cloudinary.com/htdjnmcsz/image/upload/v1557959138/xnxf7docmrpfrbmuwevi.png')\n        },\n        blur: {\n          value: new THREE.Vector2(0, 0)\n        }\n      }\n      \n      this.$emit('exec', () => {\n        uniforms.blur.value.x = 30.0 * Math.random()\n        uniforms.blur.value.y = 30.0 * Math.random()\n      });\n      \n      \n      let mat = new THREE.ShaderMaterial({\n        transparent: true,\n        uniforms,\n        vertexShader: `\n          #include <common>\n          varying vec2 vUv;\n          void main()\t{\n            vUv = uv;\n            gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );\n          }\n        `,\n        fragmentShader: `\n         // https://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/13.glsl\n          vec4 blurry(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {\n            vec4 color = vec4(0.0);\n            vec2 off1 = vec2(1.411764705882353) * direction;\n            vec2 off2 = vec2(3.2941176470588234) * direction;\n            vec2 off3 = vec2(5.176470588235294) * direction;\n            color += texture2D(image, uv) * 0.1964825501511404;\n            color += texture2D(image, uv + (off1 / resolution)) * 0.2969069646728344;\n            color += texture2D(image, uv - (off1 / resolution)) * 0.2969069646728344;\n            color += texture2D(image, uv + (off2 / resolution)) * 0.09447039785044732;\n            color += texture2D(image, uv - (off2 / resolution)) * 0.09447039785044732;\n            color += texture2D(image, uv + (off3 / resolution)) * 0.010381362401148057;\n            color += texture2D(image, uv - (off3 / resolution)) * 0.010381362401148057;\n            return color;\n          }\n          \n          uniform sampler2D ttD;\n          uniform vec2 blur;\n          varying vec2 vUv;\n          void main (void) {\n            // vec4 cColor = texture2D(ttD, vUv);\n            vec4 cColor = vec4(0.0);\n            \n            cColor = blurry(ttD, vUv, vec2(1024.0, 1024.0), vec2(blur.xy));\n            gl_FragColor = vec4(cColor.rgba);\n          }\n        `\n      });\n      this.material = mat\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      // if (child.node.type === 'map') {\n      //   this.material.map = child.map\n      // }\n      // if (child.node.type === 'geometry') {\n      //   this.material.geometry = child.geometry\n      // }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      material: false\n    }\n  },\n  methods: {\n    init () {\n      let uniforms = {\n        ttD: {\n          value: new THREE.TextureLoader().load('https://res.cloudinary.com/htdjnmcsz/image/upload/v1557959138/xnxf7docmrpfrbmuwevi.png')\n        },\n        blur: {\n          value: new THREE.Vector2(0, 0)\n        },\n        shift: {\n          value: new THREE.Vector3(0, 0, 0)\n        }\n      };\n      \n      this.$emit('exec', () => {\n        uniforms.blur.value.x *= 0.5\n        uniforms.blur.value.y *= 0.5\n        \n        // // example code\n        // let track = this.timetracks.find(tr => tr.title === 'Shake Scene' && tr.progress > 0.001 && tr.progress < 1)\n        // if (track) {\n        //   let time = track.progress * Math.PI * 2.0 \n        //   uniforms.blur.value.x += Math.sin(time) * Math.sin(time) * 30.0\n        //   uniforms.blur.value.y += Math.cos(time) * Math.sin(time) * 30.0\n          \n        //   uniforms.shift.value.x = (Math.sin(time * 0.5) * Math.sin(time * 0.5) - 0.5) * 300.0\n        //   uniforms.shift.value.y = Math.cos(time * 0.5) * Math.sin(time * 0.5) * 300.0\n        // }\n      })\n      \n      this.$parent.$parent.$el.addEventListener('mousemove', (ev) => {\n        uniforms.blur.value.x += ev.movementX * -1.0\n        uniforms.blur.value.y += -ev.movementY * -1.0\n\n        // uniforms.blur.value.x = (ev.pageX - window.innerWidth * 0.5) / window.innerWidth * 30\n        // uniforms.blur.value.y = -(ev.pageY - window.innerHeight * 0.5) / window.innerHeight * 30\n\n        uniforms.shift.value.x = (ev.pageX - window.innerWidth * 0.5) / window.innerWidth * 620\n        uniforms.shift.value.y = -(ev.pageY - window.innerHeight * 0.5) / window.innerHeight * 620\n      })\n      \n      this.$parent.$parent.$el.addEventListener('touchmove', (ev) => {\n        uniforms.blur.value.x += ev.touches[0].movementX * -1.0\n        uniforms.blur.value.y += -ev.touches[0].movementY * -1.0\n\n        // uniforms.blur.value.x = 30.0 * ev.touches[0].pageX\n        // uniforms.blur.value.y = 30.0 * ev.touches[0].pageY\n\n        uniforms.shift.value.x = (ev.touches[0].pageX - window.innerWidth * 0.5) / window.innerWidth * 620\n        uniforms.shift.value.y = -(ev.touches[0].pageY - window.innerHeight * 0.5) / window.innerHeight * 620\n      })\n      \n      \n      let mat = new THREE.ShaderMaterial({\n        transparent: true,\n        uniforms,\n        vertexShader: `\n          #include <common>\n          varying vec2 vUv;\n          uniform vec3 shift;\n          \n          void main()\t{\n            // smaller\n            vUv = uv;\n          \n            gl_Position = projectionMatrix * modelViewMatrix * vec4( position * 2.0 + shift, 1.0 );\n          }\n        `,\n        fragmentShader: `\n          // https://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/13.glsl\n          vec4 motionBlur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {\n            vec4 color = vec4(0.0);\n            vec2 off1 = vec2(1.411764705882353) * direction;\n            vec2 off2 = vec2(3.2941176470588234) * direction;\n            vec2 off3 = vec2(5.176470588235294) * direction;\n            \n            // smaller\n            vec2 samllerUV = (uv * 2.0 - 1.0 + 0.5);\n            \n            color += texture2D(image, samllerUV) * 0.1964825501511404;\n            color += texture2D(image, samllerUV + (off1 / resolution)) * 0.2969069646728344;\n            color += texture2D(image, samllerUV - (off1 / resolution)) * 0.2969069646728344;\n            color += texture2D(image, samllerUV + (off2 / resolution)) * 0.09447039785044732;\n            color += texture2D(image, samllerUV - (off2 / resolution)) * 0.09447039785044732;\n            color += texture2D(image, samllerUV + (off3 / resolution)) * 0.010381362401148057;\n            color += texture2D(image, samllerUV - (off3 / resolution)) * 0.010381362401148057;\n            return color;\n          }\n          \n          uniform sampler2D ttD;\n          uniform vec2 blur;\n          varying vec2 vUv;\n          void main (void) {\n            // vec4 cColor = texture2D(ttD, vUv);\n            vec4 cColor = vec4(0.0);\n            \n            cColor = motionBlur(ttD, vUv, vec2(1024.0, 1024.0), vec2(blur.xy));\n            gl_FragColor = vec4(cColor.rgba);\n          }\n        `\n      });\n      this.material = mat\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      // if (child.node.type === 'map') {\n      //   this.material.map = child.map\n      // }\n      // if (child.node.type === 'geometry') {\n      //   this.material.geometry = child.geometry\n      // }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
       "type": "material",
       "size": {
@@ -971,14 +971,14 @@
       "isActive": false,
       "hasFound": false,
       "rect": {
-        "x": 835,
-        "y": 396,
+        "x": 715,
+        "y": 333,
         "width": 60,
         "height": 60,
-        "top": 396,
-        "right": 895,
-        "bottom": 456,
-        "left": 835
+        "top": 333,
+        "right": 775,
+        "bottom": 393,
+        "left": 715
       }
     },
     {
@@ -1010,6 +1010,68 @@
         "bottom": 402.9898986816406,
         "left": 714.3114013671875
       }
+    },
+    {
+      "_id": "_13935",
+      "title": "Object 3D",
+      "to": "_993197",
+      "trashed": true,
+      "pos": {
+        "x": 980.00001,
+        "y": 740.00001
+      },
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "library": [],
+      "type": "object3D",
+      "size": {
+        "width": 60,
+        "height": 60
+      },
+      "isOverlapping": false,
+      "isOverlappingWith": false,
+      "isActive": false,
+      "hasFound": false,
+      "rect": {
+        "x": 822,
+        "y": 319.5222473144531,
+        "width": 60,
+        "height": 60,
+        "top": 319.5222473144531,
+        "right": 882,
+        "bottom": 379.5222473144531,
+        "left": 822
+      }
+    },
+    {
+      "_id": "_499705",
+      "title": "Object 3D",
+      "to": "_993197",
+      "trashed": true,
+      "pos": {
+        "x": 980,
+        "y": 740
+      },
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "library": [],
+      "type": "object3D",
+      "size": {
+        "width": 60,
+        "height": 60
+      },
+      "isOverlapping": false,
+      "isOverlappingWith": false,
+      "isActive": false,
+      "hasFound": false,
+      "rect": {
+        "x": 715,
+        "y": 333,
+        "width": 60,
+        "height": 60,
+        "top": 333,
+        "right": 775,
+        "bottom": 393,
+        "left": 715
+      }
     }
   ],
   "timeline": {
@@ -1017,44 +1079,45 @@
     "tracks": [
       {
         "_id": "_21128698452",
-        "start": 8.360833648924974,
-        "end": 29.99072356215222,
+        "start": 0.018204166853263072,
+        "end": 30.038532327092497,
         "title": "Still Camera",
         "trashed": false
       },
       {
         "_id": "_69100068829",
-        "start": 0,
-        "end": 10.019025665318631,
+        "start": 20.031872509960145,
+        "end": 30.05089817527877,
         "title": "Ring And Ball Scene",
         "trashed": false
       },
       {
         "_id": "_94999156642",
-        "start": 9.466135458167328,
+        "start": 10.996015936254976,
         "end": 20.890805434814315,
         "title": "Dome Scene",
         "trashed": false
       },
       {
         "_id": "_6370932991",
-        "start": 9.537848605577686,
-        "end": 21.617149050855396,
+        "start": 10.852589641434259,
+        "end": 20.42192992734937,
         "title": "Dome-Zoom",
         "trashed": false
       },
       {
         "_id": "_32591376593",
-        "start": 20.96414342629482,
-        "end": 29.89641434262952,
-        "title": "OMG Scene",
+        "start": 0.023904382470113957,
+        "end": 11.155378486055804,
+        "title": "Shake Scene",
         "trashed": false
       },
       {
         "_id": "_150903859",
-        "start": 0,
-        "end": 9.529880478087643,
-        "title": "Zoom Camera"
+        "start": 20.438247011952168,
+        "end": 30.06374501992032,
+        "title": "Zoom Camera",
+        "trashed": false
       }
     ]
   },
@@ -1066,6 +1129,6 @@
     "timelinePercentageLast": 0,
     "timelinePercentage": 0,
     "loop": true,
-    "elapsed": 5.56637209163398
+    "elapsed": 0.847700000000259
   }
 }

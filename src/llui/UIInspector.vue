@@ -52,11 +52,11 @@ export default {
       this.sync()
     })
     window.addEventListener('resize', sizer)
-    window.addEventListener('keydown', evt => {
-      if (evt.keyCode === 27) {
-        this.$emit('close')
-      }
-    })
+    // window.addEventListener('keydown', evt => {
+    //   if (evt.keyCode === 27) {
+    //     this.$emit('close')
+    //   }
+    // })
   },
   methods: {
     handle () {

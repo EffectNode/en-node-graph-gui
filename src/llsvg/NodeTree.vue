@@ -92,7 +92,7 @@
         </g>
 
         <g :key="link.from + link.to + ii" v-for="(link, ii) in links">
-          <NodePath :open="open" :link="link" :uniq="uniq"></NodePath>
+          <NodePath :link="link" :uniq="uniq"></NodePath>
         </g>
 
       </g>
@@ -105,18 +105,20 @@
 import TWEEN from '@tweenjs/tween.js'
 import { setTimeout, clearTimeout } from 'timers'
 import * as Node from './node.js'
-// import { Promise } from 'q';
+// layout algorithm
+import dagre from 'dagre'
 
-var dagre = require('dagre')
 export default {
   props: {
-    open: {},
+    // show mode
     show: {
       default: 'normal'
     },
+    // nodes to display
     nodes: {
       required: true
     },
+    // custom size
     size: {
       default: false
     }
