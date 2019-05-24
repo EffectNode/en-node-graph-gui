@@ -24,8 +24,9 @@ export default {
   mounted () {
     let dom = this.$refs['dragger']
     let md = false
-    let baseTime = this.$parent.BASE_TIME
-    let width = this.$parent.BASE_WIDTH
+
+    let baseTime = this.$parent.$parent.BASE_TIME
+    let width = this.$parent.$parent.BASE_WIDTH
 
     let state = {
       sx: 0,
