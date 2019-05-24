@@ -210,14 +210,14 @@
       "isActive": false,
       "hasFound": false,
       "rect": {
-        "x": 540,
-        "y": 218.10000610351562,
+        "x": 745,
+        "y": 165,
         "width": 60,
         "height": 60,
-        "top": 218.10000610351562,
-        "right": 600,
-        "bottom": 278.1000061035156,
-        "left": 540
+        "top": 165,
+        "right": 805,
+        "bottom": 225,
+        "left": 745
       },
       "trashed": false
     },
@@ -411,14 +411,14 @@
       "isActive": false,
       "hasFound": false,
       "rect": {
-        "x": 299,
-        "y": 330.1000061035156,
+        "x": 1207,
+        "y": 422,
         "width": 60,
         "height": 60,
-        "top": 330.1000061035156,
-        "right": 359,
-        "bottom": 390.1000061035156,
-        "left": 299
+        "top": 422,
+        "right": 1267,
+        "bottom": 482,
+        "left": 1207
       }
     },
     {
@@ -959,7 +959,7 @@
         "x": 800,
         "y": 630
       },
-      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      material: false\n    }\n  },\n  methods: {\n    init () {\n      let uniforms = {\n        ttD: {\n          value: new THREE.TextureLoader().load('https://res.cloudinary.com/htdjnmcsz/image/upload/v1557959138/xnxf7docmrpfrbmuwevi.png')\n        },\n        blur: {\n          value: new THREE.Vector2(0, 0)\n        },\n        shift: {\n          value: new THREE.Vector3(0, 0, 0)\n        }\n      };\n      \n      this.$emit('exec', () => {\n        uniforms.blur.value.x *= 0.5\n        uniforms.blur.value.y *= 0.5\n        \n        // // example code\n        // let track = this.timetracks.find(tr => tr.title === 'Shake Scene' && tr.progress > 0.001 && tr.progress < 1)\n        // if (track) {\n        //   let time = track.progress * Math.PI * 2.0 \n        //   uniforms.blur.value.x += Math.sin(time) * Math.sin(time) * 30.0\n        //   uniforms.blur.value.y += Math.cos(time) * Math.sin(time) * 30.0\n          \n        //   uniforms.shift.value.x = (Math.sin(time * 0.5) * Math.sin(time * 0.5) - 0.5) * 300.0\n        //   uniforms.shift.value.y = Math.cos(time * 0.5) * Math.sin(time * 0.5) * 300.0\n        // }\n      })\n      \n      this.$parent.$parent.$el.addEventListener('mousemove', (ev) => {\n        uniforms.blur.value.x += ev.movementX * -1.0\n        uniforms.blur.value.y += -ev.movementY * -1.0\n\n        // uniforms.blur.value.x = (ev.pageX - window.innerWidth * 0.5) / window.innerWidth * 30\n        // uniforms.blur.value.y = -(ev.pageY - window.innerHeight * 0.5) / window.innerHeight * 30\n\n        uniforms.shift.value.x = (ev.pageX - window.innerWidth * 0.5) / window.innerWidth * 620\n        uniforms.shift.value.y = -(ev.pageY - window.innerHeight * 0.5) / window.innerHeight * 620\n      })\n      \n      this.$parent.$parent.$el.addEventListener('touchmove', (ev) => {\n        uniforms.blur.value.x += ev.touches[0].movementX * -1.0\n        uniforms.blur.value.y += -ev.touches[0].movementY * -1.0\n\n        // uniforms.blur.value.x = 30.0 * ev.touches[0].pageX\n        // uniforms.blur.value.y = 30.0 * ev.touches[0].pageY\n\n        uniforms.shift.value.x = (ev.touches[0].pageX - window.innerWidth * 0.5) / window.innerWidth * 620\n        uniforms.shift.value.y = -(ev.touches[0].pageY - window.innerHeight * 0.5) / window.innerHeight * 620\n      })\n      \n      \n      let mat = new THREE.ShaderMaterial({\n        transparent: true,\n        uniforms,\n        vertexShader: `\n          #include <common>\n          varying vec2 vUv;\n          uniform vec3 shift;\n          \n          void main()\t{\n            // smaller\n            vUv = uv;\n          \n            gl_Position = projectionMatrix * modelViewMatrix * vec4( position * 2.0 + shift, 1.0 );\n          }\n        `,\n        fragmentShader: `\n          // https://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/13.glsl\n          vec4 motionBlur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {\n            vec4 color = vec4(0.0);\n            vec2 off1 = vec2(1.411764705882353) * direction;\n            vec2 off2 = vec2(3.2941176470588234) * direction;\n            vec2 off3 = vec2(5.176470588235294) * direction;\n            \n            // smaller\n            vec2 samllerUV = (uv * 2.0 - 1.0 + 0.5);\n            \n            color += texture2D(image, samllerUV) * 0.1964825501511404;\n            color += texture2D(image, samllerUV + (off1 / resolution)) * 0.2969069646728344;\n            color += texture2D(image, samllerUV - (off1 / resolution)) * 0.2969069646728344;\n            color += texture2D(image, samllerUV + (off2 / resolution)) * 0.09447039785044732;\n            color += texture2D(image, samllerUV - (off2 / resolution)) * 0.09447039785044732;\n            color += texture2D(image, samllerUV + (off3 / resolution)) * 0.010381362401148057;\n            color += texture2D(image, samllerUV - (off3 / resolution)) * 0.010381362401148057;\n            return color;\n          }\n          \n          uniform sampler2D ttD;\n          uniform vec2 blur;\n          varying vec2 vUv;\n          void main (void) {\n            // vec4 cColor = texture2D(ttD, vUv);\n            vec4 cColor = vec4(0.0);\n            \n            cColor = motionBlur(ttD, vUv, vec2(1024.0, 1024.0), vec2(blur.xy));\n            gl_FragColor = vec4(cColor.rgba);\n          }\n        `\n      });\n      this.material = mat\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      // if (child.node.type === 'map') {\n      //   this.material.map = child.map\n      // }\n      // if (child.node.type === 'geometry') {\n      //   this.material.geometry = child.geometry\n      // }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      material: false\n    }\n  },\n  methods: {\n    init () {\n      let uniforms = {\n        ttD: {\n          value: new THREE.TextureLoader().load('https://res.cloudinary.com/htdjnmcsz/image/upload/v1557959138/xnxf7docmrpfrbmuwevi.png')\n        },\n        blur: {\n          value: new THREE.Vector2(0, 0)\n        },\n        shift: {\n          value: new THREE.Vector3(0, 0, 0)\n        }\n      };\n      \n      this.$emit('exec', () => {\n        uniforms.blur.value.x *= 0.5\n        uniforms.blur.value.y *= 0.5\n        \n        // // example code\n        // let track = this.timetracks.find(tr => tr.title === 'Shake Scene' && tr.progress > 0.001 && tr.progress < 1)\n        // if (track) {\n        //   let time = track.progress * Math.PI * 2.0 \n        //   uniforms.blur.value.x += Math.sin(time) * Math.sin(time) * 30.0\n        //   uniforms.blur.value.y += Math.cos(time) * Math.sin(time) * 30.0\n          \n        //   uniforms.shift.value.x = (Math.sin(time * 0.5) * Math.sin(time * 0.5) - 0.5) * 300.0\n        //   uniforms.shift.value.y = Math.cos(time * 0.5) * Math.sin(time * 0.5) * 300.0\n        // }\n      })\n      let rect = this.$parent.$parent.$el.getBoundingClientRect()\n      \n      window.addEventListener('resize', () => {\n        rect = this.$parent.$parent.$el.getBoundingClientRect()\n      })\n        \n      this.$parent.$parent.$el.addEventListener('mousemove', (ev) => {\n        let aspect = rect.width / rect.height\n        if (aspect > 1) {\n          uniforms.blur.value.x += ev.movementX * -0.5 * aspect\n          uniforms.blur.value.y += -ev.movementY * -0.5\n        } else {\n          uniforms.blur.value.x += ev.movementX * -0.5 / aspect\n          uniforms.blur.value.y += -ev.movementY * -0.5\n        }\n        \n        // uniforms.blur.value.x = (ev.pageX - window.innerWidth * 0.5) / window.innerWidth * 30\n        // uniforms.blur.value.y = -(ev.pageY - window.innerHeight * 0.5) / window.innerHeight * 30\n\n        uniforms.shift.value.x = (ev.pageX - window.innerWidth * 0.5) / window.innerWidth * 620\n        uniforms.shift.value.y = -(ev.pageY - window.innerHeight * 0.5) / window.innerHeight * 620\n      })\n      \n      this.$parent.$parent.$el.addEventListener('touchmove', (ev) => {\n        let aspect = rect.width / rect.height\n        if (aspect > 1) {\n          uniforms.blur.value.x += ev.touches[0].movementX * -0.5 * aspect\n          uniforms.blur.value.y += -ev.touches[0].movementY * -0.5\n        } else {\n          uniforms.blur.value.x += ev.touches[0].movementX * -0.5 / aspect\n          uniforms.blur.value.y += -ev.touches[0].movementY * -0.5\n        }\n        \n        // uniforms.blur.value.x = 30.0 * ev.touches[0].pageX\n        // uniforms.blur.value.y = 30.0 * ev.touches[0].pageY\n\n        uniforms.shift.value.x = (ev.touches[0].pageX - window.innerWidth * 0.5) / window.innerWidth * 620\n        uniforms.shift.value.y = -(ev.touches[0].pageY - window.innerHeight * 0.5) / window.innerHeight * 620\n      })\n      \n      \n      let mat = new THREE.ShaderMaterial({\n        transparent: true,\n        uniforms,\n        vertexShader: `\n          #include <common>\n          varying vec2 vUv;\n          uniform vec3 shift;\n          \n          void main()\t{\n            // smaller\n            vUv = uv;\n          \n            gl_Position = projectionMatrix * modelViewMatrix * vec4( position * 2.0 + shift, 1.0 );\n          }\n        `,\n        fragmentShader: `\n          // https://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/13.glsl\n          vec4 motionBlur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {\n            vec4 color = vec4(0.0);\n            vec2 off1 = vec2(1.411764705882353) * direction;\n            vec2 off2 = vec2(3.2941176470588234) * direction;\n            vec2 off3 = vec2(5.176470588235294) * direction;\n            \n            // smaller\n            vec2 samllerUV = (uv * 2.0 - 1.0 + 0.5);\n            \n            color += texture2D(image, samllerUV) * 0.1964825501511404;\n            color += texture2D(image, samllerUV + (off1 / resolution)) * 0.2969069646728344;\n            color += texture2D(image, samllerUV - (off1 / resolution)) * 0.2969069646728344;\n            color += texture2D(image, samllerUV + (off2 / resolution)) * 0.09447039785044732;\n            color += texture2D(image, samllerUV - (off2 / resolution)) * 0.09447039785044732;\n            color += texture2D(image, samllerUV + (off3 / resolution)) * 0.010381362401148057;\n            color += texture2D(image, samllerUV - (off3 / resolution)) * 0.010381362401148057;\n            return color;\n          }\n          \n          uniform sampler2D ttD;\n          uniform vec2 blur;\n          varying vec2 vUv;\n          void main (void) {\n            // vec4 cColor = texture2D(ttD, vUv);\n            vec4 cColor = vec4(0.0);\n            \n            cColor = motionBlur(ttD, vUv, vec2(1024.0, 1024.0), vec2(blur.xy));\n            gl_FragColor = vec4(cColor.rgba);\n          }\n        `\n      });\n      this.material = mat\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      // if (child.node.type === 'map') {\n      //   this.material.map = child.map\n      // }\n      // if (child.node.type === 'geometry') {\n      //   this.material.geometry = child.geometry\n      // }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
       "type": "material",
       "size": {
@@ -971,14 +971,14 @@
       "isActive": false,
       "hasFound": false,
       "rect": {
-        "x": 715,
-        "y": 333,
+        "x": 741.02587890625,
+        "y": 188.52890014648438,
         "width": 60,
         "height": 60,
-        "top": 333,
-        "right": 775,
-        "bottom": 393,
-        "left": 715
+        "top": 188.52890014648438,
+        "right": 801.02587890625,
+        "bottom": 248.52890014648438,
+        "left": 741.02587890625
       }
     },
     {
@@ -1001,14 +1001,14 @@
       "isActive": false,
       "hasFound": false,
       "rect": {
-        "x": 714.3114013671875,
-        "y": 342.9898986816406,
+        "x": 643.3828125,
+        "y": 427.8563537597656,
         "width": 60,
         "height": 60,
-        "top": 342.9898986816406,
-        "right": 774.3114013671875,
-        "bottom": 402.9898986816406,
-        "left": 714.3114013671875
+        "top": 427.8563537597656,
+        "right": 703.3828125,
+        "bottom": 487.8563537597656,
+        "left": 643.3828125
       }
     },
     {
@@ -1129,6 +1129,6 @@
     "timelinePercentageLast": 0,
     "timelinePercentage": 0,
     "loop": true,
-    "elapsed": 0.847700000000259
+    "elapsed": 0
   }
 }

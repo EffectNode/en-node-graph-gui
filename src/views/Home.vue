@@ -158,6 +158,7 @@ export default {
       newwater.timeinfo.timelineControl = 'timer'
       newwater.timeinfo.timelinePercentageLast = 0
       newwater.timeinfo.timelinePercentage = 0
+      newwater.timeinfo.elapsed = 0
 
       return newwater
     }
