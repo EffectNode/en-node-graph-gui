@@ -7,11 +7,11 @@
           <div class="button-pill" @click="addTrack()">Add Timeline Track</div>
           <!-- <div class="button-pill" @click="baseTime *= 1.25">-</div>
           <div class="button-pill" @click="baseTime /= 1.25">+</div> -->
-          <div class="button-pill">
+          <div class="button-pill noclick">
             <span>Movie Duration:</span>
             <input class="inpill-input" type="text" v-model="timeline.totalTime" />
           </div>
-          <div class="button-pill">
+          <div class="button-pill noclick">
             <span>Current Time: {{ (timeline.totalTime * timeinfo.timelinePercentage).toFixed(2).padStart(6, '0') }}</span>
           </div>
           <div class="button-pill" v-if="!editor.timelinePlaying" @click="play">Play</div>
