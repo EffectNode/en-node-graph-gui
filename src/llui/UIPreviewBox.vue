@@ -38,13 +38,16 @@ export default {
       contentStyle: {}
     }
   },
-
-  mounted () {
-    window.addEventListener('keydown', (evt) => {
-      if (evt.keyCode + '' === '27') {
-        this.full = false
+  watch: {
+    full () {
+      if (this.full) {
+        this.$emit('addOnClose', () => {
+          this.full = false
+        })
       }
-    })
+    }
+  },
+  mounted () {
     let sizer = () => {
       this.sync()
     }

@@ -38,6 +38,10 @@ export default {
   },
 
   mounted () {
+    this.$emit('addOnClose', () => {
+      this.open.coder = false
+    })
+
     let sizer = () => {
       this.sync()
     }

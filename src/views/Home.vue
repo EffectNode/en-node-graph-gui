@@ -10,7 +10,7 @@
     </div>
 
     <UIBtnTools v-if="nodes" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
-    <UIPreviewBox :order="order" :style="{ zIndex: order.indexOf('preview') + 20 }" :open="open" v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
+    <UIPreviewBox @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('preview') + 20 }" :open="open" v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
     </UIPreviewBox>
 
@@ -22,7 +22,7 @@
       <UIControls v-if="open.inspector && timeline" :timeline="water.timeline" @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
     </UIInspector>
 
-    <UICoder :order="order" :style="{ zIndex: order.indexOf('coder') + 20 }" :open="open" v-if="open.coder" @close="open.coder = false; $forceUpdate()">
+    <UICoder @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('coder') + 20 }" :open="open" v-if="open.coder" @close="open.coder = false; $forceUpdate()">
       <UICodeControl @reload="onReload({ timeout: 0 })" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onCloseCoder" :node="node" @nodes="nodes = $event" @show="show = $event"></UICodeControl>
     </UICoder>
 
@@ -46,6 +46,7 @@ export default {
   },
   data () {
     return {
+      onCloseList: [],
       clearTimer: 0,
       order: [
         'coder',
@@ -148,6 +149,15 @@ export default {
     // }
   },
   mounted () {
+    window.addEventListener('keydown', (evt) => {
+      if (evt.keyCode + '' === '27') {
+        let latestOnClose = this.onCloseList.pop()
+        if (latestOnClose) {
+          latestOnClose()
+        }
+      }
+    })
+
     window.getNODES = () => {
       return this.nodes
     }
