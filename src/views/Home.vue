@@ -248,6 +248,7 @@ export default {
           this.doSync()
         }
       }
+
       this.clearTimer = requestAnimationFrame(rAF2)
       this.doSync()
     }, 150)

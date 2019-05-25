@@ -33,7 +33,7 @@
         "bottom": 393,
         "left": 715
       },
-      "src": "<template>\n  <div class=\"full\" ref=\"mounter\">\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timename: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      syncAll: {},\n      cameras: {},\n      scenes: {},\n      \n      sceneID: '',\n      cameraID: '',\n      \n      mouse: { x: 0, y: 0 },\n      renderer: false\n    }\n  },\n  watch: {\n    cameraID () {\n      window.dispatchEvent(new Event('resize'))\n      this.getSizeInfo()\n      this.syncAll()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'camera') {\n        this.cameras[child.node._id] = child.camera\n        window.dispatchEvent(new Event('resize'))\n      }\n      if (child.node.type === 'scene') {\n        this.scenes[child.node._id] = child.scene\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestroy () {\n    this.stop()\n    this.$emit('remove', this)\n  },\n  mounted () {\n    // let sceneIDs = this.nodes.filter(t => t.type === 'scene').map(t => t._id)\n    // let cameraIDs = this.nodes.filter(t => t.type === 'camera').map(t => t._id)\n    // this.cameraID = cameraIDs[0]\n    // this.sceneID = sceneIDs[0]\n    this.init()\n  },\n  methods: {\n    init () {\n      this.setupRenderer()\n      this.getSizeInfo()\n      this.setupSizer()\n      this.syncSize()\n      this.start()\n      this.$emit('ready', this)\n    },\n    setupRenderer () {\n      this.renderer = new THREE.WebGLRenderer({\n        antialias: true,\n        alpha: true,\n        preserveDrawingBuffer: true\n      })\n      this.renderer.domElement.style.marginBottom = '-6px'\n      this.$refs['mounter'].appendChild(this.renderer.domElement)\n    },\n    setupSizer () {\n      this.getSizeInfo()\n      window.addEventListener('resize', this.getSizeInfo, false)\n    },\n    getSizeInfo () {\n      if (!this.$refs['mounter']) {\n        return\n      }\n      var rect = this.$refs['mounter'].getBoundingClientRect()\n      this.rect = rect\n      this.size = {\n        width: rect.width,\n        height: rect.height,\n        aspect: rect.width / rect.height\n      }\n      this.dpi = 2.0 // window.devicePixelRatio || 1.0\n    },\n    syncSize () {\n      let sync = () => {\n        let { composer, cameras, renderer, size, dpi, control } = this\n        let camera = cameras[this.cameraID]\n        if (control) {\n          control.update()\n        }\n        if (composer) {\n          composer.setSize(size.width * dpi, size.height * dpi)\n        }\n        \n        renderer.setPixelRatio(dpi)\n        renderer.setSize(size.width, size.height)\n        if (camera) {\n          camera.aspect = size.width / size.height\n          camera.updateProjectionMatrix()\n        }\n      }\n      \n      sync()\n      this.syncAll = () => {\n        sync()\n      }\n      window.addEventListener('resize', sync, false)\n\n      this.$refs['mounter'].addEventListener('mousemove', (evt) => {\n        this.mouse.x = evt.pageX\n        this.mouse.y = evt.pageY\n      }, false)\n    },\n    stop () {\n      window.cancelAnimationFrame(this.rAFID)\n    },\n    start () {\n      let rAF = () => {\n        this.rAFID = window.requestAnimationFrame(rAF)\n        this.render()\n      }\n      this.rAFID = window.requestAnimationFrame(rAF)\n    },\n    resolveSwitchableArray () {\n      // console.table(this.timetracks)\n      this.timetracks.filter(track => track.progress > 0.001 && track.progress < 1).forEach((track) => {\n        let item = this.nodes.find(n => n.title === track.title)\n        if (item && item._id) {\n          if (item.type === 'camera') {\n            this.cameraID = item._id\n          } else if (item.type === 'scene') {\n            this.sceneID = item._id\n          }\n        }\n      })\n    },\n    // resolveSwitchable () {\n    // for (var kn in this.timename) {\n    //     if (this.timename[kn] > 0.001 && this.timename[kn] < 1) {\n    //       let item = this.nodes.find(n => n.title === kn)\n    //       if (item && item._id) {\n    //         if (item.type === 'camera') {\n    //           this.cameraID = item._id\n    //           // console.log('use cam ->', item.title)\n    //           // if (this.cameraID !== item._id) {\n    //           //   // window.dispatchEvent(new Event('resize'))\n    //           // }\n    //         } else if (item.type === 'scene') {\n    //           this.sceneID = item._id\n    //           // if (this.sceneID !== item._id) {\n    //           //   // console.log('use scene ->', item.title)\n    //           // }\n    //         }\n    //       }\n    //     }\n    //   }\n    // },\n    render () {\n      let { scenes, cameras, renderer, composer } = this\n      // this.resolveSwitchable()\n      this.resolveSwitchableArray()\n      \n      let scene = scenes[this.sceneID]\n      let camera = cameras[this.cameraID]\n\n      if (scene && camera && renderer && composer) {\n        composer.render()\n      } else if (scene && camera && renderer) {\n        renderer.render(scene, camera)\n      }\n    }\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "src": "<template>\n  <div class=\"full\" ref=\"mounter\">\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timename: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      screen: false,\n      syncAll: {},\n      cameras: {},\n      scenes: {},\n      \n      sceneID: '',\n      cameraID: '',\n      \n      mouse: { x: 0, y: 0 },\n      renderer: false\n    }\n  },\n  watch: {\n    cameraID () {\n      window.dispatchEvent(new Event('resize'))\n      this.getSizeInfo()\n      this.syncAll()\n      this.syncScreen()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'camera') {\n        this.cameras[child.node._id] = child.camera\n        window.dispatchEvent(new Event('resize'))\n      }\n      if (child.node.type === 'scene') {\n        this.scenes[child.node._id] = child.scene\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestroy () {\n    this.stop()\n    this.$emit('remove', this)\n  },\n  mounted () {\n    // let sceneIDs = this.nodes.filter(t => t.type === 'scene').map(t => t._id)\n    // let cameraIDs = this.nodes.filter(t => t.type === 'camera').map(t => t._id)\n    // this.cameraID = cameraIDs[0]\n    // this.sceneID = sceneIDs[0]\n    this.init()\n  },\n  methods: {\n    init () {\n      this.setupRenderer()\n      this.getSizeInfo()\n      this.setupSizer()\n      this.syncSize()\n      this.start()\n      this.$emit('ready', this)\n    },\n    syncScreen () {\n      let camera = this.cameras[this.cameraID]\n      if (camera) {\n        let depth = 0\n        var aspect = camera.aspect\n        var dist = camera.position.z - (depth) // item\n        var vFOV = THREE.Math.degToRad(camera.fov) // convert vertical fov to radians\n        var screenHeight = 2 * Math.tan(vFOV / 2) * dist // visible height\n        var screenWidth = screenHeight * aspect // visible width\n        this.screen = {\n          aspect,\n          dist,\n          vFOV,\n          screenWidth,\n          screenHeight\n        }\n      }\n    },\n    setupRenderer () {\n      this.renderer = new THREE.WebGLRenderer({\n        antialias: true,\n        alpha: true,\n        preserveDrawingBuffer: true\n      })\n      this.renderer.domElement.style.marginBottom = '-6px'\n      this.$refs['mounter'].appendChild(this.renderer.domElement)\n    },\n    setupSizer () {\n      this.getSizeInfo()\n      window.addEventListener('resize', this.getSizeInfo, false)\n    },\n    getSizeInfo () {\n      if (!this.$refs['mounter']) {\n        return\n      }\n      var rect = this.$refs['mounter'].getBoundingClientRect()\n      this.rect = rect\n      this.size = {\n        width: rect.width,\n        height: rect.height,\n        aspect: rect.width / rect.height\n      }\n      this.dpi = 2.0 // window.devicePixelRatio || 1.0\n    },\n    syncSize () {\n      let sync = () => {\n        let { composer, cameras, renderer, size, dpi, control } = this\n        let camera = cameras[this.cameraID]\n        if (control) {\n          control.update()\n        }\n        if (composer) {\n          composer.setSize(size.width * dpi, size.height * dpi)\n        }\n        \n        renderer.setPixelRatio(dpi)\n        renderer.setSize(size.width, size.height)\n        if (camera) {\n          camera.aspect = size.width / size.height\n          camera.updateProjectionMatrix()\n        }\n        this.syncScreen()\n      }\n      \n      sync()\n      this.syncAll = () => {\n        sync()\n      }\n      window.addEventListener('resize', sync, false)\n\n      this.$refs['mounter'].addEventListener('mousemove', (evt) => {\n        this.mouse.x = evt.pageX\n        this.mouse.y = evt.pageY\n      }, false)\n    },\n    stop () {\n      window.cancelAnimationFrame(this.rAFID)\n    },\n    start () {\n      let rAF = () => {\n        this.rAFID = window.requestAnimationFrame(rAF)\n        this.render()\n      }\n      this.rAFID = window.requestAnimationFrame(rAF)\n    },\n    resolveSwitchableArray () {\n      // console.table(this.timetracks)\n      this.timetracks.filter(track => track.progress > 0.001 && track.progress < 1).forEach((track) => {\n        let item = this.nodes.find(n => n.title === track.title)\n        if (item && item._id) {\n          if (item.type === 'camera') {\n            this.cameraID = item._id\n          } else if (item.type === 'scene') {\n            this.sceneID = item._id\n          }\n        }\n      })\n    },\n    // resolveSwitchable () {\n    // for (var kn in this.timename) {\n    //     if (this.timename[kn] > 0.001 && this.timename[kn] < 1) {\n    //       let item = this.nodes.find(n => n.title === kn)\n    //       if (item && item._id) {\n    //         if (item.type === 'camera') {\n    //           this.cameraID = item._id\n    //           // console.log('use cam ->', item.title)\n    //           // if (this.cameraID !== item._id) {\n    //           //   // window.dispatchEvent(new Event('resize'))\n    //           // }\n    //         } else if (item.type === 'scene') {\n    //           this.sceneID = item._id\n    //           // if (this.sceneID !== item._id) {\n    //           //   // console.log('use scene ->', item.title)\n    //           // }\n    //         }\n    //       }\n    //     }\n    //   }\n    // },\n    render () {\n      let { scenes, cameras, renderer, composer } = this\n      // this.resolveSwitchable()\n      this.resolveSwitchableArray()\n      \n      let scene = scenes[this.sceneID]\n      let camera = cameras[this.cameraID]\n\n      if (scene && camera && renderer && composer) {\n        composer.render()\n      } else if (scene && camera && renderer) {\n        renderer.render(scene, camera)\n      }\n    }\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
       "sceneID": "homepage",
       "cameraID": "_455500"
@@ -86,14 +86,14 @@
       "hasFound": false,
       "isActive": false,
       "rect": {
-        "x": 440,
-        "y": 80,
+        "x": 944.6986694335938,
+        "y": 19.42424774169922,
         "width": 60,
         "height": 60,
-        "top": 80,
-        "right": 500,
-        "bottom": 140,
-        "left": 440
+        "top": 19.42424774169922,
+        "right": 1004.6986694335938,
+        "bottom": 79.42424774169922,
+        "left": 944.6986694335938
       },
       "trashed": false,
       "type": "camera",
@@ -150,14 +150,14 @@
       "isActive": false,
       "hasFound": false,
       "rect": {
-        "x": 535,
-        "y": 278,
+        "x": 376,
+        "y": 315,
         "width": 60,
         "height": 60,
-        "top": 278,
-        "right": 595,
-        "bottom": 338,
-        "left": 535
+        "top": 315,
+        "right": 436,
+        "bottom": 375,
+        "left": 376
       }
     },
     {
@@ -959,7 +959,7 @@
         "x": 800,
         "y": 630
       },
-      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      material: false\n    }\n  },\n  methods: {\n    init () {\n      let uniforms = {\n        ttD: {\n          value: new THREE.TextureLoader().load('https://res.cloudinary.com/htdjnmcsz/image/upload/v1557959138/xnxf7docmrpfrbmuwevi.png')\n        },\n        blur: {\n          value: new THREE.Vector2(0, 0)\n        },\n        shift: {\n          value: new THREE.Vector3(0, 0, 0)\n        }\n      };\n      \n      this.$emit('exec', () => {\n        uniforms.blur.value.x *= 0.5\n        uniforms.blur.value.y *= 0.5\n        \n        // // example code\n        // let track = this.timetracks.find(tr => tr.title === 'Shake Scene' && tr.progress > 0.001 && tr.progress < 1)\n        // if (track) {\n        //   let time = track.progress * Math.PI * 2.0 \n        //   uniforms.blur.value.x += Math.sin(time) * Math.sin(time) * 30.0\n        //   uniforms.blur.value.y += Math.cos(time) * Math.sin(time) * 30.0\n          \n        //   uniforms.shift.value.x = (Math.sin(time * 0.5) * Math.sin(time * 0.5) - 0.5) * 300.0\n        //   uniforms.shift.value.y = Math.cos(time * 0.5) * Math.sin(time * 0.5) * 300.0\n        // }\n      })\n      let rect = this.$parent.$parent.$el.getBoundingClientRect()\n      \n      window.addEventListener('resize', () => {\n        rect = this.$parent.$parent.$el.getBoundingClientRect()\n      })\n        \n      this.$parent.$parent.$el.addEventListener('mousemove', (ev) => {\n        let aspect = rect.width / rect.height\n        if (aspect > 1) {\n          uniforms.blur.value.x += ev.movementX * -0.5 * aspect\n          uniforms.blur.value.y += -ev.movementY * -0.5\n        } else {\n          uniforms.blur.value.x += ev.movementX * -0.5 / aspect\n          uniforms.blur.value.y += -ev.movementY * -0.5\n        }\n        \n        // uniforms.blur.value.x = (ev.pageX - window.innerWidth * 0.5) / window.innerWidth * 30\n        // uniforms.blur.value.y = -(ev.pageY - window.innerHeight * 0.5) / window.innerHeight * 30\n\n        uniforms.shift.value.x = (ev.pageX - window.innerWidth * 0.5) / window.innerWidth * 620\n        uniforms.shift.value.y = -(ev.pageY - window.innerHeight * 0.5) / window.innerHeight * 620\n      })\n      \n      this.$parent.$parent.$el.addEventListener('touchmove', (ev) => {\n        let aspect = rect.width / rect.height\n        if (aspect > 1) {\n          uniforms.blur.value.x += ev.touches[0].movementX * -0.5 * aspect\n          uniforms.blur.value.y += -ev.touches[0].movementY * -0.5\n        } else {\n          uniforms.blur.value.x += ev.touches[0].movementX * -0.5 / aspect\n          uniforms.blur.value.y += -ev.touches[0].movementY * -0.5\n        }\n        \n        // uniforms.blur.value.x = 30.0 * ev.touches[0].pageX\n        // uniforms.blur.value.y = 30.0 * ev.touches[0].pageY\n\n        uniforms.shift.value.x = (ev.touches[0].pageX - window.innerWidth * 0.5) / window.innerWidth * 620\n        uniforms.shift.value.y = -(ev.touches[0].pageY - window.innerHeight * 0.5) / window.innerHeight * 620\n      })\n      \n      \n      let mat = new THREE.ShaderMaterial({\n        transparent: true,\n        uniforms,\n        vertexShader: `\n          #include <common>\n          varying vec2 vUv;\n          uniform vec3 shift;\n          \n          void main()\t{\n            // smaller\n            vUv = uv;\n          \n            gl_Position = projectionMatrix * modelViewMatrix * vec4( position * 2.0 + shift, 1.0 );\n          }\n        `,\n        fragmentShader: `\n          // https://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/13.glsl\n          vec4 motionBlur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {\n            vec4 color = vec4(0.0);\n            vec2 off1 = vec2(1.411764705882353) * direction;\n            vec2 off2 = vec2(3.2941176470588234) * direction;\n            vec2 off3 = vec2(5.176470588235294) * direction;\n            \n            // smaller\n            vec2 samllerUV = (uv * 2.0 - 1.0 + 0.5);\n            \n            color += texture2D(image, samllerUV) * 0.1964825501511404;\n            color += texture2D(image, samllerUV + (off1 / resolution)) * 0.2969069646728344;\n            color += texture2D(image, samllerUV - (off1 / resolution)) * 0.2969069646728344;\n            color += texture2D(image, samllerUV + (off2 / resolution)) * 0.09447039785044732;\n            color += texture2D(image, samllerUV - (off2 / resolution)) * 0.09447039785044732;\n            color += texture2D(image, samllerUV + (off3 / resolution)) * 0.010381362401148057;\n            color += texture2D(image, samllerUV - (off3 / resolution)) * 0.010381362401148057;\n            return color;\n          }\n          \n          uniform sampler2D ttD;\n          uniform vec2 blur;\n          varying vec2 vUv;\n          void main (void) {\n            // vec4 cColor = texture2D(ttD, vUv);\n            vec4 cColor = vec4(0.0);\n            \n            cColor = motionBlur(ttD, vUv, vec2(1024.0, 1024.0), vec2(blur.xy));\n            gl_FragColor = vec4(cColor.rgba);\n          }\n        `\n      });\n      this.material = mat\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      // if (child.node.type === 'map') {\n      //   this.material.map = child.map\n      // }\n      // if (child.node.type === 'geometry') {\n      //   this.material.geometry = child.geometry\n      // }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      material: false\n    }\n  },\n  methods: {\n    init () {\n      let uniforms = {\n        ttD: {\n          value: new THREE.TextureLoader().load('https://res.cloudinary.com/htdjnmcsz/image/upload/v1557959138/xnxf7docmrpfrbmuwevi.png')\n        },\n        blur: {\n          value: new THREE.Vector2(0, 0)\n        },\n        shift: {\n          value: new THREE.Vector3(0, 0, 0)\n        }\n      };\n      \n      this.$emit('exec', () => {\n        uniforms.blur.value.x *= 0.5\n        uniforms.blur.value.y *= 0.5\n        \n        // // example code\n        // let track = this.timetracks.find(tr => tr.title === 'Shake Scene' && tr.progress > 0.001 && tr.progress < 1)\n        // if (track) {\n        //   let time = track.progress * Math.PI * 2.0 \n        //   uniforms.blur.value.x += Math.sin(time) * Math.sin(time) * 30.0\n        //   uniforms.blur.value.y += Math.cos(time) * Math.sin(time) * 30.0\n          \n        //   uniforms.shift.value.x = (Math.sin(time * 0.5) * Math.sin(time * 0.5) - 0.5) * 300.0\n        //   uniforms.shift.value.y = Math.cos(time * 0.5) * Math.sin(time * 0.5) * 300.0\n        // }\n      })\n      let rect = this.$parent.$parent.$el.getBoundingClientRect()\n      \n      window.addEventListener('resize', () => {\n        rect = this.$parent.$parent.$el.getBoundingClientRect()\n      })\n      \n      var calcInfo = ({ camera, depth }) => {\n        var aspect = camera.aspect\n        var dist = camera.position.z - (depth) // item\n        var vFOV = THREE.Math.degToRad(camera.fov) // convert vertical fov to radians\n        var screenHeight = 2 * Math.tan(vFOV / 2) * dist // visible height\n        var screenWidth = screenHeight * aspect // visible width\n        var ans = {\n          aspect,\n          dist,\n          vFOV,\n          screenWidth,\n          screenHeight\n        }\n        return ans\n      }\n       \n      this.$parent.$parent.$el.addEventListener('mousemove', (ev) => {\n        let rootNode = this.nodes.find(n => n.type === 'root')\n        if (rootNode) {\n          let rootCompo = this.components[rootNode._id]\n          if (rootCompo.screen) {\n            let aspect = rect.width / rect.height\n            uniforms.blur.value.x += ev.movementX * -0.5\n            uniforms.blur.value.y += -ev.movementY * -0.5\n            \n            uniforms.shift.value.x = (ev.pageX - window.innerWidth * 0.5) / window.innerWidth * rootCompo.screen.screenWidth\n            uniforms.shift.value.y = -(ev.pageY - window.innerHeight * 0.5) / window.innerHeight * rootCompo.screen.screenHeight\n          }\n        }\n      })\n      \n      let mat = new THREE.ShaderMaterial({\n        transparent: true,\n        uniforms,\n        vertexShader: `\n          #include <common>\n          varying vec2 vUv;\n          uniform vec3 shift;\n          \n          void main()\t{\n            // smaller\n            vUv = uv;\n          \n            gl_Position = projectionMatrix * modelViewMatrix * vec4( position * 2.0 + shift, 1.0 );\n          }\n        `,\n        fragmentShader: `\n          // https://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/13.glsl\n          vec4 motionBlur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {\n            vec4 color = vec4(0.0);\n            vec2 off1 = vec2(1.411764705882353) * direction;\n            vec2 off2 = vec2(3.2941176470588234) * direction;\n            vec2 off3 = vec2(5.176470588235294) * direction;\n            \n            // smaller\n            vec2 samllerUV = (uv * 2.0 - 1.0 + 0.5);\n            \n            color += texture2D(image, samllerUV) * 0.1964825501511404;\n            color += texture2D(image, samllerUV + (off1 / resolution)) * 0.2969069646728344 * 1.5;\n            color += texture2D(image, samllerUV - (off1 / resolution)) * 0.2969069646728344 * 0.5;\n            color += texture2D(image, samllerUV + (off2 / resolution)) * 0.09447039785044732 * 1.5;\n            color += texture2D(image, samllerUV - (off2 / resolution)) * 0.09447039785044732 * 0.5;\n            color += texture2D(image, samllerUV + (off3 / resolution)) * 0.010381362401148057 * 1.5;\n            color += texture2D(image, samllerUV - (off3 / resolution)) * 0.010381362401148057 * 0.5;\n            return color;\n          }\n          \n          uniform sampler2D ttD;\n          uniform vec2 blur;\n          varying vec2 vUv;\n          void main (void) {\n            // vec4 cColor = texture2D(ttD, vUv);\n            vec4 cColor = vec4(0.0);\n            \n            cColor = motionBlur(ttD, vUv, vec2(1024.0, 1024.0), vec2(blur.xy));\n            gl_FragColor = vec4(cColor.rgba);\n          }\n        `\n      });\n      this.material = mat\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      // if (child.node.type === 'map') {\n      //   this.material.map = child.map\n      // }\n      // if (child.node.type === 'geometry') {\n      //   this.material.geometry = child.geometry\n      // }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
       "type": "material",
       "size": {
@@ -971,14 +971,14 @@
       "isActive": false,
       "hasFound": false,
       "rect": {
-        "x": 741.02587890625,
-        "y": 188.52890014648438,
+        "x": 791,
+        "y": 341,
         "width": 60,
         "height": 60,
-        "top": 188.52890014648438,
-        "right": 801.02587890625,
-        "bottom": 248.52890014648438,
-        "left": 741.02587890625
+        "top": 341,
+        "right": 851,
+        "bottom": 401,
+        "left": 791
       }
     },
     {
@@ -1001,14 +1001,14 @@
       "isActive": false,
       "hasFound": false,
       "rect": {
-        "x": 643.3828125,
-        "y": 427.8563537597656,
+        "x": 715,
+        "y": 334,
         "width": 60,
         "height": 60,
-        "top": 427.8563537597656,
-        "right": 703.3828125,
-        "bottom": 487.8563537597656,
-        "left": 643.3828125
+        "top": 334,
+        "right": 775,
+        "bottom": 394,
+        "left": 715
       }
     },
     {
@@ -1017,8 +1017,8 @@
       "to": "_993197",
       "trashed": true,
       "pos": {
-        "x": 980.00001,
-        "y": 740.00001
+        "x": 980.0000499999999,
+        "y": 740.0000499999999
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -1048,8 +1048,8 @@
       "to": "_993197",
       "trashed": true,
       "pos": {
-        "x": 980,
-        "y": 740
+        "x": 980.0000399999999,
+        "y": 740.0000399999999
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -1071,6 +1071,68 @@
         "right": 775,
         "bottom": 393,
         "left": 715
+      }
+    },
+    {
+      "_id": "_85045",
+      "title": "Object 3D",
+      "to": "root",
+      "trashed": true,
+      "pos": {
+        "x": 260.00001,
+        "y": 685.00001
+      },
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "library": [],
+      "type": "object3D",
+      "size": {
+        "width": 60,
+        "height": 60
+      },
+      "isOverlapping": false,
+      "isOverlappingWith": false,
+      "isActive": false,
+      "hasFound": false,
+      "rect": {
+        "x": 606,
+        "y": 326,
+        "width": 60,
+        "height": 60,
+        "top": 326,
+        "right": 666,
+        "bottom": 386,
+        "left": 606
+      }
+    },
+    {
+      "_id": "_330149",
+      "title": "Object 3D",
+      "to": "root",
+      "trashed": true,
+      "pos": {
+        "x": 260,
+        "y": 685
+      },
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "library": [],
+      "type": "object3D",
+      "size": {
+        "width": 60,
+        "height": 60
+      },
+      "isOverlapping": false,
+      "isOverlappingWith": false,
+      "isActive": false,
+      "hasFound": false,
+      "rect": {
+        "x": 893,
+        "y": 440,
+        "width": 60,
+        "height": 60,
+        "top": 440,
+        "right": 953,
+        "bottom": 500,
+        "left": 893
       }
     }
   ],
@@ -1108,7 +1170,7 @@
       {
         "_id": "_32591376593",
         "start": 0.023904382470113957,
-        "end": 11.155378486055804,
+        "end": 11.394422310757001,
         "title": "Shake Scene",
         "trashed": false
       },
