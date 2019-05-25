@@ -121,7 +121,7 @@ export default {
   /* width: calc(60px * 2); */
   display: flex;
   border-radius: 50px;
-  background-color: rgba(33, 33, 33, 0.459);
+  background-color: rgba(33, 33, 33, 0.637);
   box-shadow: 0px 0px 10px 0px #212121;
 
   user-select: none;
