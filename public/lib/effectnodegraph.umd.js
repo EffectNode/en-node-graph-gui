@@ -22908,12 +22908,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5ef36a44-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=30ab1da0&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7d32804a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=e5e955a6&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"time":_vm.water.timeinfo.timelinePercentage * _vm.water.timeinfo.totalTime,"progress":_vm.water.timeinfo.timelinePercentage,"timename":_vm.timename,"timetracks":_vm.timetracks,"execStack":_vm.execStack,"compoMap":_vm.compoMap,"nodes":_vm.activeNodes,"node":node},on:{"all-done":_vm.onAllDone}})}),1):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=30ab1da0&scoped=true&
+// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=e5e955a6&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js
 var get_own_property_descriptor = __webpack_require__("268f");
@@ -22971,7 +22971,7 @@ function _objectSpread(target) {
 
   return target;
 }
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"5ef36a44-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=46629316&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7d32804a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/GraphNode.vue?vue&type=template&id=46629316&
 var GraphNodevue_type_template_id_46629316_render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.compo && _vm.node)?_c(_vm.compo,{ref:"me",tag:"Component",attrs:{"time":_vm.time,"progress":_vm.progress,"timetracks":_vm.timetracks,"timename":_vm.timename,"parentNode":_vm.parentNode,"parentComponent":_vm.compoMap[_vm.node.to],"isRootNode":!!!_vm.node.to,"components":_vm.compoMap,"nodes":_vm.nodes,"node":_vm.node},on:{"exec":_vm.onExec,"ready":_vm.onReady,"remove":_vm.onRemove}}):_vm._e()}
 var GraphNodevue_type_template_id_46629316_staticRenderFns = []
 
@@ -72241,9 +72241,21 @@ var getNodeTemplate = function getNodeTemplate() {
   mounted: function mounted() {
     var _this = this;
 
-    // if (this.water) {
+    var top = window.top;
+
+    if (top) {
+      window.addEventListener('keydown', function (evt) {
+        if (evt.keyCode === 27) {
+          top.postMessage({
+            type: 'escape'
+          }, window.location.origin);
+        }
+      });
+    } // if (this.water) {
     //   this.links = Node.getLinks({ nodes: this.water.nodes })
     // }
+
+
     window.addEventListener('message', function (evt) {
       if (window.top && window.top.location.origin === window.location.origin) {
         var msg = evt.data;
@@ -72372,7 +72384,7 @@ var SandBox_component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "30ab1da0",
+  "e5e955a6",
   null
   
 )

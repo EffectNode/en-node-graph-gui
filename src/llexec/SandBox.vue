@@ -40,6 +40,15 @@ export default {
     }
   },
   mounted () {
+    let top = window.top
+    if (top) {
+      window.addEventListener('keydown', (evt) => {
+        if (evt.keyCode === 27) {
+          top.postMessage({ type: 'escape' }, window.location.origin)
+        }
+      })
+    }
+
     // if (this.water) {
     //   this.links = Node.getLinks({ nodes: this.water.nodes })
     // }

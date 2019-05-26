@@ -1,20 +1,19 @@
 <template>
-<div class="box" :style="boxStyle" :class="{ full: open.fullpreview }" @click="order.splice(order.indexOf('preview'), 1); order.push('preview');">
-  <div class="preview-box-title" ref="title" :style="titleStyle">
+<div class="box" :style="boxStyle" :class="{ mini: order.slice().reverse()[0] === 'timeline' }" @click="order.splice(order.indexOf('inspector'), 1); order.push('inspector'); order.splice(order.indexOf('coder'), 1); order.push('coder'); ">
+  <div class="ui-media-title" ref="title" :style="titleStyle">
     <div class="title-text">
       <p>
-        Preview Box
+        Media Box
       </p>
     </div>
     <div class="title-cross">
-      <img src="../icons/refresh.svg" @click="run()" alt="">
+      <img src="../icons/cloud-up.svg" @click="up()" alt="">
     </div>
-    <div class="title-cross-left">
-      <img v-if="open.fullpreview" src="../icons/fullscreen-restore.svg" @click="open.fullpreview = !open.fullpreview" alt="">
-      <img v-if="!open.fullpreview" src="../icons/fullscreen-gofull.svg" @click="open.fullpreview = !open.fullpreview" alt="">
+    <div class="title-cross2" @click="$emit('close')" @touchend="$emit('close')">
+      <img src="../icons/cross.svg" alt="">
     </div>
   </div>
-  <div class="preview-box-content" :style="contentStyle">
+  <div class="ui-media-content" :style="contentStyle">
     <slot ref="slot"></slot>
   </div>
 </div>
@@ -29,7 +28,7 @@ export default {
   data () {
     return {
       anchor: {
-        x: 0 + 0 + 0,
+        x: 320,
         y: 0 + 0
       },
       boxStyle: {},
@@ -37,19 +36,12 @@ export default {
       contentStyle: {}
     }
   },
-  watch: {
-    open: {
-      deep: true,
-      handler () {
-        if (this.open.fullpreview) {
-          this.$emit('addOnClose', () => {
-            this.open.fullpreview = false
-          })
-        }
-      }
-    }
-  },
+
   mounted () {
+    this.$emit('addOnClose', () => {
+      this.open.coder = false
+    })
+
     let sizer = () => {
       this.sync()
     }
@@ -63,8 +55,8 @@ export default {
     window.addEventListener('resize', sizer)
   },
   methods: {
-    run () {
-      this.$emit('run')
+    up () {
+      this.$emit('up')
     },
     handle () {
       let h = {
@@ -137,6 +129,7 @@ export default {
         }
       } else {
         this.boxStyle = {
+          display: 'none',
           position: 'absolute',
           bottom: `0px`,
           left: `0px`,
@@ -157,36 +150,26 @@ export default {
 
 <style scoped>
 .box{
-  width: calc(320px);
-  height: calc(320px * 1.0 + 45px);
+  width: calc(100% - 320px);
+  min-width: calc(500px);
+  height: calc(100% - 250px);
 
-  /* border: #7a7a7a solid 1px; */
+  /* border-radius: calc(45px / 2) calc(45px / 2) calc(45px / 2) calc(45px / 2); */
+  /* border: #dadada solid 1px; */
   box-sizing: border-box;
+  background-color: #363636;
   /* box-shadow: 0px 5px 30px 0px #c7c7c7; */
-  box-sizing: border-box;
-  border-left: #474747 solid 1px;
   z-index: 10;
-  background: white;
 }
-.box.full{
-  width: calc(100%);
-  height: calc(100%);
-  border: none;
+.box.mini{
+  /* height: calc(400px + 45px); */
 }
-
-/* @media screen and (min-width: 1441px) {
-  .box{
-    width: 400px;
-    height: calc(400px * 1.0 + 45px);
-  }
-} */
-
-.preview-box-title{
-  /* border-radius: calc(45px / 2) calc(45px / 2) 0px 0px; */
+.ui-media-title{
+  /* border-radius: calc(45px / 2) calc(45px / 2) calc(0px / 2) calc(0px / 2); */
   position: relative;
   height: 45px;
-  color: white;
   background-color: #474747;
+  color: white;
 }
 .title-text{
   position: absolute;
@@ -194,7 +177,7 @@ export default {
   left: 0px;
   height: 100%;
   width: 100%;
-  /* cursor: move; */
+  cursor: move;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -215,7 +198,8 @@ export default {
   justify-content: center;
   align-items: center;
 }
-.title-cross-left{
+
+.title-cross2{
   position: absolute;
   top: 0px;
   right: 0px;
@@ -227,7 +211,6 @@ export default {
   align-items: center;
 }
 
-.title-cross-left img,
 .title-cross img{
   cursor: pointer;
   /* border: black solid 5px; */
@@ -236,7 +219,15 @@ export default {
   width: 24px;
   height: 24px;
 }
-.preview-box-content{
+.title-cross2 img{
+  cursor: pointer;
+  /* border: black solid 5px; */
+  /* border-radius: 959px; */
+  /* padding: 7px; */
+  width: 24px;
+  height: 24px;
+}
+.ui-media-content{
   height: calc(100% - 45px);
   overflow: hidden;
 }

@@ -5,7 +5,7 @@
       <router-link to="/about">About</router-link> |
     </div> -->
     <div class="nodetree">
-      <NodeTree @open="open" v-if="nodes" :show="show" @dropped="onReload({ timeout: 600 })" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
+      <NodeTree @open="open" v-if="nodes && !open.fullpreview" :show="show" @dropped="onReload({ timeout: 600 })" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
       </NodeTree>
     </div>
 
@@ -14,7 +14,7 @@
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
     </UIPreviewBox>
 
-    <UITimeline :order="order" :style="{ zIndex: order.indexOf('timeline') + 20 }" :open="open" v-if="water" @close="open.timeline = false; $forceUpdate()">
+    <UITimeline :order="order" :style="{ zIndex: order.indexOf('timeline') + 20 }" :open="open" v-if="water && !open.fullpreview" @close="open.timeline = false; $forceUpdate()">
       <UITimelineHolder :timeline="water.timeline" :doSync="doSync" :editor="water.timeinfo" :timeinfo="water.timeinfo"></UITimelineHolder>
     </UITimeline>
 
@@ -25,6 +25,10 @@
     <UICoder @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('coder') + 20 }" :open="open" v-if="open.coder" @close="open.coder = false; $forceUpdate()">
       <UICodeControl @reload="onReload({ timeout: 0 })" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onCloseCoder" :node="node" @nodes="nodes = $event" @show="show = $event"></UICodeControl>
     </UICoder>
+
+    <UIMediaBox @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('mediabox') + 20 }" :open="open" v-if="open.mediabox" @close="open.mediabox = false; $forceUpdate()">
+
+    </UIMediaBox>
 
   </div>
 </template>
@@ -38,6 +42,7 @@ export default {
     UIPreviewBox: () => import(/* webpackChunkName: "uibox" */'../llui/UIPreviewBox.vue'),
     UICodeControl: () => import(/* webpackChunkName: "engine" */'../llui/UICodeControl.vue'),
     UIControls: () => import(/* webpackChunkName: "engine" */'../llui/UIControls.vue'),
+    UIMediaBox: () => import(/* webpackChunkName: "uibox" */'../llui/UIMediaBox.vue'),
     UIInspector: () => import(/* webpackChunkName: "uibox" */'../llui/UIInspector.vue'),
     UITimeline: () => import(/* webpackChunkName: "uibox" */'../llui/UITimeline.vue'),
     UITimelineHolder: () => import(/* webpackChunkName: "engine" */'../lltimeline/timeline-holder.vue'),
@@ -56,6 +61,8 @@ export default {
       ],
       show: 'normal',
       open: {
+        mediabox: false,
+        fullpreview: false,
         coder: false,
         timeline: true,
         inspector: false
@@ -157,6 +164,18 @@ export default {
         }
       }
     })
+    window.addEventListener('message', (evt) => {
+      if (evt.origin === window.location.origin) {
+        let signal = evt.data
+        let type = signal.type
+        if (type === 'escape') {
+          let latestOnClose = this.onCloseList.pop()
+          if (latestOnClose) {
+            latestOnClose()
+          }
+        }
+      }
+    })
 
     window.getNODES = () => {
       return this.nodes
@@ -195,7 +214,7 @@ export default {
     console.log(`copy(await window.unzip({ gzip: 'gzipstring' }))`)
 
     setTimeout(async () => {
-      let water = await import('../llui/water/water-03.json')
+      let water = await import(/* webpackChunkName: "engine" */'../llui/water/water-03.json')
       this.water = water.default
       // always reset timelinfo
       this.water.timeinfo = {
