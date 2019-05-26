@@ -22717,7 +22717,6 @@ var web_dom_iterable = __webpack_require__("ac6a");
 
 // EXTERNAL MODULE: ./node_modules/lodash/lodash.js
 var lodash = __webpack_require__("2ef0");
-var lodash_default = /*#__PURE__*/__webpack_require__.n(lodash);
 
 // CONCATENATED MODULE: ./src/llsvg/node.js
 
@@ -22743,7 +22742,7 @@ var node_getAllChildren = function getAllChildren(_ref) {
   };
 
   mover(node);
-  return lodash_default.a.uniqBy(bucket, '_id');
+  return Object(lodash["uniqBy"])(bucket, '_id');
 };
 var getID = function getID() {
   return "_".concat(Number(Math.random() * 1000000).toFixed(0));
@@ -22759,7 +22758,7 @@ var node_get1LevelKids = function get1LevelKids(_ref2) {
       return n._id === c.from;
     });
   });
-  return lodash_default.a.uniqBy(ans, '_id');
+  return Object(lodash["uniqBy"])(ans, '_id');
 };
 var getLinks = function getLinks(_ref3) {
   var nodes = _ref3.nodes;

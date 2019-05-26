@@ -1,4 +1,4 @@
-import _ from 'lodash'
+import { uniqBy } from 'lodash'
 
 export const getAllChildren = ({ node, nodes, links }) => {
   let bucket = []
@@ -12,7 +12,7 @@ export const getAllChildren = ({ node, nodes, links }) => {
   }
   mover(node)
 
-  return _.uniqBy(bucket, '_id')
+  return uniqBy(bucket, '_id')
 }
 
 export const getID = () => {
@@ -23,7 +23,7 @@ export const get1LevelKids = ({ node, nodes, links }) => {
     return nodes.find(n => n._id === c.from)
   })
 
-  return _.uniqBy(ans, '_id')
+  return uniqBy(ans, '_id')
 }
 
 export const getLinks = ({ nodes }) => {

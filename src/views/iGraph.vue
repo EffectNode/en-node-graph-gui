@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import(/* webpackChunkName: "igraph-coder" */'../llui/UICoder.vue')
+import(/* webpackChunkName: "igraph-coder" */'../llui/UICodeControl.vue')
 
 export default {
   props: {
@@ -42,15 +42,17 @@ export default {
   },
   name: 'igraph',
   components: {
+    // Brace
+    UICodeControl: () => import(/* webpackChunkName: "igraph-coder" */'../llui/UICodeControl.vue'),
+
     // EXEC
     EXEC: () => import(/* webpackChunkName: "igraph-core" */'../llexec/EXEC.vue'),
     NodeTree: () => import(/* webpackChunkName: "igraph-core" */'../llsvg/NodeTree.vue'),
-    UICodeControl: () => import(/* webpackChunkName: "igraph-core" */'../llui/UICodeControl.vue'),
     UIControls: () => import(/* webpackChunkName: "igraph-core" */'../llui/UIControls.vue'),
     UITimelineHolder: () => import(/* webpackChunkName: "igraph-core" */'../lltimeline/timeline-holder.vue'),
-    UICoder: () => import(/* webpackChunkName: "igraph-coder" */'../llui/UICoder.vue'),
 
     // UIBOX
+    UICoder: () => import(/* webpackChunkName: "igraph" */'../llui/UICoder.vue'),
     UIPreviewBox: () => import(/* webpackChunkName: "igraph" */'../llui/UIPreviewBox.vue'),
     UIMediaBox: () => import(/* webpackChunkName: "igraph" */'../llui/UIMediaBox.vue'),
     UIInspector: () => import(/* webpackChunkName: "igraph" */'../llui/UIInspector.vue'),
