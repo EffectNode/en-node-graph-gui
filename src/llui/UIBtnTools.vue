@@ -12,6 +12,9 @@
     <div class="uit-icon" @click="zoomOut()">
       <img src="../icons/magnify-minus.svg" title="map view" alt="map view">
     </div>
+    <div class="uit-icon" @click="toggleMedia()">
+      <img src="../icons/folder.svg" title="media view" alt="media view">
+    </div>
     <!-- <div class="uit-icon" @click="toggleTimeline()">
       <img src="../icons/timer.svg" title="map view" alt="map view">
     </div> -->
@@ -28,6 +31,7 @@
 
 export default {
   props: {
+    open: {},
     show: {},
     node: {},
     nodes: {}
@@ -37,6 +41,9 @@ export default {
   mounted () {
   },
   methods: {
+    toggleMedia () {
+      this.open.mediabox = !this.open.mediabox
+    },
     toggleTimeline () {
       this.$parent.open.timeline = !this.$parent.open.timeline
       this.$forceUpdate()

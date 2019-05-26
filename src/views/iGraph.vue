@@ -9,7 +9,7 @@
       </NodeTree>
     </div>
 
-    <UIBtnTools v-if="nodes" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
+    <UIBtnTools v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
     <UIPreviewBox @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('preview') + 20 }" :open="open" v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
     </UIPreviewBox>
@@ -35,19 +35,25 @@
 
 <script>
 export default {
+  props: {
+    initWater: {}
+  },
   name: 'home',
   components: {
+    // EXEC
     EXEC: () => import(/* webpackChunkName: "engine" */'../llexec/EXEC.vue'),
     NodeTree: () => import(/* webpackChunkName: "engine" */'../llsvg/NodeTree.vue'),
-    UIPreviewBox: () => import(/* webpackChunkName: "uibox" */'../llui/UIPreviewBox.vue'),
     UICodeControl: () => import(/* webpackChunkName: "engine" */'../llui/UICodeControl.vue'),
     UIControls: () => import(/* webpackChunkName: "engine" */'../llui/UIControls.vue'),
-    UIMediaBox: () => import(/* webpackChunkName: "uibox" */'../llui/UIMediaBox.vue'),
-    UIInspector: () => import(/* webpackChunkName: "uibox" */'../llui/UIInspector.vue'),
-    UITimeline: () => import(/* webpackChunkName: "uibox" */'../llui/UITimeline.vue'),
     UITimelineHolder: () => import(/* webpackChunkName: "engine" */'../lltimeline/timeline-holder.vue'),
     UICoder: () => import(/* webpackChunkName: "engine" */'../llui/UICoder.vue'),
-    UIBtnTools: () => import(/* webpackChunkName: "uibox" */'../llui/UIBtnTools.vue')
+
+    // UIBOX
+    UIPreviewBox: () => import(/* webpackChunkName: "engine" */'../llui/UIPreviewBox.vue'),
+    UIMediaBox: () => import(/* webpackChunkName: "engine" */'../llui/UIMediaBox.vue'),
+    UIInspector: () => import(/* webpackChunkName: "engine" */'../llui/UIInspector.vue'),
+    UITimeline: () => import(/* webpackChunkName: "engine" */'../llui/UITimeline.vue'),
+    UIBtnTools: () => import(/* webpackChunkName: "engine" */'../llui/UIBtnTools.vue')
   },
   data () {
     return {
@@ -181,29 +187,13 @@ export default {
       return this.nodes
     }
     window.getWater = () => {
-      let newwater = JSON.parse(JSON.stringify(this.water))
-      newwater.timeinfo.start = 0
-      newwater.timeinfo.timelinePlaying = true
-      newwater.timeinfo.timelineControl = 'timer'
-      newwater.timeinfo.timelinePercentageLast = 0
-      newwater.timeinfo.timelinePercentage = 0
-      newwater.timeinfo.elapsed = 0
-
-      return newwater
+      return this.getWater()
     }
-
-    window.zip = async ({ obj }) => {
-      let pako = await import('pako')
-      var binaryString = pako.deflate(JSON.stringify(obj), { to: 'string' })
-      binaryString = btoa(binaryString)
-      return binaryString
+    window.zip = ({ obj }) => {
+      return this.zip({ obj })
     }
-
-    window.unzip = async ({ gzip }) => {
-      let pako = await import('pako')
-      gzip = atob(gzip)
-      var restored = JSON.parse(pako.inflate(gzip, { to: 'string' }))
-      return restored
+    window.unzip = ({ gzip }) => {
+      return this.unzip({ gzip })
     }
 
     console.log(`copy(window.getNODES())`)
@@ -213,74 +203,51 @@ export default {
     console.log(`copy(await window.zip({ obj: getWater() }))`)
     console.log(`copy(await window.unzip({ gzip: 'gzipstring' }))`)
 
-    setTimeout(async () => {
-      let water = await import(/* webpackChunkName: "engine" */'../llui/water/water-03.json')
-      this.water = water.default
-      // always reset timelinfo
-      this.water.timeinfo = {
-        ...this.water.timeinfo,
-        start: window.performance.now() * 0.001,
-        // totalTime: 30,
-        loop: true,
-        elapsed: 0,
-        timelinePlaying: false,
-        timelineControl: 'timer',
-        timelinePercentageLast: 0,
-        timelinePercentage: 0 // can be timeline, render or play
+    this.water = JSON.parse(JSON.stringify(this.initWater))
+    // always reset timelinfo
+    this.water.timeinfo = {
+      ...this.water.timeinfo,
+      start: window.performance.now() * 0.001,
+      // totalTime: 30,
+      loop: true,
+      elapsed: 0,
+      timelinePlaying: false,
+      timelineControl: 'timer',
+      timelinePercentageLast: 0,
+      timelinePercentage: 0 // can be timeline, render or play
+    }
+
+    window.addEventListener('message', (evt) => {
+      let obj = evt.data
+      let type = obj.type
+      if (type === 'all-ready') {
+        console.log('all-ready')
+        setTimeout(() => {
+          this.water.timeinfo.start = window.performance.now() * 0.001
+          this.water.timeinfo.timelinePlaying = true
+        }, 10)
       }
+    }, false)
 
-      window.addEventListener('message', (evt) => {
-        let obj = evt.data
-        let type = obj.type
-        if (type === 'all-ready') {
-          console.log('all-ready')
-          setTimeout(() => {
-            this.water.timeinfo.start = window.performance.now() * 0.001
-            this.water.timeinfo.timelinePlaying = true
-          }, 100)
-        }
-      }, false)
-
-      if (process.env.NODE_ENV === 'development') {
-        let waterStr = localStorage.getItem('water-OMGOMG')
-        if (waterStr) {
-          try {
-            water = JSON.parse(waterStr)
-            this.water = water
-          } catch (e) {
-            console.log(e)
-          }
-        } else {
-
-        }
-        // apple //
-        this.autoSaveTimer = setInterval(() => {
-          console.log('.... saving .....')
-          localStorage.setItem('water-OMGOMG', JSON.stringify(window.getWater()))
-        }, 2000)
-        // orange //
-      }
-
-      let rAF2 = () => {
-        this.clearTimer = requestAnimationFrame(rAF2)
-        if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
-          let totalTime = this.water.timeline.totalTime
-          this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
-          let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
-          this.water.timeinfo.timelinePercentage = lastTime / totalTime
-          if (this.water.timeinfo.loop) {
-            this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start) % this.water.timeinfo.totalTime
-            this.water.timeinfo.timelinePercentage %= 1
-          } else {
-            this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start)
-          }
-          this.doSync()
-        }
-      }
-
+    let rAF2 = () => {
       this.clearTimer = requestAnimationFrame(rAF2)
-      this.doSync()
-    }, 150)
+      if (this.water.timeinfo.timelineControl === 'timer' && this.water.timeinfo.timelinePlaying) {
+        let totalTime = this.water.timeline.totalTime
+        this.water.timeinfo.timelinePercentageLast = this.getTime(this.water.timeinfo.start) / totalTime
+        let lastTime = this.water.timeinfo.timelinePercentageLast * totalTime
+        this.water.timeinfo.timelinePercentage = lastTime / totalTime
+        if (this.water.timeinfo.loop) {
+          this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start) % this.water.timeinfo.totalTime
+          this.water.timeinfo.timelinePercentage %= 1
+        } else {
+          this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start)
+        }
+        this.doSync()
+      }
+    }
+
+    this.clearTimer = requestAnimationFrame(rAF2)
+    this.doSync()
   },
   created () {
     this.$on('onLayout', ({ node, nodes, args = {} }) => {
@@ -304,6 +271,29 @@ export default {
     cancelAnimationFrame(this.clearTimer)
   },
   methods: {
+    getWater () {
+      let newwater = JSON.parse(JSON.stringify(this.water))
+      newwater.timeinfo.start = 0
+      newwater.timeinfo.timelinePlaying = true
+      newwater.timeinfo.timelineControl = 'timer'
+      newwater.timeinfo.timelinePercentageLast = 0
+      newwater.timeinfo.timelinePercentage = 0
+      newwater.timeinfo.elapsed = 0
+
+      return newwater
+    },
+    async zip ({ obj }) {
+      let pako = await import('pako')
+      var binaryString = pako.deflate(JSON.stringify(obj), { to: 'string' })
+      var base64 = btoa(binaryString)
+      return base64
+    },
+    async unzip ({ gzip }) {
+      let pako = await import('pako')
+      gzip = atob(gzip)
+      var restored = JSON.parse(pako.inflate(gzip, { to: 'string' }))
+      return restored
+    },
     sendTop (v) {
       this.order.splice(this.order.indexOf(v), 1)
       this.order.push(v)
@@ -367,6 +357,7 @@ export default {
   height: 100%;
   width: 100%;
   overflow: hidden;
+  position: relative;
 }
 
 .nodetree{

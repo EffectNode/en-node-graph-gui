@@ -400,7 +400,7 @@ export default {
 .timetick{
   width: 2px;
   height: 250px;
-  position: fixed;
+  position: absolute;
   bottom: 0px;
   left: 0px;
   z-index: -1;
@@ -410,7 +410,7 @@ export default {
 .timetick2{
   width: 2px;
   height: 250px;
-  position: fixed;
+  position: absolute;
   bottom: 0px;
   left: 0px;
   z-index: -1;

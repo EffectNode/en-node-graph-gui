@@ -1,13 +1,13 @@
 <template>
-<div class="box" :style="boxStyle" :class="{ mini: order.slice().reverse()[0] === 'timeline' }" @click="order.splice(order.indexOf('inspector'), 1); order.push('inspector'); order.splice(order.indexOf('coder'), 1); order.push('coder'); ">
+<div class="box" :style="boxStyle" @click="order.splice(order.indexOf('mediabox'), 1); order.push('mediabox'); ">
   <div class="ui-media-title" ref="title" :style="titleStyle">
     <div class="title-text">
       <p>
-        Media Box
+        Media Folder
       </p>
     </div>
     <div class="title-cross">
-      <img src="../icons/cloud-up.svg" @click="up()" alt="">
+      <img src="../icons/add.svg" @click="up()" alt="">
     </div>
     <div class="title-cross2" @click="$emit('close')" @touchend="$emit('close')">
       <img src="../icons/cross.svg" alt="">
@@ -39,7 +39,7 @@ export default {
 
   mounted () {
     this.$emit('addOnClose', () => {
-      this.open.coder = false
+      this.open.mediabox = false
     })
 
     let sizer = () => {

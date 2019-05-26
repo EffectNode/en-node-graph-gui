@@ -9,21 +9,18 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'iGraph',
-      component: () => import(/* webpackChunkName: "editor" */ './views/iGraph.vue')
+      name: 'Landing',
+      component: () => import(/* webpackChunkName: "landing" */ './views/Landing.vue')
     },
     {
-      path: '/editro/:graphID',
-      name: 'iGraph',
-      component: () => import(/* webpackChunkName: "editor" */ './views/iGraph.vue')
+      path: '/demo',
+      name: 'iGraphDemo',
+      component: () => import(/* webpackChunkName: "demo" */ './views/iGraphDemo.vue')
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import(/* webpackChunkName: "about" */ './views/About.vue')
+      path: '/editor/:graphID',
+      name: 'iGraphEditor',
+      component: () => import(/* webpackChunkName: "editor" */ './views/iGraphEditor.vue')
     }
   ]
 })
