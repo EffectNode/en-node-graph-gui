@@ -40,7 +40,7 @@ export default {
     }
   },
   mounted () {
-    let top = window.top
+    let top = window.parent
     if (top) {
       window.addEventListener('keydown', (evt) => {
         if (evt.keyCode === 27) {
@@ -54,7 +54,7 @@ export default {
     // }
 
     window.addEventListener('message', (evt) => {
-      if (window.top && window.top.location.origin === window.location.origin) {
+      if (window.parent && window.parent.location.origin === window.location.origin) {
         let msg = evt.data
         let type = msg.type
         let args = msg.data
@@ -117,7 +117,7 @@ export default {
   },
   methods: {
     onAllDone () {
-      let top = window.top
+      let top = window.parent
       if (top) {
         top.postMessage({ type: 'all-ready', data: this.water }, window.location.origin)
       }

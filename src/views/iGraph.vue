@@ -1,21 +1,17 @@
 <template>
-  <div class="home">
-    <!-- <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link> |
-    </div> -->
+  <div class="igraph">
     <div class="nodetree">
       <NodeTree @open="open" v-if="nodes && !open.fullpreview" :show="show" @dropped="onReload({ timeout: 600 })" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
       </NodeTree>
     </div>
 
-    <UIBtnTools v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
+    <UIBtnTools :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
     <UIPreviewBox @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('preview') + 20 }" :open="open" v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
     </UIPreviewBox>
 
     <UITimeline :order="order" :style="{ zIndex: order.indexOf('timeline') + 20 }" :open="open" v-if="water && !open.fullpreview" @close="open.timeline = false; $forceUpdate()">
-      <UITimelineHolder :timeline="water.timeline" :doSync="doSync" :editor="water.timeinfo" :timeinfo="water.timeinfo"></UITimelineHolder>
+      <UITimelineHolder :timeline="water.timeline" :doSync="syncToFrame" :editor="water.timeinfo" :timeinfo="water.timeinfo"></UITimelineHolder>
     </UITimeline>
 
     <UIInspector :order="order" :style="{ zIndex: order.indexOf('inspector') + 20 }" :open="open" @close="onClose">
@@ -27,7 +23,6 @@
     </UICoder>
 
     <UIMediaBox @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('mediabox') + 20 }" :open="open" v-if="open.mediabox" @close="open.mediabox = false; $forceUpdate()">
-
     </UIMediaBox>
 
   </div>
@@ -36,24 +31,29 @@
 <script>
 export default {
   props: {
+    modes: {
+      default () {
+        return {}
+      }
+    },
     initWater: {}
   },
-  name: 'home',
+  name: 'igraph',
   components: {
     // EXEC
-    EXEC: () => import(/* webpackChunkName: "engine" */'../llexec/EXEC.vue'),
-    NodeTree: () => import(/* webpackChunkName: "engine" */'../llsvg/NodeTree.vue'),
-    UICodeControl: () => import(/* webpackChunkName: "engine" */'../llui/UICodeControl.vue'),
-    UIControls: () => import(/* webpackChunkName: "engine" */'../llui/UIControls.vue'),
-    UITimelineHolder: () => import(/* webpackChunkName: "engine" */'../lltimeline/timeline-holder.vue'),
-    UICoder: () => import(/* webpackChunkName: "engine" */'../llui/UICoder.vue'),
+    EXEC: () => import(/* webpackChunkName: "igraph-core" */'../llexec/EXEC.vue'),
+    NodeTree: () => import(/* webpackChunkName: "igraph-core" */'../llsvg/NodeTree.vue'),
+    UICodeControl: () => import(/* webpackChunkName: "igraph-core" */'../llui/UICodeControl.vue'),
+    UIControls: () => import(/* webpackChunkName: "igraph-core" */'../llui/UIControls.vue'),
+    UITimelineHolder: () => import(/* webpackChunkName: "igraph-core" */'../lltimeline/timeline-holder.vue'),
+    UICoder: () => import(/* webpackChunkName: "igraph-core" */'../llui/UICoder.vue'),
 
     // UIBOX
-    UIPreviewBox: () => import(/* webpackChunkName: "engine" */'../llui/UIPreviewBox.vue'),
-    UIMediaBox: () => import(/* webpackChunkName: "engine" */'../llui/UIMediaBox.vue'),
-    UIInspector: () => import(/* webpackChunkName: "engine" */'../llui/UIInspector.vue'),
-    UITimeline: () => import(/* webpackChunkName: "engine" */'../llui/UITimeline.vue'),
-    UIBtnTools: () => import(/* webpackChunkName: "engine" */'../llui/UIBtnTools.vue')
+    UIPreviewBox: () => import(/* webpackChunkName: "igraph" */'../llui/UIPreviewBox.vue'),
+    UIMediaBox: () => import(/* webpackChunkName: "igraph" */'../llui/UIMediaBox.vue'),
+    UIInspector: () => import(/* webpackChunkName: "igraph" */'../llui/UIInspector.vue'),
+    UITimeline: () => import(/* webpackChunkName: "igraph" */'../llui/UITimeline.vue'),
+    UIBtnTools: () => import(/* webpackChunkName: "igraph" */'../llui/UIBtnTools.vue')
   },
   data () {
     return {
@@ -79,33 +79,6 @@ export default {
         return now - start
       },
       water: false,
-
-      // defaultWater: () => ({
-      //   nodes: [],
-      //   timeline: {
-      //     totalTime: 30,
-      //     tracks: [
-      //       {
-      //         _id: '_62003052518',
-      //         start: 0,
-      //         end: 20.071031128319383,
-      //         title: 'fly',
-      //         trashed: false
-      //       }
-      //     ]
-      //   },
-
-      //   timeinfo: {
-      //     // $forceUpdate () {},
-      //     start: 0,
-      //     totalTime: 30,
-      //     timelinePlaying: true,
-      //     timelineControl: 'timer',
-      //     timelinePercentageLast: 0,
-      //     timelinePercentage: 0 // can be timeline, render or play
-      //   }
-      // }),
-
       view: {
         x: 0,
         y: 0
@@ -242,12 +215,12 @@ export default {
         } else {
           this.water.timeinfo.elapsed = this.getTime(this.water.timeinfo.start)
         }
-        this.doSync()
+        this.syncToFrame()
       }
     }
 
     this.clearTimer = requestAnimationFrame(rAF2)
-    this.doSync()
+    this.syncToFrame()
   },
   created () {
     this.$on('onLayout', ({ node, nodes, args = {} }) => {
@@ -298,7 +271,7 @@ export default {
       this.order.splice(this.order.indexOf(v), 1)
       this.order.push(v)
     },
-    doSync () {
+    syncToFrame () {
       window.dispatchEvent(new CustomEvent('sync-all', {
         detail: {
           timeinfo: this.water.timeinfo,
@@ -352,7 +325,7 @@ export default {
 </script>
 
 <style lang="css" scoped>
-.home{
+.igraph{
   background-color: #212121;
   height: 100%;
   width: 100%;

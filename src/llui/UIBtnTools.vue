@@ -12,7 +12,7 @@
     <div class="uit-icon" @click="zoomOut()">
       <img src="../icons/magnify-minus.svg" title="map view" alt="map view">
     </div>
-    <div class="uit-icon" @click="toggleMedia()">
+    <div v-if="modes.isEditor" class="uit-icon" @click="toggleMedia()">
       <img src="../icons/folder.svg" title="media view" alt="media view">
     </div>
     <!-- <div class="uit-icon" @click="toggleTimeline()">
@@ -31,6 +31,7 @@
 
 export default {
   props: {
+    modes: {},
     open: {},
     show: {},
     node: {},

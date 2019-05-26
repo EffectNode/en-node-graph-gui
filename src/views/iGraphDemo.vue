@@ -7,7 +7,7 @@
 <script>
 export default {
   components: {
-    iGraph: () => import(/* webpackChunkName: "demo" */'./iGraph.vue')
+    iGraph: () => import(/* webpackChunkName: "igraph" */'./iGraph.vue')
   },
   data () {
     return {
@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     async load () {
-      let water = await import(/* webpackChunkName: "demo" */'../llui/water/water-03.json')
+      let water = await import(/* webpackChunkName: "igraph-demo" */'../llui/water/water-03.json')
       this.water = water.default
 
       if (process.env.NODE_ENV === 'development') {

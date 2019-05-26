@@ -1,0 +1,225 @@
+<template>
+  <div>
+
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    node: {},
+    parentNode: {},
+    isRootNode: {},
+
+    nodes: {},
+    components: {},
+    timetracks: {}
+  },
+  data () {
+    return {
+      material: false
+    }
+  },
+  methods: {
+    init () {
+      let uniforms = {
+        aspect: {
+          value: 1
+        },
+        ttD: {
+          value: new THREE.TextureLoader().load('https://res.cloudinary.com/hslkngave/image/upload/v1558817010/rtfocvx82nibvswgrqhl.png', () => {
+            uniforms.aspect.value = uniforms.ttD.value.image.width / uniforms.ttD.value.image.height;
+            // uniforms.ttD.value.wrapS = THREE.RepeatWrapping;
+            // uniforms.ttD.value.wrapT = THREE.RepeatWrapping;
+          })
+        },
+        blur: {
+          value: new THREE.Vector2(0, 0)
+        },
+        shift: {
+          value: new THREE.Vector3(0, 0, 0)
+        }
+      };
+      // uniforms.ttD.value.wrapS = THREE.MirroredRepeatWrapping
+      // uniforms.ttD.value.wrapT = THREE.MirroredRepeatWrapping
+
+      this.$emit('exec', () => {
+        uniforms.blur.value.x *= 0.75
+        uniforms.blur.value.y *= 0.75
+      })
+
+      let rect = this.$parent.$parent.$el.getBoundingClientRect()
+
+      window.addEventListener('resize', () => {
+        rect = this.$parent.$parent.$el.getBoundingClientRect()
+      })
+
+      this.$parent.$parent.$el.addEventListener('mousemove', (ev) => {
+        let rootNode = this.nodes.find(n => n.type === 'root')
+        if (rootNode) {
+          let rootCompo = this.components[rootNode._id]
+          if (rootCompo.screen) {
+            uniforms.blur.value.x += ev.movementX * 2.0
+            uniforms.blur.value.y += -ev.movementY * 2.0
+
+            uniforms.shift.value.x = (ev.pageX - window.innerWidth * 0.5) / window.innerWidth * rootCompo.screen.screenWidth
+            uniforms.shift.value.y = -(ev.pageY - window.innerHeight * 0.5) / window.innerHeight * rootCompo.screen.screenHeight
+          }
+        }
+      })
+      let h = {
+        ts: { x: 0, y: 0 },
+      }
+      this.$parent.$parent.$el.addEventListener('touchstart', (ev) => {
+        ev.preventDefault()
+        h.ts.x = ev.touches[0].pageX
+        h.ts.y = -ev.touches[0].pageY
+      })
+      this.$parent.$parent.$el.addEventListener('touchmove', (ev) => {
+        ev.preventDefault()
+        let rootNode = this.nodes.find(n => n.type === 'root')
+        if (rootNode) {
+          let rootCompo = this.components[rootNode._id]
+          if (rootCompo.screen) {
+            uniforms.shift.value.x = (ev.touches[0].pageX - window.innerWidth * 0.5) / window.innerWidth * 30.0
+            uniforms.shift.value.y = -(ev.touches[0].pageY - window.innerHeight * 0.5) / window.innerHeight * 30.0
+
+            let delta = {
+              x: ev.touches[0].pageX - h.ts.x,
+              y: -ev.touches[0].pageY - h.ts.y
+            }
+            uniforms.blur.value.x += delta.x * 0.5
+            uniforms.blur.value.y += delta.y * 0.5
+
+            uniforms.shift.value.x = (ev.touches[0].pageX - window.innerWidth * 0.5) / window.innerWidth * rootCompo.screen.screenWidth
+            uniforms.shift.value.y = -(ev.touches[0].pageY - window.innerHeight * 0.5) / window.innerHeight * rootCompo.screen.screenHeight
+
+            delta.x = ev.touches[0].pageX
+            delta.y = ev.touches[0].pageY
+          }
+        }
+      })
+
+      let mat = new THREE.ShaderMaterial({
+        transparent: true,
+        uniforms,
+        vertexShader: `
+          #include <common>
+          varying vec2 vUv;
+          uniform vec3 shift;
+          uniform float aspect;
+
+          void main()	{
+            // smaller
+            vUv = uv;
+
+            vec3 nPos = position * 2.0;
+            if (aspect > 1.0) {
+              nPos.y /= aspect;
+            } else {
+              nPos.x *= aspect;
+            }
+
+            gl_Position = projectionMatrix * modelViewMatrix * vec4( nPos + shift, 1.0 );
+          }
+        `,
+        fragmentShader: `
+
+          bool shouldDraw (vec2 uv) {
+            if (uv.x < 0.001) {
+              return false;
+            }
+            if (uv.y < 0.001) {
+              return false;
+            }
+            if (uv.x > 0.999) {
+              return false;
+            }
+            if (uv.y > 0.999) {
+              return false;
+            }
+            return true;
+          }
+
+          // https://github.com/Jam3/glsl-fast-gaussian-blur/blob/master/13.glsl
+          vec4 motionBlur(sampler2D image, vec2 uv, vec2 resolution, vec2 direction) {
+            vec4 color = vec4(0.0);
+            vec2 off1 = vec2(1.411764705882353) * direction;
+            vec2 off2 = vec2(3.2941176470588234) * direction;
+            vec2 off3 = vec2(5.176470588235294) * direction;
+
+            vec2 newUV = uv * 2.0 - 0.5;
+
+            if (shouldDraw((newUV))) {
+              color += texture2D(image, (newUV)) * 0.2969069646728344;
+            }
+            if (shouldDraw((newUV + (off1 / resolution)))) {
+              color += texture2D(image, (newUV + (off1 / resolution))) * 0.1964825501511404;
+            }
+            if (shouldDraw((newUV + 0.5 * (off1 / resolution)))) {
+              color += texture2D(image, (newUV + 0.5 * (off1 / resolution))) * 0.1964825501511404;
+            }
+            if (shouldDraw((newUV + (off2 / resolution)))) {
+              color += texture2D(image, (newUV + (off2 / resolution))) * 0.09447039785044732;
+            }
+            if (shouldDraw((newUV + 0.5 * (off2 / resolution)))) {
+              color += texture2D(image, (newUV + 0.5 * (off2 / resolution))) * 0.09447039785044732;
+            }
+            if (shouldDraw((newUV + (off3 / resolution)))) {
+              color += texture2D(image, (newUV + (off3 / resolution))) * 0.010381362401148057;
+            }
+            if (shouldDraw((newUV + 0.5 * (off3 / resolution)))) {
+              color += texture2D(image, (newUV + 0.5 * (off3 / resolution))) * 0.010381362401148057;
+            }
+
+            return color;
+          }
+
+          uniform highp sampler2D ttD;
+          uniform vec2 blur;
+          varying highp vec2 vUv;
+          void main (void) {
+            // vec4 cColor = texture2D(ttD, vUv);
+            vec4 cColor = vec4(0.0);
+
+            cColor = motionBlur(ttD, vUv, vec2(1024.0, 1024.0), vec2(blur.xy));
+            gl_FragColor = vec4(cColor.rgba);
+          }
+        `
+      });
+      this.material = mat
+    }
+  },
+  mounted () {
+    this.init()
+    this.$emit('ready', this)
+  },
+  created () {
+    this.$on('addToParent', ({ parent }) => {
+      // console.log(this.node.title, 'addToParent', parent.node.title)
+    })
+    this.$on('addChild', ({ child }) => {
+      // if (child.node.type === 'map') {
+      //   this.material.map = child.map
+      // }
+      // if (child.node.type === 'geometry') {
+      //   this.material.geometry = child.geometry
+      // }
+      console.log(this.node.title, 'addChild', child.node.title)
+    })
+    this.$on('removeFromParent', ({ parent }) => {
+      // console.log(this.node.title, 'removeFromParent', parent.node.title)
+    })
+    this.$on('removeChild', ({ child }) => {
+      // console.log(this.node.title, 'removeChild', child.node.title)
+    })
+  },
+  beforeDestory () {
+    this.$emit('remove', this)
+  }
+}
+</script>
+
+<style>
+
+</style>
