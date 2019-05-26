@@ -29,6 +29,8 @@
 </template>
 
 <script>
+import(/* webpackChunkName: "igraph-coder" */'../llui/UICoder.vue')
+
 export default {
   props: {
     modes: {
@@ -46,7 +48,7 @@ export default {
     UICodeControl: () => import(/* webpackChunkName: "igraph-core" */'../llui/UICodeControl.vue'),
     UIControls: () => import(/* webpackChunkName: "igraph-core" */'../llui/UIControls.vue'),
     UITimelineHolder: () => import(/* webpackChunkName: "igraph-core" */'../lltimeline/timeline-holder.vue'),
-    UICoder: () => import(/* webpackChunkName: "igraph-core" */'../llui/UICoder.vue'),
+    UICoder: () => import(/* webpackChunkName: "igraph-coder" */'../llui/UICoder.vue'),
 
     // UIBOX
     UIPreviewBox: () => import(/* webpackChunkName: "igraph" */'../llui/UIPreviewBox.vue'),
