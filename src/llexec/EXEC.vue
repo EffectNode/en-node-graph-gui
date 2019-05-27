@@ -95,6 +95,13 @@ export default {
     }
   },
   async mounted () {
+    window.addEventListener('reload', (evt) => {
+      this.refresher = false
+      this.$nextTick(() => {
+        this.refresher = true
+      })
+    }, false)
+
     window.addEventListener('sync-all', (evt) => {
       if (evt.type === 'sync-all') {
         let iframe = this.$refs['iframe']

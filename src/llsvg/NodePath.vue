@@ -51,7 +51,7 @@ export default {
         this.stroke = `url(#${this.uniq}rainbow-gradient-path)`
 
         // desktop
-        if (window.innerWidth > 767) {
+        if (window.innerWidth > 1280) {
           this.running = this.link.running
           this.dashed = this.link.dashed
           if (!this.dashed) {

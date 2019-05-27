@@ -40,11 +40,13 @@ export default {
   watch: {
     open: {
       deep: true,
-      handler () {
+      handler (oldV, newV) {
         if (this.open.fullpreview) {
           this.$emit('addOnClose', () => {
             this.open.fullpreview = false
           })
+        } else {
+          window.dispatchEvent(new Event('reload'))
         }
       }
     }

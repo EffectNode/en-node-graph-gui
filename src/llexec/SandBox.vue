@@ -59,6 +59,13 @@ export default {
         let type = msg.type
         let args = msg.data
 
+        // if (type === 'resize') {
+        //   window.dispatchEvent(new Event('resize'))
+        //   setTimeout(() => {
+        //     window.dispatchEvent(new Event('resize'))
+        //   }, 1)
+        // }
+
         if (type === 'sync-all') {
           // console.log(JSON.stringify(args.timeinfo))
           // this.nodes = args
