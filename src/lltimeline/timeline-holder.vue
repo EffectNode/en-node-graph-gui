@@ -191,6 +191,9 @@ export default {
       }
     }
   },
+  beforeDestroy () {
+    cancelAnimationFrame(this.rAFIDTick)
+  },
   methods: {
     syncRect () {
       // this.rect = {
@@ -302,7 +305,8 @@ export default {
           this.timeinfo.elapsed = this.timeinfo.timelinePercentage * this.timeinfo.totalTime
         }
       }
-      setInterval(() => {
+      let rAF = () => {
+        this.rAFIDTick = window.requestAnimationFrame(rAF)
         let baseTime = this.BASE_TIME
         let per30 = this.BASE_WIDTH
         let ticker1Width = per30 * this.totalTime / baseTime
@@ -325,7 +329,8 @@ export default {
           }
           this.$refs['timetick2'].style.transform = `translateZ(1px) translateX(${tickerMaxTime.toFixed(1)}px)`
         }
-      }, 1000 / 60)
+      }
+      this.rAFIDTick = window.requestAnimationFrame(rAF)
       dom.addEventListener('mouseneter', (evt) => {
         this.hover()
       })
