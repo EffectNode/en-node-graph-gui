@@ -115,6 +115,28 @@ export default {
       }
     })
 
+    window.addEventListener('keydown', (evt) => {
+      if (evt.keyCode + '' === '32') {
+        if (this.timeinfo.timelinePlaying) {
+          this.pause()
+        } else {
+          this.play()
+        }
+      }
+    })
+
+    if (window.parent) {
+      window.parent.addEventListener('keydown', (evt) => {
+        if (evt.keyCode + '' === '32') {
+          if (this.timeinfo.timelinePlaying) {
+            this.pause()
+          } else {
+            this.play()
+          }
+        }
+      })
+    }
+
     window.addEventListener('resize', () => {
       if (this.$refs['holder'] && this.$refs['holder'][0]) {
         this.rect = this.$refs['holder'][0].getBoundingClientRect()

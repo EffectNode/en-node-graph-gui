@@ -32,7 +32,7 @@ export default {
       timetracks: [],
       timename: {},
       getTime: (start) => {
-        let now = new Date().getTime() * 0.001
+        let now = window.performance.now() * 0.001
         return now - start
       },
       execStack: {},
