@@ -285,6 +285,7 @@ export default {
       this.$forceUpdate()
 
       let dom = this.$refs['toucher']
+      //
       let now = 0
       let onupdateTick = (evt) => {
         this.timeinfo.totalTime = this.totalTime
@@ -311,14 +312,14 @@ export default {
         // let width = 1440
         // let width = this.toucherRect.width - this.sizer
         if (this.$refs['timetick']) {
-          let ticker = Number(widthPercentage * (ticker1Width) + 0)
+          let ticker = Number(widthPercentage * (ticker1Width) - dom.scrollLeft)
           if (isNaN(ticker)) {
             ticker = 0
           }
           this.$refs['timetick'].style.transform = `translateZ(1px) translateX(${ticker.toFixed(1)}px)`
         }
         if (this.$refs['timetick2']) {
-          let tickerMaxTime = Number(0 + (ticker2Width) + 0)
+          let tickerMaxTime = Number(0 + (ticker2Width) - dom.scrollLeft)
           if (isNaN(tickerMaxTime)) {
             tickerMaxTime = 0
           }
@@ -395,9 +396,9 @@ export default {
   height: 203px;
   max-width: 100%;
   position: relative;
+
   overflow: scroll;
   -webkit-overflow-scrolling: touch;
-  overflow-x: scroll;
 }
 .wider{
   width: 300px;
