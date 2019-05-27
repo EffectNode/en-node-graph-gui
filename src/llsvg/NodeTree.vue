@@ -615,6 +615,6 @@ export default {
 
 <style scoped>
 .svgnodetree{
-  background-color: #212121;
+  /* background-color: #212121; */
 }
 </style>

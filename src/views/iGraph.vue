@@ -1,5 +1,5 @@
 <template>
-  <div class="igraph">
+  <div class="igraph" :class="{ 'loading': loading }">
     <div class="nodetree">
       <NodeTree @open="open" v-if="nodes && !open.fullpreview" :show="show" @dropped="onReload({ timeout: 600 })" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
       </NodeTree>
@@ -61,6 +61,8 @@ export default {
   },
   data () {
     return {
+      loading: true,
+
       onCloseList: [],
       clearTimer: 0,
       order: [
@@ -202,6 +204,7 @@ export default {
         setTimeout(() => {
           this.water.timeinfo.start = window.performance.now() * 0.001
           this.water.timeinfo.timelinePlaying = true
+          this.loading = false
         }, 10)
       }
     }, false)
@@ -329,6 +332,20 @@ export default {
 </script>
 
 <style lang="css" scoped>
+@keyframes bgMove {
+  0%{
+    background-position-x: 0%;
+  }
+  100%{
+    background-position-x: 400%;
+  }
+}
+.igraph.loading{
+  background-image: linear-gradient(90deg, #212121, #474747, #212121);
+  background-size: 400% 100%;
+  animation: bgMove 3.5s linear 0s infinite reverse both;
+}
+
 .igraph{
   background-color: #212121;
   height: 100%;
@@ -347,4 +364,5 @@ export default {
     height: calc(100% - 250px);
   }
 }
+
 </style>
