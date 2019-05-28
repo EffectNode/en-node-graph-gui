@@ -18,6 +18,16 @@ export default new Router({
       component: () => import(/* webpackChunkName: "demo" */ './views/iGraphDemo.vue')
     },
     {
+      path: '/register',
+      name: 'Register',
+      component: () => import(/* webpackChunkName: "landing" */ './views/Register.vue')
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: () => import(/* webpackChunkName: "landing" */ './views/Login.vue')
+    },
+    {
       path: '/editor/:graphID',
       name: 'iGraphEditor',
       component: () => import(/* webpackChunkName: "editor" */ './views/iGraphEditor.vue')
