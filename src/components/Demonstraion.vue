@@ -2,6 +2,10 @@
 <div class="demo-area">
   <img v-if="!showDemo" class="demo-pic" src="../assets/screenshot/home.png" alt="iGraph by Effect Node" title="iGraph by Effect Node">
   <iframe v-if="showDemo" class="iframe" src="/demo" frameborder="0"></iframe>
+  <div class="caption-go">
+    <router-link to="/demo">Go Full Screen</router-link>
+    Woop Woop!
+  </div>
 </div>
 </template>
 
@@ -31,7 +35,8 @@ export default {
   width: 100%;
   background-color: #000000;
   margin-top: 20px;
-  margin-bottom: 20px;
+  margin-bottom: calc(20px + 50px);
+  color: white;
 }
 .demo-pic{
   display: block;
@@ -56,5 +61,17 @@ export default {
   .iframe{
     height: calc(800px - 20px * 2);
   }
+}
+.caption-go{
+  width: calc(100% - 20px * 2.0);
+  max-width: 1280px;
+  margin: 10px auto;
+  text-align: left;
+}
+.caption-go a,
+.caption-go a:hover,
+.caption-go a:active,
+.caption-go a:visited {
+  color: white
 }
 </style>

@@ -5,7 +5,7 @@
       </NodeTree>
     </div>
 
-    <UIBtnTools :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
+    <UIBtnTools @download="onDownload" :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
     <UIPreviewBox @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('preview') + 20 }" :open="open" v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
     </UIPreviewBox>
@@ -251,6 +251,20 @@ export default {
     cancelAnimationFrame(this.clearTimer)
   },
   methods: {
+    async onDownload () {
+      /* eslint-disable */
+      let download = await import('raw-loader!../fragments/download.fragment.html')
+      /* eslint-enable */
+      let str = download.default
+      let replaceTokenGZIPB64 = `/*gZipBase64*/`
+      str = str.replace(replaceTokenGZIPB64, await this.zip({ obj: this.getWater() }))
+
+      let anchor = document.createElement('a')
+      anchor.target = '_blank'
+      anchor.href = URL.createObjectURL(new Blob([str], { tyep: 'text/html' }))
+      anchor.download = 'My Demo.html'
+      anchor.click()
+    },
     getWater () {
       let newwater = JSON.parse(JSON.stringify(this.water))
       newwater.timeinfo.start = 0

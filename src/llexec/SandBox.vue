@@ -125,7 +125,7 @@ export default {
   methods: {
     onAllDone () {
       let top = window.parent
-      if (top) {
+      if (top && window.location.origin) {
         top.postMessage({ type: 'all-ready', data: this.water }, window.location.origin)
       }
     },

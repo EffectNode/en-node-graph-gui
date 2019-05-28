@@ -1,16 +1,16 @@
 <template>
   <div class="corner-layer">
     <div class="uit-icon" :class="{ isActivated: show === 'trashed' }" @click="onGoHome()">
-      <img src="../icons/pin.svg" title="oraganise" alt="oraganise">
+      <img src="../icons/pin.svg" title="Go Home" alt="Go Home">
     </div>
     <div class="uit-icon" @click="zoomIn()">
-      <img src="../icons/magnify-add.svg" title="map view" alt="map view">
+      <img src="../icons/magnify-add.svg" title="Zoom In" alt="Zoom In">
     </div>
     <div class="uit-icon" @click="zoomRestore()">
-      <img src="../icons/magnify.svg" title="map view" alt="map view">
+      <img src="../icons/magnify.svg" title="Zoom Restore" alt="Zoom Restore">
     </div>
     <div class="uit-icon" @click="zoomOut()">
-      <img src="../icons/magnify-minus.svg" title="map view" alt="map view">
+      <img src="../icons/magnify-minus.svg" title="Zoom Out" alt="Zoom Out">
     </div>
     <div v-if="modes.isEditor" class="uit-icon" @click="toggleMedia()">
       <img src="../icons/folder.svg" title="media view" alt="media view">
@@ -21,6 +21,10 @@
     <div class="uit-icon" v-if="nodes.some(n => n.trashed)" @click="() => { onToggleRecycleView() }">
       <img v-if="isAtRecycle()" class="isActivated" src="../icons/recycle-on.svg" title="Recycle view" alt="Recycle view">
       <img v-if="!isAtRecycle()"  src="../icons/recycle-off.svg" title="Recycle view" alt="Recycle view">
+    </div>
+
+    <div class="uit-icon" @click="$emit('download')">
+      <img src="../icons/cloud-download.svg" title="Download" alt="Download">
     </div>
 
   </div>

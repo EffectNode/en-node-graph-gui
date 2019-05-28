@@ -1,0 +1,30 @@
+<script src="https://unpkg.com/vue"></script>
+<script src="https://unpkg.com/pako@1.0.10/dist/pako.min.js"></script>
+<script src="https://en-node-graph-gui.netlify.com/iframelib/enigraph.umd.min.js"></script>
+<div id="ANY-THING-GOES" class="full">
+  <enigraph v-if="water" class="full" :water="water"></enigraph>
+</div>
+<script>
+  window.addEventListener('DOMContentLoaded', () => {
+    let gZipBase64 = document.getElementById('ANY-THING-GOES-GZIP-BASE64').innerHTML.trim()
+new Vue({
+  components: {
+    enigraph: window.enigraph
+  },
+  data () {
+    return {
+      // gzip base64 -> gzip raw -> json string -> object
+      water: JSON.parse(pako.inflate(atob(gZipBase64), { to: 'string' }))
+    }
+  }
+}).$mount('#ANY-THING-GOES')
+  });
+</script>
+<style>
+html, body, .full{
+  width: 100%;
+  height: 100%;
+  margin: 0px;
+}
+</style>
+<script id="ANY-THING-GOES-GZIP-BASE64" type="notjs">/*gZipBase64*/</script>

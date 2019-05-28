@@ -16,4 +16,7 @@ export default {
   color: white;
   background-color: black;
 }
+.ex-row {
+
+}
 </style>
