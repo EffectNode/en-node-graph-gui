@@ -23,7 +23,7 @@
         <div class="oo-wrap">
           <div class="oo-content">
             <div class="oo-content-title">
-              Easy to organise
+              Easy to Organise
             </div>
             <div class="oo-content-body">
               Our content tree helps you to organise in a visual way. So that you can easily navigate to your content and edit it.
@@ -125,6 +125,19 @@
         <div class="oo-wrap">
           <div class="oo-content">
             <div class="oo-content-title">
+              Code Hosting / Zero Deploy
+            </div>
+            <div class="oo-content-body">
+              Once you saved the project the target is updated. No need to copy and paste code.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="oo-div">
+        <div class="oo-wrap">
+          <div class="oo-content">
+            <div class="oo-content-title">
               Submit to Featured Gallery
             </div>
             <div class="oo-content-body">
@@ -154,7 +167,7 @@
               Automatic iGraph Backup
             </div>
             <div class="oo-content-body">
-              The system can automacitally backup by taking snapshots of your work periodically.
+              The system can automacitally backup by taking snapshots of your work periodically for maximum 100 snapshots.
             </div>
           </div>
         </div>
@@ -208,6 +221,19 @@
             </div>
             <div class="oo-content-body">
               You can save a project codebase within 50MB. P.S. Large Code is slow to load reguardless our limit.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="oo-div">
+        <div class="oo-wrap">
+          <div class="oo-content">
+            <div class="oo-content-title">
+              1000 Snapshots
+            </div>
+            <div class="oo-content-body">
+              You can auto backup the latest 1000 snapshots of each project.
             </div>
           </div>
         </div>
