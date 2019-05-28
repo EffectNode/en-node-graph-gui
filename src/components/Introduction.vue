@@ -4,10 +4,10 @@
       Simple Cinematic Graphics Editor
     </div>
     <div class="sub-title">
-      Multiple Scenes and Cameras.
+      Multiple Scenes and Cameras with a Timeline.
     </div>
     <div class="sub-sub-title">
-      Made for Web.
+      Made for Web with Love & JS.
     </div>
   </div>
 </template>

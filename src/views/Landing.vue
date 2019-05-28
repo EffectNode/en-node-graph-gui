@@ -2,18 +2,20 @@
   <div class="landing">
     <StickyNav></StickyNav>
     <Introduction></Introduction>
-    <SectionDemo></SectionDemo>
+    <Demonstraion></Demonstraion>
+    <Explaination></Explaination>
   </div>
 </template>
 
 <script>
 export default {
   components: {
-    Introduction: () => import(/* webpackChunkName: "igraph-demo" */'../components/Introduction.vue'),
-    StickyNav: () => import(/* webpackChunkName: "igraph-demo" */'../components/StickyNav.vue'),
-    SectionDemo: () => import(/* webpackChunkName: "igraph-demo" */'../components/SectionDemo.vue')
+    Introduction: () => import(/* webpackChunkName: "landing" */'../components/Introduction.vue'),
+    StickyNav: () => import(/* webpackChunkName: "landing" */'../components/StickyNav.vue'),
+    Demonstraion: () => import(/* webpackChunkName: "landing" */'../components/Demonstraion.vue'),
+    Explaination: () => import(/* webpackChunkName: "landing" */'../components/Explaination.vue')
   },
-  beforeCreate () {
+  mounted () {
     document.body.style.backgroundColor = 'black'
   },
   beforeDestroy () {

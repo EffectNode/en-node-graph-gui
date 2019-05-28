@@ -1,7 +1,7 @@
 <template>
 <div class="demo-area">
-  <img class="demo-pic" src="../assets/screenshot/home.png" alt="iGraph by Effect Node" title="iGraph by Effect Node">
-  <iframe class="iframe" src="/demo" frameborder="0"></iframe>
+  <img v-if="!showDemo" class="demo-pic" src="../assets/screenshot/home.png" alt="iGraph by Effect Node" title="iGraph by Effect Node">
+  <iframe v-if="showDemo" class="iframe" src="/demo" frameborder="0"></iframe>
 </div>
 </template>
 
@@ -12,13 +12,13 @@ export default {
   },
   data () {
     return {
-      showDemoEdit: false,
+      showDemo: false,
       stopFrame: false
     }
   },
   mounted () {
     let sizer = () => {
-      this.showDemoEdit = window.innerWidth > 1023
+      this.showDemo = window.innerWidth > 1023
     }
     sizer()
     window.addEventListener('resize', sizer)
@@ -43,25 +43,15 @@ export default {
   box-shadow: 0px 0px 30px 0px rgb(43, 35, 15);
 }
 .iframe{
-  display: none;
+  display: block;
+  width: calc(100% - 20px * 2.0);
+  max-width: 1280px;
+  height: calc(767px - 40px);
+  margin: auto auto;
+  border-radius: 5px;
+  border: rgb(43, 35, 15) solid 1px;
+  box-shadow: 0px 0px 30px 0px rgb(43, 35, 15);
 }
-
-@media screen and (min-width: 767px) {
-  .demo-pic{
-    display: none;
-  }
-  .iframe{
-    display: block;
-    width: calc(100% - 20px * 2.0);
-    max-width: 1280px;
-    height: calc(767px - 40px);
-    margin: auto auto;
-    border-radius: 5px;
-    border: rgb(43, 35, 15) solid 1px;
-    box-shadow: 0px 0px 30px 0px rgb(43, 35, 15);
-  }
-}
-
 @media screen and (min-width: 1280px) {
   .iframe{
     height: calc(800px - 20px * 2);

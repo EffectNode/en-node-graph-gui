@@ -18,7 +18,6 @@
       </div>
     </div>
     <div class="ll-menu-nav" :class="{ 'open': open }">
-
     </div>
   </div>
 </template>
@@ -26,6 +25,8 @@
 <script>
 export default {
   props: {
+    override: {
+    },
     sticky: {
       type: Boolean,
       default: false
@@ -71,6 +72,9 @@ export default {
         }
       ]
     }
+  },
+  mounted () {
+    this.items = this.override || this.items
   }
 }
 </script>
