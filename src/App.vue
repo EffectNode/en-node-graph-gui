@@ -5,21 +5,11 @@
 </template>
 
 <style>
-/* @font-face {
-  font-family: 'Inter';
-  font-style:  normal;
-  font-weight: 300;
-  src: url("./assets/fonts/interui/Inter-Light-BETA.woff2") format("woff2"),
-       url("./assets/fonts/interui/Inter-Light-BETA.woff") format("woff");
-}
-
-@font-face {
-  font-family: 'Inter';
-  font-style:  normal;
-  font-weight: 400;
-  src: url("./assets/fonts/interui/Inter-Regular.woff2") format("woff2"),
-       url("./assets/fonts/interui/Inter-Regular.woff") format("woff");
-} */
+/*
+http://www.cutegrids.com/
+*/
+@import url('./cute/css/normalize.css');
+@import url('./cute/css/cutegrids.css');
 
 body, html, #enigma, .full{
   width: 100%;

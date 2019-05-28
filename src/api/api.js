@@ -26,13 +26,13 @@ NProgress.configure({
 
 let storeConfig = {
   cookie: {
-    key: 'jwt',
+    key: 'en-igraph',
     options: {
       path: '/'
     }
   },
   localStorage: {
-    key: 'jwt'
+    key: 'en-igraph'
   }
 }
 

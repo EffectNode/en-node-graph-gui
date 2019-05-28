@@ -364,6 +364,7 @@ export default {
 
 <style scoped>
 .uicontrols{
-  color: white;
+  /* background-color: black; */
+  color: grey;
 }
 </style>
