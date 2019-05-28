@@ -75,11 +75,13 @@ export default {
       })
     },
     async zoomRestore () {
-      let to = 3
-      if (window.innerWidth >= 767) {
-        to = 1
+      let zoomTo = 3
+      if (window.innerWidth >= 767 && window.innerWidth <= 1280) {
+        zoomTo = 1.25
+      } else if (window.innerWidth > 1280) {
+        zoomTo = 1
       }
-      this.zoom({ to })
+      this.zoom({ to: zoomTo })
     },
     async zoomIn () {
       let zoomLevel = this.$parent.$refs['editor'].zoom
