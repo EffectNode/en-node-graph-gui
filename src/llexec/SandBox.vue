@@ -6,7 +6,7 @@
 
 <script>
 import GraphNode from './GraphNode.vue'
-import * as Node from '../llsvg/node.js'
+// import * as Node from '../llsvg/node.js'
 export default {
   components: {
     GraphNode
@@ -43,7 +43,7 @@ export default {
     let top = window.parent
     if (top) {
       window.addEventListener('keydown', (evt) => {
-        if (evt.keyCode === 27 && window.location.origin) {
+        if (evt.keyCode === 27 && window.location.origin !== 'file://') {
           top.postMessage({ type: 'escape' }, window.location.origin)
         }
       })
@@ -125,7 +125,7 @@ export default {
   methods: {
     onAllDone () {
       let top = window.parent
-      if (top && window.location.origin) {
+      if (top && window.location.origin !== 'file://') {
         top.postMessage({ type: 'all-ready', data: this.water }, window.location.origin)
       }
     },
