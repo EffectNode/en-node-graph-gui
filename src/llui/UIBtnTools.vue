@@ -113,7 +113,10 @@ export default {
 
       this.$nextTick(() => {
         if (this.$parent.show === 'normal') {
-          this.$parent.$refs['editor'].cleanLayout({ instant: false, goHome: true, resetZoom: true })
+          this.$nextTick(() => {
+            this.onGoHome()
+          })
+          // this.$parent.$refs['editor'].cleanLayout({ instant: false, goHome: true, resetZoom: true })
         } else {
           this.$parent.$refs['editor'].cleanLayout({ instant: false, goNode: this.nodes.find(n => n.trashed), resetZoom: true })
         }
