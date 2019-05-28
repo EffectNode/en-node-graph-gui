@@ -10,7 +10,7 @@
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
     </UIPreviewBox>
 
-    <UITimeline :order="order" :style="{ zIndex: order.indexOf('timeline') + 20 }" :open="open" v-if="water && !open.fullpreview" @close="open.timeline = false; $forceUpdate()">
+    <UITimeline :order="order" :style="{ zIndex: 20 }" :open="open" v-if="water && !open.fullpreview" @close="open.timeline = false; $forceUpdate()">
       <UITimelineHolder :timeline="water.timeline" :doSync="syncToFrame" :editor="water.timeinfo" :timeinfo="water.timeinfo"></UITimelineHolder>
     </UITimeline>
 
