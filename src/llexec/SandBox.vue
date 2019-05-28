@@ -43,7 +43,7 @@ export default {
     let top = window.parent
     if (top) {
       window.addEventListener('keydown', (evt) => {
-        if (evt.keyCode === 27 && window.location.origin !== 'file://') {
+        if (evt.keyCode === 27 && window.location.origin !== 'null') {
           top.postMessage({ type: 'escape' }, window.location.origin)
         }
       })
@@ -125,7 +125,7 @@ export default {
   methods: {
     onAllDone () {
       let top = window.parent
-      if (top && window.location.origin !== 'file://') {
+      if (top && window.location.origin !== 'null') {
         top.postMessage({ type: 'all-ready', data: this.water }, window.location.origin)
       }
     },

@@ -5529,12 +5529,12 @@ if (typeof window !== 'undefined') {
 // Indicate to webpack that this file can be concatenated
 /* harmony default export */ var setPublicPath = (null);
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7d32804a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=5267110c&scoped=true&
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js?{"cacheDirectory":"node_modules/.cache/vue-loader","cacheIdentifier":"7d32804a-vue-loader-template"}!./node_modules/vue-loader/lib/loaders/templateLoader.js??vue-loader-options!./node_modules/cache-loader/dist/cjs.js??ref--0-0!./node_modules/vue-loader/lib??vue-loader-options!./src/llexec/SandBox.vue?vue&type=template&id=197e5f58&scoped=true&
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;return (_vm.activeNodes && _vm.water)?_c('div',{staticClass:"app-entry-dom"},_vm._l((_vm.activeNodes),function(node){return _c('GraphNode',{key:node._id,attrs:{"time":_vm.water.timeinfo.timelinePercentage * _vm.water.timeinfo.totalTime,"progress":_vm.water.timeinfo.timelinePercentage,"timename":_vm.timename,"timetracks":_vm.timetracks,"execStack":_vm.execStack,"compoMap":_vm.compoMap,"nodes":_vm.activeNodes,"node":node},on:{"all-done":_vm.onAllDone}})}),1):_vm._e()}
 var staticRenderFns = []
 
 
-// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=5267110c&scoped=true&
+// CONCATENATED MODULE: ./src/llexec/SandBox.vue?vue&type=template&id=197e5f58&scoped=true&
 
 // EXTERNAL MODULE: ./node_modules/@babel/runtime-corejs2/core-js/object/get-own-property-descriptor.js
 var get_own_property_descriptor = __webpack_require__("268f");
@@ -54782,7 +54782,7 @@ var component = normalizeComponent(
 
     if (top) {
       window.addEventListener('keydown', function (evt) {
-        if (evt.keyCode === 27 && window.location.origin !== 'file://') {
+        if (evt.keyCode === 27 && window.location.origin !== 'null') {
           top.postMessage({
             type: 'escape'
           }, window.location.origin);
@@ -54864,7 +54864,7 @@ var component = normalizeComponent(
     onAllDone: function onAllDone() {
       var top = window.parent;
 
-      if (top && window.location.origin !== 'file://') {
+      if (top && window.location.origin !== 'null') {
         top.postMessage({
           type: 'all-ready',
           data: this.water
@@ -54926,7 +54926,7 @@ var SandBox_component = normalizeComponent(
   staticRenderFns,
   false,
   null,
-  "5267110c",
+  "197e5f58",
   null
   
 )

@@ -261,7 +261,7 @@ export default {
 
       let anchor = document.createElement('a')
       anchor.target = '_blank'
-      anchor.href = URL.createObjectURL(new Blob([str], { tyep: 'text/html' }))
+      anchor.href = `data:text/html;charset=utf-8,${encodeURIComponent(str)}`
       anchor.download = 'My Demo.html'
       anchor.click()
     },
