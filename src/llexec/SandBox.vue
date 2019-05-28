@@ -43,7 +43,7 @@ export default {
     let top = window.parent
     if (top) {
       window.addEventListener('keydown', (evt) => {
-        if (evt.keyCode === 27) {
+        if (evt.keyCode === 27 && window.location.origin) {
           top.postMessage({ type: 'escape' }, window.location.origin)
         }
       })
@@ -54,7 +54,7 @@ export default {
     // }
 
     window.addEventListener('message', (evt) => {
-      if (window.parent && window.parent.location.origin === window.location.origin) {
+      if (window.parent && window.parent.location.origin === window.location.origin && window.location.origin) {
         let msg = evt.data
         let type = msg.type
         let args = msg.data
