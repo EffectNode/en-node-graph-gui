@@ -5,7 +5,7 @@
       </NodeTree>
     </div>
 
-    <UIBtnTools @download="onDownload" :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
+    <UIBtnTools @codepen="onCodePen" @download="onDownload" :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
     <UIPreviewBox @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('preview') + 20 }" :open="open" v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
     </UIPreviewBox>
@@ -30,7 +30,6 @@
 
 <script>
 import(/* webpackChunkName: "igraph-coder" */'../llui/UICodeControl.vue')
-
 export default {
   props: {
     modes: {
@@ -253,7 +252,7 @@ export default {
   methods: {
     async onDownload () {
       /* eslint-disable */
-      let download = await import('raw-loader!../fragments/download.fragment.html')
+      let download = await import(/* webpackChunkName: "igraph-export" */'raw-loader!../fragments/download.fragment.html')
       /* eslint-enable */
       let str = download.default
       let replaceTokenGZIPB64 = `/*gZipBase64*/`
@@ -264,6 +263,43 @@ export default {
       anchor.href = `data:text/html;charset=utf-8,${encodeURIComponent(str)}`
       anchor.download = 'My Demo.html'
       anchor.click()
+    },
+    async onCodePen () {
+      /* eslint-disable */
+      let download = await import(/* webpackChunkName: "igraph-export" */'raw-loader!../fragments/download.fragment.html')
+      /* eslint-enable */
+      let str = download.default
+      let replaceTokenGZIPB64 = `/*gZipBase64*/`
+      str = str.replace(replaceTokenGZIPB64, await this.zip({ obj: this.getWater() }))
+
+      let document = window.document
+      if (window.top) {
+        document = window.top.document
+      }
+
+      let form = document.createElement('form')
+      form.action = `https://codepen.io/pen/define`
+      form.method = 'POST'
+      form.style.display = 'none'
+
+      document.body.appendChild(form)
+
+      let input = document.createElement('input')
+      input.type = 'text'
+      input.name = 'data'
+      input.value = JSON.stringify({
+        html: str,
+        css: '',
+        js: ''
+      })
+      form.appendChild(input)
+      form.submit()
+
+      // let anchor = document.createElement('a')
+      // anchor.target = '_blank'
+      // anchor.href = `data:text/html;charset=utf-8,${encodeURIComponent(str)}`
+      // anchor.download = 'My Demo.html'
+      // anchor.click()
     },
     getWater () {
       let newwater = JSON.parse(JSON.stringify(this.water))

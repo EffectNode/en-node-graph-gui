@@ -26,6 +26,9 @@
     <div class="uit-icon" @click="$emit('download')">
       <img src="../icons/cloud-download.svg" title="Download" alt="Download">
     </div>
+    <div class="uit-icon" @click="$emit('codepen')">
+      <img src="../icons/code.svg" title="Download" alt="Download">
+    </div>
 
   </div>
 </template>
