@@ -2,9 +2,12 @@
 <div class="demo-area">
   <img v-if="!showDemo" class="demo-pic" src="../assets/screenshot/home.png" alt="iGraph by Effect Node" title="iGraph by Effect Node">
   <iframe v-if="showDemo" class="iframe" src="/demo" frameborder="0"></iframe>
-  <div class="caption-go">
+  <div v-if="showDemo" class="caption-go">
     <router-link to="/demo">Go Full Screen</router-link>
     Woop Woop!
+  </div>
+  <div v-if="!showDemo" class="caption-go">
+    Try it on a desktop! 🥰 No login required.
   </div>
 </div>
 </template>
