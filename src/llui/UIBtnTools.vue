@@ -149,8 +149,8 @@ export default {
 }
 .uit-icon{
   display: inline-block;
-  width: 60px;
-  height: 60px;
+  width: 53px;
+  height: 53px;
   display: flex;
   justify-content: center;
   align-items: center;

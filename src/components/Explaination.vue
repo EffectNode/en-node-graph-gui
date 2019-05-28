@@ -58,7 +58,7 @@
         <div class="oo-wrap">
           <div class="oo-content">
             <div class="oo-content-title">
-              Visualise your content structure.
+              Visualise navigation structure.
             </div>
             <div class="oo-content-body">
               Our content tree lets you organise content in a visual way, so that you can easily navigate through your content and edit them.
