@@ -374,7 +374,9 @@ export default {
       });
 
       let zoomTo = 3
-      if (window.innerWidth >= 767) {
+      if (window.innerWidth >= 767 && window.innerWidth <= 1280) {
+        zoomTo = 1.25
+      } else {
         zoomTo = 1
       }
       if (resetZoom && this.zoom !== zoomTo) {

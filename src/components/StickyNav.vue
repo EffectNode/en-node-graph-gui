@@ -1,10 +1,12 @@
 <template>
-  <section class="ll-welcome-section" :class="{ 'sticky': sticky }">
+  <div class="ll-welcome-section">
     <div class="ll-row">
       <div class="ll-nav-left">
         <div class="ll-welcome-msg">
-          <img class="ll-logo-mobile ll-in-mobile-only" src="../assets/logo/igraph-only.svg" title="iGraph by EffectNode.com" alt="iGraph by EffectNode.com">
-          <img class="ll-logo-desktop ll-in-desktop-only" src="../assets/logo/igraph.svg" title="iGraph by EffectNode.com" alt="iGraph by EffectNode.com">
+          <router-link to="/">
+            <img class="ll-logo-mobile ll-in-mobile-only" src="../assets/logo/igraph-only.svg" title="iGraph by EffectNode.com" alt="iGraph by EffectNode.com">
+            <img class="ll-logo-desktop ll-in-desktop-only" src="../assets/logo/igraph.svg" title="iGraph by EffectNode.com" alt="iGraph by EffectNode.com">
+          </router-link>
         </div>
       </div>
       <div class="ll-nav-right">
@@ -18,14 +20,15 @@
     <div class="ll-menu-nav" :class="{ 'open': open }">
 
     </div>
-  </section>
+  </div>
 </template>
 
 <script>
 export default {
   props: {
     sticky: {
-      type: Boolean
+      type: Boolean,
+      default: false
     }
   },
   data () {
@@ -33,24 +36,37 @@ export default {
       open: false,
       items: [
         {
-          label: 'Menu',
-          class: { 'll-in-mobile-only': true },
+          label: 'Github',
+          class: {
+            'll-in-desktop-only': true
+          },
           action: () => {
-            this.open = !this.open
+            window.location.assign('https://github.com/EffectNode/en-node-graph-gui')
           }
         },
         {
           label: 'Login',
           class: { 'll-in-desktop-only': true },
           action: () => {
-            this.$router.push('/register')
+            this.$router.push({
+              path: '/login'
+            })
           }
         },
         {
           label: 'Register',
           class: { 'll-in-desktop-only': true },
           action: () => {
-            this.$router.push('/register')
+            this.$router.push({
+              path: '/register'
+            })
+          }
+        },
+        {
+          label: 'Menu',
+          class: { 'll-in-mobile-only': true },
+          action: () => {
+            this.open = !this.open
           }
         }
       ]
@@ -76,12 +92,7 @@ export default {
   width: 100%;
   color: white;
   background-color: rgba(0,0,0,0.8);
-  overflow: hidden;
   /* background-image: linear-gradient(black, transparent); */
-}
-.ll-welcome-section.sticky{
-  position: sticky;
-  top: 0px;
 }
 .ll-welcome-msg{
   display: inline-block;
@@ -89,11 +100,11 @@ export default {
   box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
 }
 .ll-logo-mobile{
-  margin: 25px;
+  margin: 20px;
   height: 40px;
 }
 .ll-logo-desktop{
-  margin: 25px;
+  margin: 20px;
   height: 40px;
 }
 .ll-row{
@@ -102,7 +113,7 @@ export default {
   align-items: center;
 }
 .ll-nav-list{
-  margin: 30px;
+  margin: 20px;
   font-size: 18px;
 }
 .ll-nav-item{

@@ -1,6 +1,7 @@
 <template>
   <div class="landing">
     <StickyNav></StickyNav>
+    <Introduction></Introduction>
     <SectionDemo></SectionDemo>
   </div>
 </template>
@@ -8,6 +9,7 @@
 <script>
 export default {
   components: {
+    Introduction: () => import(/* webpackChunkName: "igraph-demo" */'../components/Introduction.vue'),
     StickyNav: () => import(/* webpackChunkName: "igraph-demo" */'../components/StickyNav.vue'),
     SectionDemo: () => import(/* webpackChunkName: "igraph-demo" */'../components/SectionDemo.vue')
   },

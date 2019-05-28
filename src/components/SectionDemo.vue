@@ -1,18 +1,14 @@
 <template>
-<section class="full">
-  <div class="demo-area">
-    <iframe v-if="showDemoEdit" src="/demo" :class="{ stop: stopFrame }" class="demo-instance" frameborder="0" @load="stopFrame = true"></iframe>
-    <div v-if="!showDemoEdit" class="demo-instance exec" :class="{ stop: stopFrame }">
-      <ExecDemo @load="stopFrame = true"></ExecDemo>
-    </div>
-  </div>
-</section>
+<div class="demo-area">
+  <img class="demo-pic" src="../assets/screenshot/home.png" alt="iGraph by Effect Node" title="iGraph by Effect Node">
+  <iframe class="iframe" src="/demo" frameborder="0"></iframe>
+</div>
 </template>
 
 <script>
 export default {
   components: {
-    ExecDemo: () => import(/* webpackChunkName: "igraph-demo" */'../views/ExecDemo.vue')
+    // ExecDemo: () => import(/* webpackChunkName: "igraph-demo" */'../views/ExecDemo.vue')
   },
   data () {
     return {
@@ -32,56 +28,43 @@ export default {
 
 <style scoped>
 .demo-area{
-  background-color: #000000;
-
-  height: 100%;
   width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #000000;
+  margin-top: 20px;
+  margin-bottom: 20px;
 }
-.demo-instance{
-  border: #4d4d4d solid 1px;
-  border-radius: 5px;
+.demo-pic{
+  display: block;
   width: calc(100% - 20px * 2.0);
-  height: calc(100% - 20px * 2.0);
+  max-width: 1280px;
+  margin: auto auto;
+  border-radius: 5px;
+  border: rgb(43, 35, 15) solid 1px;
+  box-shadow: 0px 0px 30px 0px rgb(43, 35, 15);
+}
+.iframe{
+  display: none;
 }
 
-@keyframes bgMove {
-  0%{
-    background-position-x: 0%;
+@media screen and (min-width: 767px) {
+  .demo-pic{
+    display: none;
   }
-  100%{
-    background-position-x: 400%;
-  }
-}
-
-@media screen and (min-width: 1023px) {
-
-  .demo-area{
-    display: flex;
-    justify-content: center;
-  }
-  .demo-instance{
-    margin: auto auto;
-    width: calc(100% - 40px * 2.0);
-    max-width: 1280px;
-    height: calc(100% - 40px);
-    max-height: 800px;
-
-    background-image: linear-gradient(90deg, #212121, #474747, #212121);
-    background-size: 400% 100%;
-    animation: bgMove 1.5s linear 0s infinite reverse both;
-    box-sizing: border-box;
-    border: #474747 solid 1px;
+  .iframe{
     display: block;
+    width: calc(100% - 20px * 2.0);
+    max-width: 1280px;
+    height: calc(767px - 40px);
+    margin: auto auto;
     border-radius: 5px;
-    box-shadow: 0px 0px 30px 0px rgba(255, 255, 255, 0.274);
+    border: rgb(43, 35, 15) solid 1px;
+    box-shadow: 0px 0px 30px 0px rgb(43, 35, 15);
   }
-  .demo-instance.stop{
-    animation-play-state: paused;
-    border: #4d4d4d solid 1px;
-    background-image: linear-gradient(white, white);
+}
+
+@media screen and (min-width: 1280px) {
+  .iframe{
+    height: calc(800px - 20px * 2);
   }
 }
 </style>
