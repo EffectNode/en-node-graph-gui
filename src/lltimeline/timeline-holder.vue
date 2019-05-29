@@ -77,13 +77,15 @@ export default {
     'timeline-diamond': require('./timeline-diamond.vue').default
   },
   data () {
-    let BASE_WIDTH = window.innerWidth - 400 - 25
-    if (BASE_WIDTH < 767) {
-      BASE_WIDTH = 767
-    }
+    // let BASE_WIDTH = window.innerWidth - 400 - 25
+    // if (BASE_WIDTH < 767) {
+    //   BASE_WIDTH = 767
+    // }
+    //
+
     return {
       BASE_TIME: 30,
-      BASE_WIDTH,
+      BASE_WIDTH: 860,
 
       canvas: {},
       baseTime: 30,
@@ -539,7 +541,7 @@ export default {
 } */
 .inpill-input{
   display: inline-block;
-  width: 15px;
+  width: 22px;
   height: 15px;
   padding: 0px;
   padding-left: 5px;

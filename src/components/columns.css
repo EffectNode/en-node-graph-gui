@@ -163,3 +163,7 @@
   border: white solid 1px;
   margin-bottom: 15px;
 }
+
+.oo-shot{
+  max-width: 100%;
+}

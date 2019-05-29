@@ -1,1 +1,11 @@
-<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" fill-rule="evenodd" clip-rule="evenodd"><path fill="white" d="M15.853 16.56c-1.683 1.517-3.911 2.44-6.353 2.44-5.243 0-9.5-4.257-9.5-9.5s4.257-9.5 9.5-9.5 9.5 4.257 9.5 9.5c0 2.442-.923 4.67-2.44 6.353l7.44 7.44-.707.707-7.44-7.44zm-6.353-15.56c4.691 0 8.5 3.809 8.5 8.5s-3.809 8.5-8.5 8.5-8.5-3.809-8.5-8.5 3.809-8.5 8.5-8.5z"/></svg>
+
+<svg width="24px" height="24px" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="magnify" fill="#FFFFFF">
+            <path d="M15.853,16.56 C14.17,18.077 11.942,19 9.5,19 C4.257,19 0,14.743 0,9.5 C0,4.257 4.257,0 9.5,0 C14.743,0 19,4.257 19,9.5 C19,11.942 18.077,14.17 16.56,15.853 L24,23.293 L23.293,24 L15.853,16.56 Z M9.5,1 C14.191,1 18,4.809 18,9.5 C18,14.191 14.191,18 9.5,18 C4.809,18 1,14.191 1,9.5 C1,4.809 4.809,1 9.5,1 Z" id="Shape"></path>
+        </g>
+        <text id="1" font-family="Nunito-Regular, Nunito" font-size="11" font-weight="normal" fill="#FFFFFF">
+            <tspan x="6" y="13">1</tspan>
+        </text>
+    </g>
+</svg>

@@ -5,6 +5,8 @@
 </template>
 
 <style>
+/* recylcebin, how do i add a new item */
+
 /*
 http://www.cutegrids.com/
 */
@@ -15,11 +17,14 @@ body, html, #enigma, .full{
   width: 100%;
   height: 100%;
 }
+
 html{
 }
+
 body{
   margin: 0px;
 }
+
 #enigma {
   font-family: 'Nunito', 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;

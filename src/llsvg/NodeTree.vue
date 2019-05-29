@@ -377,7 +377,7 @@ export default {
       if (window.innerWidth >= 767 && window.innerWidth <= 1280) {
         zoomTo = 1.25
       } else if (window.innerWidth > 1280) {
-        zoomTo = 1
+        zoomTo = 1.25
       }
       if (resetZoom && this.zoom !== zoomTo) {
         // this.zoom += 0.00000000000000000000000001

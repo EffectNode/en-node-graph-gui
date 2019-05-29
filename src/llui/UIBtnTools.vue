@@ -1,7 +1,12 @@
 <template>
   <div class="corner-layer">
-    <div class="uit-icon" :class="{ isActivated: show === 'trashed' }" @click="onGoHome()">
-      <img src="../icons/pin.svg" title="Go Home" alt="Go Home">
+    <div class="uit-icon" v-if="!isAtRecycle() && nodes.some(n => n.trashed)" @click="() => { onToggleRecycleView() }">
+      <!-- <img v-if="isAtRecycle()" class="isActivated" src="../icons/back.svg" title="Recycle view" alt="Recycle view"> -->
+      <img src="../icons/trashcan.svg" title="Recycle view" alt="Recycle view">
+    </div>
+    <div class="uit-icon" :class="{ isActivated: show === 'trashed' }">
+      <img v-if="isAtRecycle()"  @click="() => { onToggleRecycleView() }" class="isActivated" src="../icons/back.svg" title="Back view" alt="Back view">
+      <img v-if="!isAtRecycle()"  @click="onGoHome()" src="../icons/home.svg" title="Go Home" alt="Go Home">
     </div>
     <div class="uit-icon" @click="zoomIn()">
       <img src="../icons/magnify-add.svg" title="Zoom In" alt="Zoom In">
@@ -18,10 +23,6 @@
     <!-- <div class="uit-icon" @click="toggleTimeline()">
       <img src="../icons/timer.svg" title="map view" alt="map view">
     </div> -->
-    <div class="uit-icon" v-if="nodes.some(n => n.trashed)" @click="() => { onToggleRecycleView() }">
-      <img v-if="isAtRecycle()" class="isActivated" src="../icons/recycle-on.svg" title="Recycle view" alt="Recycle view">
-      <img v-if="!isAtRecycle()"  src="../icons/recycle-off.svg" title="Recycle view" alt="Recycle view">
-    </div>
 
     <div class="uit-icon" @click="$emit('download')">
       <img src="../icons/cloud-download.svg" title="Download" alt="Download">
@@ -34,8 +35,6 @@
 </template>
 
 <script>
-//
-
 export default {
   props: {
     modes: {},
@@ -86,7 +85,7 @@ export default {
       if (window.innerWidth >= 767 && window.innerWidth <= 1280) {
         zoomTo = 1.25
       } else if (window.innerWidth > 1280) {
-        zoomTo = 1
+        zoomTo = 1.25
       }
       this.zoom({ to: zoomTo })
     },

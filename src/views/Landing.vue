@@ -3,6 +3,7 @@
     <StickyNav></StickyNav>
     <Introduction></Introduction>
     <Demonstraion></Demonstraion>
+    <Examples></Examples>
     <Explaination></Explaination>
   </div>
 </template>
@@ -10,6 +11,7 @@
 <script>
 export default {
   components: {
+    Examples: () => import(/* webpackChunkName: "landing" */'../components/Examples.vue'),
     Introduction: () => import(/* webpackChunkName: "landing" */'../components/Introduction.vue'),
     StickyNav: () => import(/* webpackChunkName: "landing" */'../components/StickyNav.vue'),
     Demonstraion: () => import(/* webpackChunkName: "landing" */'../components/Demonstraion.vue'),

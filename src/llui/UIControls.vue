@@ -1,5 +1,82 @@
 <template>
   <div class="uicontrols">
+    <div class="section-block">
+      <div class="section-title">Title</div>
+      <input class="textinput" placeholder="cutsom types..." type="text" v-model="node.title">
+    </div>
+    <div class="section-block">
+      <div class="section-title">Type of Item</div>
+      <select :disabled="node.type === 'root'" class="selsel" v-model="node.type" @change="otherType = node.type">
+        <option value="root">App Engine</option>
+        <option value="scene">Scene</option>
+        <option value="camera">Camera</option>
+        <option value="object3D">Object3D</option>
+        <option value="drawable">Mesh / Points / LineSegments</option>
+        <option value="geometry">Geometry</option>
+        <option value="materail">Materail</option>
+        <option value="organiser">Organiser</option>
+        <option :value="otherType">Others: {{ otherType }}</option>
+      </select>
+      <input v-if="node.type !== 'root'" class="textinput" placeholder="Other types..." type="text" v-model="otherType" @change="(v) => { node.type = v.target.value }">
+    </div>
+
+    <div class="section-block">
+      <div class="section-title">Custom Code</div>
+      <button class="inspector-btn" v-if="node" @click="$emit('openCoder', { node, nodes })">Edit Code</button>
+      <div v-bind="node.library = node.library || []">
+        <div>
+          <input type="text" class="textinput" placeholder="Library URL...." v-model="adderLib">
+          <button class="inspector-btn" @click="addLib({ libs: node.library, add: adderLib })">+ Add Dependency</button>
+        </div>
+        <div :key="ii" v-for="(lib, ii) in node.library">
+          <input class="textinput" type="text" v-model="lib.url">
+          <button class="inspector-btn small" @click="removeLib({ libs: node.library, lib, idx: ii })">X</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="section-title">Add Example Item</div>
+      <div>
+        <button class="inspector-btn left-align" v-if="!node.trashed" @click="addScene({ node, nodes })">+ Scene</button>
+      </div>
+
+      <div>
+        <button class="inspector-btn left-align" v-if="!node.trashed" @click="addCamera({ node, nodes })">+ Camera</button>
+      </div>
+      <div>
+        <button class="inspector-btn left-align" v-if="!node.trashed" @click="addObject3DChildTo({ node, nodes })">+ Object3D</button>
+      </div>
+      <div>
+        <button class="inspector-btn left-align" v-if="!node.trashed" @click="addMatCapMaterial({ node, nodes })">+ MatCap Material</button>
+      </div>
+      <div>
+        <button class="inspector-btn left-align" v-if="!node.trashed" @click="addSphereGeometry({ node, nodes })">+ Sphere Geometry</button>
+      </div>
+
+      <div>
+        <button class="inspector-btn left-align" v-if="!node.trashed" @click="addExample({ node, nodes })">+ Sample Ball</button>
+      </div>
+      <div>
+        <button class="inspector-btn left-align" v-if="!node.trashed" @click="addWireFrame({ node, nodes })">+ Basic Solid Material</button>
+      </div>
+    </div>
+
+    <div class="section-block">
+      <div class="section-title">Recycle Bin</div>
+      <button class="inspector-btn" v-if="!node.trashed && !node.preventDelete" @click="recycleNode({ node, nodes })">Recycle Node and SubTree</button>
+      <div class="checkbox-item" v-if="!node.trashed && node.type !== 'root'">
+        Prevent Delete
+        <input type="checkbox" v-model="node.preventDelete">
+      </div>
+      <div class="checkbox-item" v-if="node.type === 'root'">
+        App Item is cannot be deleted.
+      </div>
+
+      <button class="inspector-btn" v-if="node.trashed" @click="restoreNode({ node, nodes })">Restore Item</button>
+      <button class="inspector-btn" v-if="node.trashed" @click="removeNodePerm({ node, nodes })">Permanently Delete</button>
+    </div>
+
     <!-- <p>
       ID
     </p> -->
@@ -13,19 +90,10 @@
       parent
     </p>
     <input type="text" v-model="node.to"  @input="$emit('onInputAnimate', { node })"> -->
-
-    <h1>{{ node.title }}</h1>
+<!--
     <input type="text" v-model="node.title">
     <p>type</p>
-    <input type="text" v-model="node.type">
-
-    <ul v-bind="node.library = node.library || []">
-      <li :key="ii" v-for="(lib, ii) in node.library">
-        <input type="text" v-model="lib.url">
-        <button @click="removeLib({ libs: node.library, lib, idx: ii })">X</button>
-      </li>
-      <li><button @click="addLib({ libs: node.library, add: adderLib })">Add</button> <input type="text" v-model="adderLib"></li>
-    </ul>
+    <input type="text" v-model="node.type"> -->
 
     <!-- <select v-if="node.type === 'root'" v-model="node.sceneID" @change="$emit('reload')">
       <option :value="node._id" :key="node._id" v-for="node in nodes.filter(t => t.type === 'scene')">{{ node.title }}</option>
@@ -42,41 +110,19 @@
       <input type="text" v-model="node.keyname">
     </p> -->
 
-    <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code editor</button>
+    <!-- <button v-if="!node.trashed" @click="$emit('openCoder', { node, nodes })">Code editor</button> -->
     <!--
     <br />
     <button v-if="!node.trashed" @click="addEmptyChildTo({ node, nodes })">Add TE Child</button> -->
 
-    <br />
-    <button v-if="!node.trashed" @click="addObject3DChildTo({ node, nodes })">Add Object3D Child</button>
-
-    <br />
-    <button v-if="!node.trashed" @click="addMatCapMaterial({ node, nodes })">Add MatCap Material</button>
-
-    <br />
-    <button v-if="!node.trashed" @click="addCamera({ node, nodes })">Add Camera Child</button>
-
-    <br />
-    <button v-if="!node.trashed" @click="addSphereGeometry({ node, nodes })">Add Sphere Geometry Child</button>
-
-    <br />
-    <button v-if="!node.trashed" @click="addScene({ node, nodes })">Add Scene</button>
-
-    <br />
-    <button v-if="!node.trashed" @click="addExample({ node, nodes })">Add Sample Ball</button>
-
-    <br />
-    <button v-if="!node.trashed" @click="addWireFrame({ node, nodes })">Add Basic Solid Material Child</button>
-
-    <div>
+    <!-- <div>
       <br />
       <button v-if="!node.trashed" @click="recycleNode({ node, nodes })">Recycle Node and SubTree</button>
       <button v-if="node.trashed" @click="restoreNode({ node, nodes })">Restore</button>
-      <br />
       <button v-if="node.trashed" @click="removeNodePerm({ node, nodes })">PermDelete Node and SubTree</button>
     </div>
 
-    <pre>{{ node }}</pre>
+    <pre>{{ node }}</pre> -->
   </div>
 </template>
 
@@ -96,6 +142,7 @@ export default {
   },
   data () {
     return {
+      otherType: '',
       newTrackID: '',
       adderLib: ''
     }
@@ -134,36 +181,38 @@ export default {
       this.$emit('reload')
     },
     removeNodePerm ({ node, nodes }) {
-      let links = Node.getLinks({ nodes })
-      let allChd = Node.getAllChildren({ node, nodes, links })
+      if (window.prompt(`Copy and paste "${node.title}" to remove item.`) === node.title) {
+        let links = Node.getLinks({ nodes })
+        let allChd = Node.getAllChildren({ node, nodes, links })
 
-      let markDelNode = (node) => {
-        node.toBeRemoved = true
-      }
-      markDelNode(node)
-
-      // all descendets
-      allChd.forEach((n) => {
-        markDelNode(n)
-      })
-
-      // this node
-      this.$forceUpdate()
-
-      this.nodes.filter(n => n.toBeRemoved).forEach(n => {
-        let idx = this.nodes.findIndex(no => no._id === n._id)
-        this.nodes.splice(idx, 1)
-      })
-
-      this.$emit('close', { node, nodes })
-      this.$emit('onLayout', {
-        node,
-        nodes,
-        args: {
-          goNode: nodes.find(m => m._id === node.to)
+        let markDelNode = (node) => {
+          node.toBeRemoved = true
         }
-      })
-      this.$emit('reload')
+        markDelNode(node)
+
+        // all descendets
+        allChd.forEach((n) => {
+          markDelNode(n)
+        })
+
+        // this node
+        this.$forceUpdate()
+
+        this.nodes.filter(n => n.toBeRemoved).forEach(n => {
+          let idx = this.nodes.findIndex(no => no._id === n._id)
+          this.nodes.splice(idx, 1)
+        })
+
+        this.$emit('close', { node, nodes })
+        this.$emit('onLayout', {
+          node,
+          nodes,
+          args: {
+            goNode: nodes.find(m => m._id === node.to)
+          }
+        })
+        this.$emit('reload')
+      }
     },
     recycleNode ({ node, nodes }) {
       let links = Node.getLinks({ nodes })
@@ -365,6 +414,92 @@ export default {
 <style scoped>
 .uicontrols{
   /* background-color: black; */
-  color: grey;
+  color: white;
+}
+
+button,
+select,
+input{
+  color: black;
+}
+
+select.selsel {
+   -webkit-appearance: button;
+   -webkit-border-radius: 2px;
+   -webkit-box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.1);
+   -webkit-padding-end: 20px;
+   -webkit-padding-start: 2px;
+   -webkit-user-select: none;
+
+   background-image: url(../assets/ui/select.png), linear-gradient(#FAFAFA, #F4F4F4 40%, #E5E5E5);
+   background-position: 97% center;
+   background-repeat: no-repeat;
+   border: 1px solid #AAA;
+   color:rgb(43, 43, 43);
+   font-size: inherit;
+   margin-left: 0px;
+   overflow: hidden;
+   padding: 5px 10px;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   width: calc(100% - 20px * 2);
+}
+
+select.selsel:disabled{
+  color: rgb(175, 175, 175);
+  background-image: none;
+}
+
+.textinput{
+  appearance: none;
+  border: 1px solid #AAA;
+  color: rgb(43, 43, 43);
+  font-size: inherit;
+  margin-left: 0px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - 20px * 2);
+}
+
+.textinput::-webkit-input-placeholder{
+  color: rgb(43, 43, 43);
+}
+
+.section-title{
+  font-size: 19px;
+  margin-bottom: 10px;
+  font-weight: bold;
+  padding-left: 20px;
+  border-left: white solid 1px;
+}
+.section-block{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.inspector-btn{
+  appearance: none;
+  border: 1px solid #AAA;
+  color: rgb(43, 43, 43);
+  font-size: inherit;
+  margin-left: 0px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100% - 20px * 2);
+}
+
+.inspector-btn.left-align{
+  text-align: left;
+}
+.inspector-btn:hover{
+  background-color: rgba(255,255,255,1.0);
+}
+
+.checkbox-item{
+  margin-bottom: 15px;
 }
 </style>
