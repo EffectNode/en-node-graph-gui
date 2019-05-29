@@ -221,6 +221,7 @@ export default {
       setTimeout(() => {
         this.toucher.scrollTop = this.toucher.scrollHeight
       }, 1000)
+      this.$emit('reload')
     },
     tryResetTrackConfirm () {
       let trs = this.timeline.tracks
