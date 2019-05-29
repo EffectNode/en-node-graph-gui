@@ -5,7 +5,7 @@
         Essential Example
       </h1>
       <h2>
-        How to make my own scene?
+        How to make my own scene and direct it with timeline?
       </h2>
     </div>
     <div class="oo-row">
