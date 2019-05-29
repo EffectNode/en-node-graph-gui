@@ -26,7 +26,7 @@
               Easy to Organise
             </div>
             <div class="oo-content-body">
-              Our content tree helps you to organise in a visual way. So that you can easily navigate to your content and edit it.Our content tree helps you to organise in a visual way. So that you can easily navigate to your content and edit it.
+              Our content tree helps you to organise in a visual way. So that you can easily navigate to your content and edit it.
             </div>
           </div>
         </div>

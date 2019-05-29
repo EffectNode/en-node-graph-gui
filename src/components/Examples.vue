@@ -14,7 +14,7 @@
           <div class="oo-content">
             <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/add-scene.png')})` }"></div>
             <div class="oo-content-title">
-              1. Click "Scenes"
+              1. Click "Scenes" Ball
             </div>
             <div class="oo-content-body">
               Every App has multiple scene supported. Click the "Scenes" to add more scene
@@ -29,7 +29,7 @@
           <div class="oo-content">
             <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/inspector.png')})` }"></div>
             <div class="oo-content-title">
-              2. Go To Inspector
+              2. Go To Inspector Box
             </div>
             <div class="oo-content-body">
               We can use Inspector to add Example Items. It's at the screen's bottom left hand corner.
@@ -44,7 +44,7 @@
           <div class="oo-content">
             <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/addScene.png')})` }"></div>
             <div class="oo-content-title">
-              3. Click "+ Scene"
+              3. Click "+ Scene" Button
             </div>
             <div class="oo-content-body">
               After clicking + Scene, please click the newly added Scene Ball
@@ -59,7 +59,7 @@
           <div class="oo-content">
             <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/clickNewScene.png')})` }"></div>
             <div class="oo-content-title">
-              4. Click the new "Scene"
+              4. Click the new "Scene" Ball
             </div>
             <div class="oo-content-body">
               You can select it by clicking it in the balls area.
