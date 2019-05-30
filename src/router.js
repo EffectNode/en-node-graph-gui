@@ -36,12 +36,25 @@ export default new Router({
     {
       path: '/register',
       name: 'Register',
-
+      beforeEnter: async (to, from, next) => {
+        if (API.check() && await API.getMyself()) {
+          next('/myhome')
+        } else {
+          next()
+        }
+      },
       component: () => import(/* webpackChunkName: "landing" */ './views/Register.vue')
     },
     {
       path: '/login',
       name: 'Login',
+      beforeEnter: async (to, from, next) => {
+        if (API.check() && await API.getMyself()) {
+          next('/myhome')
+        } else {
+          next()
+        }
+      },
       component: () => import(/* webpackChunkName: "landing" */ './views/Login.vue')
     },
     {

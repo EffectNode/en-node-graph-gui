@@ -1,5 +1,5 @@
 <template>
-  <div class="textinput" @click="logout()">
+  <div class="auth-btn" @click="logout()">
     Logout
   </div>
 </template>

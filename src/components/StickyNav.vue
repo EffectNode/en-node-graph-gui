@@ -17,8 +17,18 @@
         </div>
       </div>
     </div>
+    <div class="ll-menu-nav-closer" :class="{ 'open': open }" @click="open = false"></div>
     <div class="ll-menu-nav" :class="{ 'open': open }">
-
+      <div class="ll-menu-v-list">
+        <div class="ll-menu-item title">
+          Menu
+        </div>
+        <div class="ll-menu-item" :key="item.label + 'sticky'" v-for="item in items.filter(f => !f.noMenu)">
+          <div class="word"  @click="item.action()">
+            {{ item.label }}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -31,6 +41,15 @@ export default {
     sticky: {
       type: Boolean,
       default: false
+    }
+  },
+  watch: {
+    open () {
+      if (this.open) {
+        document.body.style.overflow = 'hidden'
+      } else {
+        document.body.style.overflow = 'unset'
+      }
     }
   },
   data () {
@@ -63,14 +82,15 @@ export default {
               path: '/register'
             })
           }
-        }// ,
-        // {
-        //   label: 'Menu',
-        //   class: { 'll-in-mobile-only': true },
-        //   action: () => {
-        //     this.open = !this.open
-        //   }
-        // }
+        },
+        {
+          noMenu: true,
+          label: 'Menu',
+          class: { 'll-in-mobile-only': false },
+          action: () => {
+            this.open = !this.open
+          }
+        }
       ]
     }
   },
@@ -91,7 +111,42 @@ export default {
   left: 0px;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.85);
+  background-color: rgba(0, 0, 0, 0.925);
+  z-index: 10;
+}
+.ll-menu-nav-closer{
+  display: none;
+}
+@keyframes zoomin {
+  0%{
+    transform: scale(0)
+  }
+  100%{
+    transform: scale(1)
+  }
+}
+@keyframes fadeinMove {
+  0%{
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  100%{
+    opacity: 1;
+    transform: translateY(0px);
+  }
+}
+.ll-menu-nav-closer.open{
+  cursor: pointer;
+  display: block;
+  position: absolute;
+  animation: zoomin 0.3s 0s ease-in-out;
+  top: 20px;
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background-color: rgba(201, 120, 120, 0.925);
+  z-index: 11;
 }
 .ll-welcome-section{
   width: 100%;
@@ -126,6 +181,7 @@ export default {
   display: inline-block;
   margin: 0px 10px;
   text-decoration: underline;
+  -webkit-tap-highlight-color: transparent;
 }
 .ll-in-mobile-only{
   display: inline-block;
@@ -143,4 +199,29 @@ export default {
     display: inline-block;
   }
 }
+
+.ll-menu-v-list{
+}
+.ll-menu-item{
+  margin-bottom: 30px;
+  font-size: 37px;
+  height: calc(100% / 8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  animation: fadeinMove 1.3s 0s ease-in-out;
+}
+
+.ll-menu-item.title{
+  font-size: 60px;
+  margin-top: 60px;
+}
+
+.ll-menu-item .word{
+  display: inline-block;
+  cursor: pointer;
+}
+
 </style>
