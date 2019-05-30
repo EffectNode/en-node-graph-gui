@@ -18,6 +18,7 @@
       </div>
     </div>
     <div class="ll-menu-nav" :class="{ 'open': open }">
+
     </div>
   </div>
 </template>
@@ -45,31 +46,31 @@ export default {
             window.location.assign('https://github.com/EffectNode/en-node-graph-gui')
           }
         },
-        {
-          label: 'Login',
-          class: { 'll-in-desktop-only': true },
-          action: () => {
-            this.$router.push({
-              path: '/login'
-            })
-          }
-        },
-        {
-          label: 'Register',
-          class: { 'll-in-desktop-only': true },
-          action: () => {
-            this.$router.push({
-              path: '/register'
-            })
-          }
-        },
-        {
-          label: 'Menu',
-          class: { 'll-in-mobile-only': true },
-          action: () => {
-            this.open = !this.open
-          }
-        }
+        // {
+        //   label: 'Login',
+        //   class: { 'll-in-desktop-only': true },
+        //   action: () => {
+        //     this.$router.push({
+        //       path: '/login'
+        //     })
+        //   }
+        // },
+        // {
+        //   label: 'Register',
+        //   class: { 'll-in-desktop-only': true },
+        //   action: () => {
+        //     this.$router.push({
+        //       path: '/register'
+        //     })
+        //   }
+        // },
+        // {
+        //   label: 'Menu',
+        //   class: { 'll-in-mobile-only': true },
+        //   action: () => {
+        //     this.open = !this.open
+        //   }
+        // }
       ]
     }
   },
