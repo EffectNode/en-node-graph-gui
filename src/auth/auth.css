@@ -1,0 +1,100 @@
+
+.login-box{
+  outline: white solid 1px;
+}
+.login-title{
+  font-size: 35px;
+  font-weight: bold;
+}
+
+.textinput{
+  appearance: none;
+  border: 1px solid #AAA;
+  color: rgb(43, 43, 43);
+  font-size: inherit;
+  margin-left: 0px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100%);
+
+}
+
+.textinput::-webkit-input-placeholder{
+  color: rgb(43, 43, 43);
+}
+
+
+.auth-btn{
+  appearance: none;
+  border: 1px solid #AAA;
+  color: rgb(43, 43, 43);
+  font-size: inherit;
+  margin-left: 0px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100%);
+
+}
+
+.auth-btn.left-align{
+  text-align: left;
+}
+.auth-btn:hover{
+  background-color: rgba(255,255,255,1.0);
+}
+
+a:visited,
+a:active,
+a{
+  color: white;
+  text-decoration: underline;
+}
+
+.center-text{
+  text-align: center;
+}
+.red {
+  color: red;
+}
+
+.login-box-wrap{
+  border: white solid 1px;
+}
+
+.login-box-margin{
+  margin: 25px;
+}
+
+/* For phone classes */
+@media only screen {
+
+} /* For mobile styles */
+
+/* For Tablet Classes */
+@media only screen and (min-width: 48em) {
+
+} /* min-width 768px for Tablet styles */
+
+/* For Laptop Classes */
+@media only screen and (min-width: 62em) { } /* min-width 992px for laptop to small desktop styles /*
+
+/* For Desktop Classes */
+@media only screen and (min-width: 75em) { } /* min-width 1200px medium to large Desktop styles /*
+
+/* Others Media Queries used for devices with min and max used with show and hide classes*/
+
+@media only screen and (max-width: 47.938em) { } /* Up to 767px */
+
+@media only screen and (min-width: 48em) and (max-width: 61.938em) { } /* 768px to 991px */
+
+@media only screen and (min-width: 62em) and (max-width: 74.938em) { } /*  992px to 1199px */
+
+@media only screen and (min-width: 75em) { } /* 1200px and up */
+
+/* Used to stack columns 30em and under with cute-100 */
+@media only screen and (max-width: 30em){ } /* max-width 30em 480px */
+

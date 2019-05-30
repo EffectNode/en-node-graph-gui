@@ -36,7 +36,7 @@ let storeConfig = {
   }
 }
 
-let baseURL = 'https://stark-sea-51366.herokuapp.com'
+let baseURL = 'https://en-node-graph-api.herokuapp.com/'
 
 if (process.env.NODE_ENV === 'production') {
 
@@ -77,6 +77,7 @@ export const login = async ({ email, password }) => {
 }
 
 export const logout = () => {
+  SDK.clearToken()
   Cookies.remove(storeConfig.cookie.key, storeConfig.cookie.options)
   window.localStorage.removeItem(storeConfig.localStorage.key)
 }

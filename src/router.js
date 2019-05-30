@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-
+import * as API from './api/api.js'
 Vue.use(Router)
 
 export default new Router({
@@ -13,6 +13,22 @@ export default new Router({
       component: () => import(/* webpackChunkName: "landing" */ './views/Landing.vue')
     },
     {
+      path: '/myhome',
+      name: 'My Home',
+      beforeEnter: (to, from, next) => {
+        if (API.check()) {
+          API.getMyself().then(() => {
+            next()
+          }, () => {
+            next('/login')
+          })
+        } else {
+          next('/login')
+        }
+      },
+      component: () => import(/* webpackChunkName: "landing" */ './views/MyHome.vue')
+    },
+    {
       path: '/demo',
       name: 'iGraphDemo',
       component: () => import(/* webpackChunkName: "demo" */ './views/iGraphDemo.vue')
@@ -20,6 +36,7 @@ export default new Router({
     {
       path: '/register',
       name: 'Register',
+
       component: () => import(/* webpackChunkName: "landing" */ './views/Register.vue')
     },
     {
