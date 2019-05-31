@@ -12,6 +12,12 @@ export default new Router({
       name: 'Landing',
       component: () => import(/* webpackChunkName: "landing" */ './views/Landing.vue')
     },
+
+    {
+      path: '/demo',
+      name: 'iGraphDemo',
+      component: () => import(/* webpackChunkName: "demo" */ './views/iGraphDemo.vue')
+    },
     {
       path: '/myhome',
       name: 'My Home',
@@ -26,36 +32,34 @@ export default new Router({
           next('/login')
         }
       },
-      component: () => import(/* webpackChunkName: "landing" */ './views/MyHome.vue')
-    },
-    {
-      path: '/demo',
-      name: 'iGraphDemo',
-      component: () => import(/* webpackChunkName: "demo" */ './views/iGraphDemo.vue')
-    },
-    {
-      path: '/register',
-      name: 'Register',
-      beforeEnter: async (to, from, next) => {
-        if (API.check() && await API.getMyself()) {
-          next('/myhome')
-        } else {
-          next()
-        }
+      meta: {
+        loginGate: true
       },
-      component: () => import(/* webpackChunkName: "landing" */ './views/Register.vue')
+      component: () => import(/* webpackChunkName: "landing" */ './views/MyHome.vue')
     },
     {
       path: '/login',
       name: 'Login',
       beforeEnter: async (to, from, next) => {
-        if (API.check() && await API.getMyself()) {
+        if (API.check()) {
           next('/myhome')
         } else {
           next()
         }
       },
       component: () => import(/* webpackChunkName: "landing" */ './views/Login.vue')
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      beforeEnter: async (to, from, next) => {
+        if (API.check()) {
+          next('/myhome')
+        } else {
+          next()
+        }
+      },
+      component: () => import(/* webpackChunkName: "landing" */ './views/Register.vue')
     },
     {
       path: '/editor/:graphID',

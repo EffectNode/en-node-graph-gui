@@ -272,10 +272,11 @@ export default {
       let replaceTokenGZIPB64 = `/*gZipBase64*/`
       str = str.replace(replaceTokenGZIPB64, await this.zip({ obj: this.getWater() }))
 
-      let document = window.document
-      if (window.top) {
-        document = window.top.document
-      }
+      let newWin = window.open()
+      let document = newWin.document
+      // if (window.top) {
+      //   document = window.top.document
+      // }
 
       let form = document.createElement('form')
       form.action = `https://codepen.io/pen/define`

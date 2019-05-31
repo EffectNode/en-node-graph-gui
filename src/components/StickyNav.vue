@@ -66,6 +66,16 @@ export default {
           }
         },
         {
+          label: 'My Home',
+          class: { 'll-in-desktop-only': true },
+          action: () => {
+            this.$router.push({
+              path: '/myhome'
+            })
+          }
+        },
+        {
+          noMenu: this.$route.path === '/login',
           label: 'Login',
           class: { 'll-in-desktop-only': true },
           action: () => {
@@ -75,6 +85,7 @@ export default {
           }
         },
         {
+          noMenu: this.$route.path === '/register',
           label: 'Register',
           class: { 'll-in-desktop-only': true },
           action: () => {
@@ -209,7 +220,6 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   animation: fadeinMove 1.3s 0s ease-in-out;
 }
@@ -222,6 +232,12 @@ export default {
 .ll-menu-item .word{
   display: inline-block;
   cursor: pointer;
+}
+
+.ll-menu-item .word:hover{
+  margin: -1px 0px;
+  border-bottom: white solid 1px;
+  border-top: white solid 1px;
 }
 
 </style>
