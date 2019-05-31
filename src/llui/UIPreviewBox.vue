@@ -49,7 +49,9 @@ export default {
           // if (window.innerWidth < 1921) {
           //   this.run()
           // }
-          // window.dispatchEvent(new Event('resize'))
+          this.$nextTick(() => {
+            window.dispatchEvent(new Event('resize'))
+          })
           // window.dispatchEvent(new Event('reload'))
         }
       }

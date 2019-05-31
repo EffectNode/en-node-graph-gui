@@ -1,6 +1,7 @@
 <template>
-  <div class="full">
-    <iframe v-if="refresher" class="full" :width="iframe.width" ref="iframe" :height="iframe.height" frameborder="0" :src="src"></iframe>
+  <div class="parent">
+    <!-- <iframe v-if="refresher" class="full" ref="iframe" frameborder="0" :src="src"></iframe> -->
+    <iframe v-if="refresher" class="iframe" ref="iframe" :width="iframe.width"  :height="iframe.height" frameborder="0" :src="src"></iframe>
     <!-- <DevExec v-else-if="refresher" class="full" :nodes="nodes" ref="devexec"></DevExec> -->
   </div>
 </template>
@@ -13,6 +14,7 @@ export default {
     // playing: {
     //   default: false
     // },
+    size: {},
     mode: {
       default: 'preview'
     },
@@ -126,28 +128,22 @@ export default {
     }, false)
 
     let dimension = () => {
-      this.$nextTick(() => {
-        let rect = this.$el.getBoundingClientRect()
-        this.iframe.width = rect.width.toFixed(0)
-        this.iframe.height = rect.height.toFixed(0)
-      })
+      let rect = this.$el.getBoundingClientRect()
+      if (this.iframe.width < rect.width) {
+        this.reload()
+        return
+      }
+      this.iframe.width = Number(rect.width.toFixed(0))
+      this.iframe.height = Number(rect.height.toFixed(0))
+      this.$forceUpdate()
     }
-    window.addEventListener('resize', dimension, false)
+    window.addEventListener('resize', dimension, true)
     dimension()
 
-    // function doOnOrientationChange () {
-    //   switch (window.orientation) {
-    //     case -90 || 90:
-    //       dimension()
-    //       break
-    //     default:
-    //       dimension()
-    //       break
-    //   }
-    // }
-
-    // window.addEventListener('orientationchange', doOnOrientationChange)
-    // doOnOrientationChange()
+    function doOnOrientationChange () {
+      dimension()
+    }
+    window.addEventListener('orientationchange', doOnOrientationChange)
 
     await this.reload()
   },
@@ -213,8 +209,18 @@ export default {
 </script>
 
 <style scoped>
-.full{
+.parent{
+  position: relative;
   width: 100%;
-  height: 100%
+  height: 100%;
+}
+.iframe{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  max-width: 100%;
+  height: 100%;
 }
 </style>
