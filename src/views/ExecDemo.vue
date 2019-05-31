@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     async load () {
-      let water = await import(/* webpackChunkName: "igraph-demo" */'../llui/water/water-03.json')
+      let water = await import(/* webpackChunkName: "igraph-demo" */'../llui/water/water-03-stable.json')
       this.water = water.default
       this.$emit('load', true)
     }

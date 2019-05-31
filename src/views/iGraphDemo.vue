@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     async load () {
-      let water = await import(/* webpackChunkName: "igraph-demo" */'../llui/water/water-03.json')
+      let water = await import(/* webpackChunkName: "igraph-demo" */'../llui/water/water-04.json')
       this.water = water.default
 
       // if (process.env.NODE_ENV === 'development') {
