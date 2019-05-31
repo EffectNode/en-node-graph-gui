@@ -30,6 +30,7 @@
 </template>
 
 <script>
+import NProgress from 'nprogress'
 import(/* webpackChunkName: "igraph-coder" */'../llui/UICodeControl.vue')
 export default {
   props: {
@@ -199,19 +200,22 @@ export default {
     if (this.modes.isEditor) {
       let water1 = JSON.stringify(this.getWater())
       this.autoChecker = setInterval(() => {
-        if (JSON.stringify(this.getWater()) !== water1) {
+        let water2 = JSON.stringify(this.getWater())
+        if (water2 !== water1) {
+          NProgress.start()
           // this.loading = true
           // this.$refs.igraph.classList.add('loading')
           this.$emit('save', {
-            obj: this.water,
+            obj: this.getWater(),
             done: () => {
+              NProgress.done()
               // this.$refs.igraph.classList.remove('loading')
               // this.loading = false
             }
           })
-          water1 = JSON.stringify(this.getWater())
+          water1 = water2
         }
-      }, 500)
+      }, 1500)
     }
 
     window.addEventListener('message', (evt) => {
@@ -324,7 +328,6 @@ export default {
     },
     getWater () {
       let newwater = JSON.parse(JSON.stringify(this.water))
-
       newwater.timeinfo.start = 0
       newwater.timeinfo.timelinePlaying = true
       newwater.timeinfo.timelineControl = 'timer'

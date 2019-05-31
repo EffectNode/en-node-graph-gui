@@ -96,7 +96,7 @@ export default {
 
     // this.water.timeinfo = {
     //   start: 0,
-    //   totalTime: this.water.timeinfo,
+    //   totalTime: this.water.timeinfo.totalTime,
     //   timelinePlaying: true,
     //   timelineControl: 'timer',
     //   timelinePercentageLast: 0,
