@@ -141,7 +141,7 @@ export const updateGraph = ({ data }) => {
 }
 
 export const delGraph = ({ data }) => {
-  return SDK.request('DELETE', `/igraphs/${data._id}?userID=${data.userID}`, { data })
+  return SDK.request('DELETE', `/igraphs/${data._id}`, { data })
 }
 
 // ---- UPLOAD ------
