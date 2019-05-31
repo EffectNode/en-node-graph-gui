@@ -49,7 +49,7 @@ export default {
           // if (window.innerWidth < 1921) {
           //   this.run()
           // }
-          window.dispatchEvent(new Event('resize'))
+          // window.dispatchEvent(new Event('resize'))
           // window.dispatchEvent(new Event('reload'))
         }
       }
@@ -193,6 +193,7 @@ export default {
   height: 45px;
   color: white;
   background-color: #474747;
+  z-index: 10;
 }
 .title-text{
   position: absolute;
