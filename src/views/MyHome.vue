@@ -36,7 +36,7 @@
           <div class="projectlist">
             <div class="project-item" ref="boxes" :key="w._id" v-for="(w) in list">
               <div class="movie" ref="movie" @click="list.forEach(w => w.playing = false); w.playing = true;">
-                <EXEC :size="size" v-if="w.water && w.playing" :water="w.water"></EXEC>
+                <EXEC v-if="w.water && w.playing" :water="w.water"></EXEC>
                 <div class="clicktoplay" v-show="!w.playing">
                   Click to Play
                 </div>

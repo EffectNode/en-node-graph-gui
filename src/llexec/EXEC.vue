@@ -14,7 +14,6 @@ export default {
     // playing: {
     //   default: false
     // },
-    size: {},
     mode: {
       default: 'preview'
     },
