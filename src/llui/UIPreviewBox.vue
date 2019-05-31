@@ -46,7 +46,11 @@ export default {
             this.open.fullpreview = false
           })
         } else {
-          window.dispatchEvent(new Event('reload'))
+          // if (window.innerWidth < 1921) {
+          //   this.run()
+          // }
+          window.dispatchEvent(new Event('resize'))
+          // window.dispatchEvent(new Event('reload'))
         }
       }
     }

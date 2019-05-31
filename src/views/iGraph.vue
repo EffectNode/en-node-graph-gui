@@ -1,7 +1,7 @@
 <template>
   <div class="igraph" :class="{ 'loading': loading && !modes.isEditor }">
     <div class="nodetree">
-      <NodeTree @open="open" v-if="nodes && !open.fullpreview" :show="show" @dropped="onReload({ timeout: 600 })" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
+      <NodeTree @open="open" v-if="nodes" :show="show" @dropped="onReload({ timeout: 600 })" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
       </NodeTree>
     </div>
 
@@ -190,7 +190,7 @@ export default {
       // totalTime: 30,
       loop: true,
       elapsed: 0,
-      timelinePlaying: false,
+      timelinePlaying: true,
       timelineControl: 'timer',
       timelinePercentageLast: 0,
       timelinePercentage: 0 // can be timeline, render or play
@@ -200,11 +200,13 @@ export default {
       let water1 = JSON.stringify(this.getWater())
       this.autoChecker = setInterval(() => {
         if (JSON.stringify(this.getWater()) !== water1) {
-          this.loading = true
+          // this.loading = true
+          // this.$refs.igraph.classList.add('loading')
           this.$emit('save', {
             obj: this.water,
             done: () => {
-              this.loading = false
+              // this.$refs.igraph.classList.remove('loading')
+              // this.loading = false
             }
           })
           water1 = JSON.stringify(this.getWater())

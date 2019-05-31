@@ -80,12 +80,6 @@ export default {
           // this.$forceUpdate()
           cancelAnimationFrame(this.clearTimer)
         }
-        if (type === 'pause') {
-          this.water.timeinfo.timelinePlaying = false
-        }
-        if (type === 'play') {
-          this.water.timeinfo.timelinePlaying = true
-        }
       }
     })
     let rAF2 = () => {
