@@ -10,9 +10,9 @@ import * as CodeGen from '../llexec/code-generator.js'
 import * as Node from '../llsvg/node'
 export default {
   props: {
-    playing: {
-      default: false
-    },
+    // playing: {
+    //   default: false
+    // },
     mode: {
       default: 'preview'
     },
@@ -68,13 +68,13 @@ export default {
     }
   },
   watch: {
-    playing () {
-      if (this.playing) {
-        this.play()
-      } else {
-        this.pause()
-      }
-    }
+    // playing () {
+    //   if (this.playing) {
+    //     this.play()
+    //   } else {
+    //     this.pause()
+    //   }
+    // }
     // refresher () {
     //   if (this.refresher) {
     //     this.$nextTick(() => {
@@ -136,18 +136,18 @@ export default {
     await this.reload()
   },
   methods: {
-    pause () {
-      let iframe = this.$refs['iframe']
-      if (iframe) {
-        iframe.contentWindow.postMessage({ type: 'pause' }, window.location.origin)
-      }
-    },
-    play () {
-      let iframe = this.$refs['iframe']
-      if (iframe) {
-        iframe.contentWindow.postMessage({ type: 'play' }, window.location.origin)
-      }
-    },
+    // pause () {
+    //   let iframe = this.$refs['iframe']
+    //   if (iframe) {
+    //     iframe.contentWindow.postMessage({ type: 'pause' }, window.location.origin)
+    //   }
+    // },
+    // play () {
+    //   let iframe = this.$refs['iframe']
+    //   if (iframe) {
+    //     iframe.contentWindow.postMessage({ type: 'play' }, window.location.origin)
+    //   }
+    // },
     // tryGet (fn = () => {}) {
     //   let insta = fn()
     //   if (insta) {

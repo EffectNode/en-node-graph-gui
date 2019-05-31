@@ -62,7 +62,7 @@ export default new Router({
       component: () => import(/* webpackChunkName: "landing" */ './views/Register.vue')
     },
     {
-      path: '/editor/:graphID',
+      path: '/iGraph-Editor/:graphID',
       name: 'iGraphEditor',
       component: () => import(/* webpackChunkName: "editor" */ './views/iGraphEditor.vue')
     }

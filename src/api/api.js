@@ -130,7 +130,10 @@ export const createIGraph = ({ data }) => {
 }
 
 export const getMyGraphs = ({ userID, pageAt = 0, perPage = 7 }) => {
-  return SDK.request('GET', `/igraphs?userID=${userID}&_limit=${perPage}&_start=${pageAt * perPage}&_sort=dateUpdated:DESC`)
+  return SDK.request('GET', `/igraphs?userID=${userID}&_limit=${perPage}&_start=${pageAt * perPage}&_sort=updatedAt:DESC`)
+}
+export const getGraph = ({ graphID }) => {
+  return SDK.request('GET', `/igraphs/${graphID}`)
 }
 
 export const updateGraph = ({ data }) => {

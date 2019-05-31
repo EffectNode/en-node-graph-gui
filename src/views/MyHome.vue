@@ -14,6 +14,9 @@
           <h2 class="myprojects">
             My Projects:
           </h2>
+          <h3 v-if="list.length === 0">
+            The Space is Empty. Let's get creative. :D
+          </h3>
           <div class="projectlist">
             <div class="project-item" ref="boxes" :key="w._id" v-for="(w) in list">
               <div class="movie" @click="list.forEach(w => w.playing = false); w.playing = true;">
@@ -31,6 +34,10 @@
                     <img src="../icons/trash-dark.svg" @click="w.trashed = true" v-if="!w.trashed" title="remove" alt="remove movie">
                     <img src="../icons/trash-red.svg" @click="delGraph({ water: w })" v-if="w.trashed" title="remove" alt="remove movie">
                   </div>
+                  <div class="p-btn-icon">
+                    <img src="../icons/edit-dark.svg" @click="$router.push(`/iGraph-Editor/${w._id}`)" v-if="!w.trashed" title="edit" alt="edit movie">
+                  </div>
+
                 </div>
               </div>
             </div>
@@ -123,7 +130,7 @@ export default {
       let base64gzip = await API.ZIP(JSON.stringify(water.default))
       let data = {
         userID: myself._id,
-        title: this.newTitle,
+        title: this.newTitle || 'my new',
         base64gzip
       }
 
@@ -197,7 +204,9 @@ export default {
 .movie{
   width: 100%;
   height: 270px;
+  margin-bottom: 15px;
   border: #eee solid 1px;
+  cursor: pointer;
 }
 
 .p-name{
@@ -224,5 +233,9 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+.p-btn-icon{
+  margin: 0px 12px;
+  margin-right: 0px;
 }
 </style>

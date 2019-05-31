@@ -195,6 +195,20 @@ export default {
       timelinePercentage: 0 // can be timeline, render or play
     }
 
+    let water1 = JSON.stringify(this.getWater())
+    this.autoChecker = setInterval(() => {
+      if (JSON.stringify(this.getWater()) !== water1) {
+        this.loading = true
+        this.$emit('save', {
+          obj: this.water,
+          done: () => {
+            this.loading = false
+          }
+        })
+        water1 = JSON.stringify(this.getWater())
+      }
+    }, 500)
+
     window.addEventListener('message', (evt) => {
       let obj = evt.data
       let type = obj.type
@@ -304,6 +318,7 @@ export default {
     },
     getWater () {
       let newwater = JSON.parse(JSON.stringify(this.water))
+
       newwater.timeinfo.start = 0
       newwater.timeinfo.timelinePlaying = true
       newwater.timeinfo.timelineControl = 'timer'

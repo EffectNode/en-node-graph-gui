@@ -7,13 +7,13 @@
     <div class="section-block">
       <div class="section-title">Type of Item</div>
       <select :disabled="node.type === 'root'" class="selsel" v-model="node.type" @change="otherType = node.type">
-        <option value="root">App Engine</option>
+        <option disabled value="root">App Engine</option>
         <option value="scene">Scene</option>
         <option value="camera">Camera</option>
         <option value="object3D">Object3D</option>
         <option value="drawable">Mesh / Points / LineSegments</option>
         <option value="geometry">Geometry</option>
-        <option value="materail">Materail</option>
+        <option value="material">Material</option>
         <option value="organiser">Organiser</option>
         <option :value="otherType">Others: {{ otherType }}</option>
       </select>
@@ -148,6 +148,9 @@ export default {
     }
   },
   watch: {
+    node () {
+      this.otherType = this.node.type
+    }
   },
   mounted () {
 
