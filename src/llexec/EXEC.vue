@@ -126,12 +126,28 @@ export default {
     }, false)
 
     let dimension = () => {
-      let rect = this.$el.getBoundingClientRect()
-      this.iframe.width = rect.width.toFixed(0)
-      this.iframe.height = rect.height.toFixed(0)
+      this.$nextTick(() => {
+        let rect = this.$el.getBoundingClientRect()
+        this.iframe.width = rect.width.toFixed(0)
+        this.iframe.height = rect.height.toFixed(0)
+      })
     }
     window.addEventListener('resize', dimension, false)
     dimension()
+
+    // function doOnOrientationChange () {
+    //   switch (window.orientation) {
+    //     case -90 || 90:
+    //       dimension()
+    //       break
+    //     default:
+    //       dimension()
+    //       break
+    //   }
+    // }
+
+    // window.addEventListener('orientationchange', doOnOrientationChange)
+    // doOnOrientationChange()
 
     await this.reload()
   },
