@@ -6,7 +6,6 @@ import * as Cookies from 'js-cookie'
 import NProgress from 'nprogress'
 import './nprogress/nprogress.css'
 import downscale from 'downscale'
-
 // @.@
 
 NProgress.configure({
@@ -116,6 +115,30 @@ export const addGalleryItem = ({ userID, media }) => {
     userID,
     media
   })
+}
+
+// ----- iGraph -----
+export const ZIP = (str) => {
+  return import('compress-str').then(m => m.gzip(str))
+}
+export const UNZIP = (str) => {
+  return import('compress-str').then(m => m.gunzip(str))
+}
+
+export const createIGraph = ({ data }) => {
+  return SDK.request('POST', `/igraphs`, { data })
+}
+
+export const getMyGraphs = ({ userID, pageAt = 0, perPage = 7 }) => {
+  return SDK.request('GET', `/igraphs?userID=${userID}&_limit=${perPage}&_start=${pageAt * perPage}&_sort=dateUpdated:DESC`)
+}
+
+export const updateGraph = ({ data }) => {
+  return SDK.request('PUT', `/igraphs/${data._id}?userID=${data.userID}`, { data })
+}
+
+export const delGraph = ({ data }) => {
+  return SDK.request('DELETE', `/igraphs/${data._id}?userID=${data.userID}`, { data })
 }
 
 // ---- UPLOAD ------

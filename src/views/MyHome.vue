@@ -1,24 +1,228 @@
 <template>
-  <div>
-    <UILogout @ok="$router.push('/')"></UILogout>
-    <EXEC v-if="water" :water="water"></EXEC>
+  <div class="myhome">
+    <StickyNav  :at="'secure'"></StickyNav>
+    <div class="row">
+      <div class="cute-100">
+        <div class="welcomehome">
+          Welcome Home.
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <div class="cute-8-tablet">
+        <div class="projects-area">
+          <h2 class="myprojects">
+            My Projects:
+          </h2>
+          <div class="projectlist">
+            <div class="project-item" ref="boxes" :key="w._id" v-for="(w) in list">
+              <div class="movie" @click="list.forEach(w => w.playing = false); w.playing = true;">
+                <EXEC v-if="w.water && w.playing" :water="w.water"></EXEC>
+                <div class="clicktoplay" v-show="!w.playing">
+                  Click to Play
+                </div>
+              </div>
+              <div class="movie-ctrl">
+                <div class="p-name">
+                  <input type="text" @keydown="updateGraph({ water: w })" class="newtitleinput" v-model="w.title">
+                </div>
+                <div class="p-btns">
+                  <div class="p-btn-icon">
+                    <img src="../icons/trash-dark.svg" @click="w.trashed = true" v-if="!w.trashed" title="remove" alt="remove movie">
+                    <img src="../icons/trash-red.svg" @click="delGraph({ water: w })" v-if="w.trashed" title="remove" alt="remove movie">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="cute-4-tablet">
+        <div class="create-area">
+          <h2 class="letscreate">
+            Let's Create:
+          </h2>
+          <div class="newtitle">
+          </div>
+          <div class="action-entry">
+            <img class="icon" src="../icons/add-circle.svg" alt=""  @click="addIGraphs()">
+            <div class="action-sub-item">
+              <input type="text" @keydown.enter="addIGraphs()" class="newtitleinput" v-model="newTitle">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- <EXEC v-if="water" :water="water"></EXEC> -->
   </div>
 </template>
 
 <script>
+import * as API from '../api/api'
+import _ from 'lodash'
 export default {
   components: {
-    UILogout: () => import(/* webpackChunkName: "landing" */ '../auth/UILogout.vue'),
-    EXEC: () => import(/* webpackChunkName: "myhome" */ '../llexec/EXEC.vue')
+    StickyNav: () => import(/* webpackChunkName: "landing" */ '../components/StickyNav.vue'),
+    EXEC: () => import(/* webpapckChunkName: "myhome" */ '../llexec/EXEC.vue')
   },
   data () {
     return {
-      water: false
+      newTitle: '',
+      water: false,
+      myself: false,
+      list: [],
+      pageAt: 0,
+      perPage: 4
+    }
+  },
+  mounted () {
+    this.loadMyGraphs()
+  },
+  methods: {
+    logout () {
+      API.logout()
+      this.$router.push('/')
+    },
+    async delGraph ({ water }) {
+      if (water.title === window.prompt(`Please copy and paste "${water.title}" to delete.`)) {
+        let newWater = JSON.parse(JSON.stringify(water))
+        await API.delGraph({ data: newWater })
+        this.loadMyGraphs()
+      }
+    },
+    updateGraph: _.debounce(async function ({ water }) {
+      let newWater = JSON.parse(JSON.stringify(water))
+      delete newWater.water
+      delete newWater.base64gzip
+
+      await API.updateGraph({ data: newWater })
+    }, 300),
+    async loadMyGraphs () {
+      let myself = this.myself || await API.getMyself()
+      this.myself = myself
+      let list = await API.getMyGraphs({ userID: myself._id, pageAt: this.pageAt, perPage: this.perPage })
+      this.list = await Promise.all(list.map(async (l) => {
+        l.water = JSON.parse(await API.UNZIP(l.base64gzip))
+        return {
+          playing: null,
+          trashed: false,
+          ...l
+        }
+      }))
+      this.list.forEach(l => {
+        l.playing = false
+      })
+      this.$forceUpdate()
+      console.log(this.list)
+      console.log(myself)
+    },
+    async addIGraphs () {
+      let myself = this.myself || await API.getMyself()
+      this.myself = myself
+      let water = await import('../llui/water/water-03.json')
+      let base64gzip = await API.ZIP(JSON.stringify(water.default))
+      let data = {
+        userID: myself._id,
+        title: this.newTitle,
+        base64gzip
+      }
+
+      await API.createIGraph({ data })
+      this.newTitle = ''
+      this.loadMyGraphs()
     }
   }
 }
 </script>
 
-<style>
+<style scoped>
+.myhome{
+  width:100%;
+}
+.welcomehome{
+  font-size: 50px;
+}
+.letscreate{
+  margin-bottom: 30px;
+}
+.myprojects{
+  margin-bottom: 30px;
+}
+.logout{
+  text-decoration: underline;
+}
+.action-entry{
+  display: flex;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.icon{
+  display: inline-block;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+  margin-right: 4px;
+}
+.action-sub-item{
+  display: inline-block;
+  height: 40px;
+  line-height: 40px;
+  font-size: 23px;
+  cursor: pointer;
+}
+.action-entry:hover .action-sub-item{
+  text-decoration: underline;
+}
 
+.newtitleinput{
+  appearance: none;
+  border: 1px solid transparent;
+  border-bottom: 3px solid rgb(0, 0, 0);
+  color: rgb(43, 43, 43);
+  font-size: inherit;
+  margin-left: 0px;
+  overflow: hidden;
+  padding: 5px 10px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: calc(100%);
+  margin-bottom: 5px;
+
+}
+
+.newtitleinput::-webkit-input-placeholder{
+  color: rgb(43, 43, 43);
+}
+
+.movie{
+  width: 100%;
+  height: 270px;
+  border: #eee solid 1px;
+}
+
+.p-name{
+  display: inline-block;
+  width: 60%;
+}
+.p-btns{
+  display: inline-flex;
+  width: 40%;
+  justify-content: flex-end;
+}
+.p-btn-icon > img{
+  height: 30px;
+  cursor: pointer;
+}
+.movie-ctrl{
+  display: flex;
+  align-items: center;
+  margin-bottom: 50px;
+}
+.clicktoplay{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 </style>

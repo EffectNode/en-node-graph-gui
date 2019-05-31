@@ -37,4 +37,7 @@ body{
   font-weight: 400;
   font-style: normal;
 }
+.outline{
+  outline: red solid 1px;
+}
 </style>

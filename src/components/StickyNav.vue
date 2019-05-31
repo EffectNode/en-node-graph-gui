@@ -11,7 +11,7 @@
       </div>
       <div class="ll-nav-right">
         <div class="ll-nav-list">
-          <div class="ll-nav-item" :key="item.label" :class="item.class" v-for="item in items" @click="item.action()">
+          <div class="ll-nav-item" v-show="item.show({ at, isTop: true, isMenu: false })" :key="item.label" :class="item.class" v-for="item in items" @click="item.action()">
             {{ item.label }}
           </div>
         </div>
@@ -23,19 +23,29 @@
         <div class="ll-menu-item title">
           Menu
         </div>
-        <div class="ll-menu-item" :key="item.label + 'sticky'" v-for="item in items.filter(f => !f.noMenu)">
+        <div class="ll-menu-item" v-show="item.show({ at, isTop: false, isMenu: true })" :key="item.label + 'sticky'" v-for="item in items">
           <div class="word"  @click="item.action()">
             {{ item.label }}
           </div>
         </div>
+        <!-- <div class="ll-menu-item" v-if="at === 'secure'">
+          <div class="word" @click="logout">
+            Logout
+          </div>
+        </div> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import * as API from '../api/api.js'
+
 export default {
   props: {
+    at: {
+      default: 'unknown'
+    },
     override: {
     },
     sticky: {
@@ -58,51 +68,75 @@ export default {
       items: [
         {
           label: 'Github',
+          show: () => true,
           class: {
             'll-in-desktop-only': true
           },
           action: () => {
-            window.location.assign('https://github.com/EffectNode/en-node-graph-gui')
+            this.open = false
+            window.open('https://github.com/EffectNode/en-node-graph-gui')
           }
         },
         {
           label: 'My Home',
+          show: ({ isMenu }) => isMenu,
           class: { 'll-in-desktop-only': true },
           action: () => {
+            this.open = false
             this.$router.push({
               path: '/myhome'
             })
           }
         },
         {
-          noMenu: this.$route.path === '/login',
+          show: () => this.at !== 'secure',
           label: 'Login',
           class: { 'll-in-desktop-only': true },
           action: () => {
+            this.open = false
             this.$router.push({
               path: '/login'
             })
           }
         },
         {
-          noMenu: this.$route.path === '/register',
+          show: () => this.at !== 'secure',
           label: 'Register',
           class: { 'll-in-desktop-only': true },
           action: () => {
+            this.open = false
             this.$router.push({
               path: '/register'
             })
           }
         },
         {
-          noMenu: true,
-          label: 'Menu',
-          class: { 'll-in-mobile-only': false },
+          show: ({ isMenu }) => this.at === 'secure',
+          hideTop: true,
+          label: 'Logout',
+          class: {},
           action: () => {
+            this.open = false
+            this.logout()
+          }
+        },
+        {
+          show: ({ isTop }) => isTop,
+          notFullScreenMenu: true,
+          label: 'Menu',
+          class: {},
+          action: () => {
+            this.open = false
             this.open = !this.open
           }
         }
       ]
+    }
+  },
+  methods: {
+    logout () {
+      API.logout()
+      this.$router.push('/')
     }
   },
   mounted () {
@@ -167,8 +201,6 @@ export default {
 }
 .ll-welcome-msg{
   display: inline-block;
-  border-radius: 50px;
-  box-shadow: 0px 0px 20px 0px rgb(0, 0, 0);
 }
 .ll-logo-mobile{
   margin: 20px;
