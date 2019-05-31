@@ -43,16 +43,25 @@
               </div>
               <div class="movie-ctrl">
                 <div class="p-name">
-                  <input type="text" @keydown="updateGraph({ water: w })" class="newtitleinput" v-model="w.title">
+                  <input type="text"  :style="{ 'text-decoration': w.trashed ? 'line-through' : '' }" @keydown="updateGraph({ water: w })" class="newtitleinput" v-model="w.title">
                 </div>
                 <div class="p-btns">
                   <div class="p-btn-icon">
-                    <img src="../icons/trash-dark.svg" @click="w.trashed = true" v-if="!w.trashed" title="remove" alt="remove movie">
-                    <img src="../icons/trash-red.svg" @click="delGraph({ water: w })" v-if="w.trashed" title="remove" alt="remove movie">
+                    <span class="v-center">
+                      <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link>
+                      <img src="../icons/edit-dark.svg" @click="$router.push(`/iGraph-Editor/${w._id}`)" title="edit" alt="edit movie">
+                    </span>
                   </div>
+
                   <div class="p-btn-icon">
-                    <img src="../icons/edit-dark.svg" @click="$router.push(`/iGraph-Editor/${w._id}`)" title="edit" alt="edit movie">
+                    <span class="v-center" v-if="!w.trashed" @click="w.trashed = true" >Remove
+                      <img src="../icons/trash-dark.svg" v-if="!w.trashed" title="remove" alt="remove movie">
+                    </span>
+                    <span class="v-center confirm" v-if="w.trashed" @click="delGraph({ water: w })" >Confirm
+                      <img src="../icons/trash-red.svg" v-if="w.trashed" title="remove" alt="remove movie">
+                    </span>
                   </div>
+
                 </div>
               </div>
             </div>
@@ -96,6 +105,8 @@ export default {
         let newWater = JSON.parse(JSON.stringify(water))
         await API.delGraph({ data: newWater })
         this.loadMyGraphs()
+      } else {
+        water.trashed = false
       }
     },
     updateGraph: _.debounce(async function ({ water }) {
@@ -195,7 +206,7 @@ export default {
   white-space: nowrap;
   width: calc(100%);
   margin-bottom: 5px;
-
+  border-radius: 0px;
 }
 
 .newtitleinput::-webkit-input-placeholder{
@@ -238,5 +249,29 @@ export default {
 .p-btn-icon{
   margin: 0px 12px;
   margin-right: 0px;
+}
+
+.v-center{
+  height: 100%;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+.v-center.confirm{
+  color: red;
+}
+.v-center > img {
+  margin-left: 5px;
+}
+.v-center > a:active,
+.v-center > a:visited,
+.v-center > a {
+  color: black;
+  text-decoration: none;
+}
+.v-center > a:hover{
+  color: black;
+  text-decoration: underline;
 }
 </style>
