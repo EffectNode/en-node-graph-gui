@@ -9,6 +9,22 @@
       </div>
     </div>
     <div class="row">
+      <div class="cute-4-tablet">
+        <div class="create-area">
+          <h2 class="letscreate">
+            Let's Create:
+          </h2>
+          <div class="newtitle">
+          </div>
+          <div class="action-entry">
+            <img class="icon" src="../icons/add-circle.svg" alt=""  @click="addIGraphs()">
+            <div class="action-sub-item">
+              <input type="text" @keydown.enter="addIGraphs()" placeholder="a new Project..."  class="newtitleinput" v-model="newTitle">
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div class="cute-8-tablet">
         <div class="projects-area">
           <h2 class="myprojects">
@@ -43,21 +59,7 @@
           </div>
         </div>
       </div>
-      <div class="cute-4-tablet">
-        <div class="create-area">
-          <h2 class="letscreate">
-            Let's Create:
-          </h2>
-          <div class="newtitle">
-          </div>
-          <div class="action-entry">
-            <img class="icon" src="../icons/add-circle.svg" alt=""  @click="addIGraphs()">
-            <div class="action-sub-item">
-              <input type="text" @keydown.enter="addIGraphs()" placeholder="a new Project..."  class="newtitleinput" v-model="newTitle">
-            </div>
-          </div>
-        </div>
-      </div>
+
     </div>
     <!-- <EXEC v-if="water" :water="water"></EXEC> -->
   </div>
