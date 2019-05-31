@@ -66,7 +66,7 @@
       <div class="section-title">Recycle Bin</div>
 
       <button class="inspector-btn" v-if="!node.trashed && !node.preventDelete && !node.confirmRecylce" @click="node.confirmRecylce = true; $forceUpdate()">Recycle Node and SubTree</button>
-      <button class="inspector-btn" v-if="!node.trashed && !node.preventDelete && node.confirmRecylce" @click="recycleNode({ node, nodes })">Confirm Recycle</button>
+      <button class="inspector-btn red" v-if="!node.trashed && !node.preventDelete && node.confirmRecylce" @click="recycleNode({ node, nodes })">Confirm Recycle</button>
 
       <div class="checkbox-item" v-if="!node.trashed && node.type !== 'root'">
         Prevent Delete
@@ -504,7 +504,9 @@ select.selsel:disabled{
 .inspector-btn:hover{
   background-color: rgba(255,255,255,1.0);
 }
-
+.inspector-btn.red{
+  color: red;
+}
 .checkbox-item{
   margin-bottom: 15px;
 }
