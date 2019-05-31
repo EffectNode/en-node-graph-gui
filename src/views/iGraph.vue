@@ -1,11 +1,12 @@
 <template>
-  <div class="igraph" :class="{ 'loading': loading }">
+  <div class="igraph" :class="{ 'loading': loading && !modes.isEditor }">
     <div class="nodetree">
       <NodeTree @open="open" v-if="nodes && !open.fullpreview" :show="show" @dropped="onReload({ timeout: 600 })" @view="(v) => { view = v }" @onNodeClick="onNodeClick" :nodes="dynamic(show, nodes)" class="full svg-box" ref="editor">
       </NodeTree>
     </div>
 
-    <UIBtnTools @codepen="onCodePen" @download="onDownload" :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
+    <UIBtnTools :loading="loading" @codepen="onCodePen" @download="onDownload" :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
+
     <UIPreviewBox @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('preview') + 20 }" :open="open" v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
     </UIPreviewBox>
@@ -195,19 +196,21 @@ export default {
       timelinePercentage: 0 // can be timeline, render or play
     }
 
-    let water1 = JSON.stringify(this.getWater())
-    this.autoChecker = setInterval(() => {
-      if (JSON.stringify(this.getWater()) !== water1) {
-        this.loading = true
-        this.$emit('save', {
-          obj: this.water,
-          done: () => {
-            this.loading = false
-          }
-        })
-        water1 = JSON.stringify(this.getWater())
-      }
-    }, 500)
+    if (this.modes.isEditor) {
+      let water1 = JSON.stringify(this.getWater())
+      this.autoChecker = setInterval(() => {
+        if (JSON.stringify(this.getWater()) !== water1) {
+          this.loading = true
+          this.$emit('save', {
+            obj: this.water,
+            done: () => {
+              this.loading = false
+            }
+          })
+          water1 = JSON.stringify(this.getWater())
+        }
+      }, 500)
+    }
 
     window.addEventListener('message', (evt) => {
       let obj = evt.data
@@ -260,6 +263,7 @@ export default {
     })
   },
   beforeDestroy () {
+    clearInterval(this.autoChecker)
     clearInterval(this.autoSaveTimer)
     cancelAnimationFrame(this.clearTimer)
   },
@@ -325,6 +329,15 @@ export default {
       newwater.timeinfo.timelinePercentageLast = 0
       newwater.timeinfo.timelinePercentage = 0
       newwater.timeinfo.elapsed = 0
+
+      newwater.nodes.forEach((node) => {
+        node.confirmRecylce = false
+        node.hasFound = false
+        node.isActive = false
+        node.isOverlapping = false
+        node.isOverlappingWith = false
+        delete node.rect
+      })
 
       return newwater
     },
@@ -408,7 +421,7 @@ export default {
 }
 .igraph.loading{
   background-image: linear-gradient(90deg, #212121, #474747, #212121);
-  background-size: 400% 100%;
+  background-size: 400% 400%;
   animation: bgMove 3.5s linear 0s infinite reverse both;
 }
 

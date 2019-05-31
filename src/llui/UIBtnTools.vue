@@ -1,12 +1,13 @@
 <template>
   <div class="corner-layer">
-    <div class="uit-icon" v-if="!isAtRecycle() && nodes.some(n => n.trashed)" @click="() => { onToggleRecycleView() }">
-      <!-- <img v-if="isAtRecycle()" class="isActivated" src="../icons/back.svg" title="Recycle view" alt="Recycle view"> -->
-      <img src="../icons/trashcan.svg" title="Recycle view" alt="Recycle view">
+    <div v-if="modes.isEditor" class="uit-icon" @click="$router.push('/myhome')">
+      <img src="../icons/circle-close.svg" title="media view" alt="media view">
     </div>
-    <div class="uit-icon" :class="{ isActivated: show === 'trashed' }">
-      <img v-if="isAtRecycle()"  @click="() => { onToggleRecycleView() }" class="isActivated" src="../icons/back.svg" title="Back view" alt="Back view">
-      <img v-if="!isAtRecycle()"  @click="onGoHome()" src="../icons/home.svg" title="Go Home" alt="Go Home">
+    <div v-if="!isAtRecycle()" class="uit-icon" :class="{ isActivated: show === 'trashed' }">
+      <img  @click="onGoHome()" src="../icons/home.svg" title="Go Home" alt="Go Home">
+    </div>
+    <div v-if="isAtRecycle()"  class="uit-icon" :class="{ isActivated: show === 'trashed' }">
+      <img  @click="() => { onToggleRecycleView() }" class="isActivated" src="../icons/back.svg" title="Back view" alt="Back view">
     </div>
     <div class="uit-icon" @click="zoomIn()">
       <img src="../icons/magnify-add.svg" title="Zoom In" alt="Zoom In">
@@ -31,12 +32,22 @@
       <img src="../icons/code.svg" title="Download" alt="Download">
     </div>
 
+    <div class="uit-icon" v-if="!isAtRecycle() && nodes.some(n => n.trashed)" @click="() => { onToggleRecycleView() }">
+      <!-- <img v-if="isAtRecycle()" class="isActivated" src="../icons/back.svg" title="Recycle view" alt="Recycle view"> -->
+      <img src="../icons/trashcan.svg" title="Recycle view" alt="Recycle view">
+    </div>
+
+    <div class="uit-icon" v-if="modes.isEditor" v-show="loading">
+      <img src="../icons/refresh.svg" class="spin" title="Recycle view" alt="Recycle view">
+    </div>
+
   </div>
 </template>
 
 <script>
 export default {
   props: {
+    loading: {},
     modes: {},
     open: {},
     show: {},
@@ -173,5 +184,16 @@ export default {
 }
 .isActivated{
   animation: isActivated 0.5s linear 0s infinite normal both;
+}
+@keyframes spinner {
+  0%{
+    transform: rotate(0deg)
+  }
+  100%{
+    transform: rotate(-360deg)
+  }
+}
+.spin{
+  animation: spinner 1.3s linear 0s infinite normal both;
 }
 </style>

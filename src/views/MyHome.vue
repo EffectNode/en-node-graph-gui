@@ -270,7 +270,7 @@ export default {
   color: black;
   text-decoration: none;
 }
-.v-center > a:hover{
+.v-center:hover > a{
   color: black;
   text-decoration: underline;
 }

@@ -22,25 +22,25 @@ export default {
       let water = await import(/* webpackChunkName: "igraph-demo" */'../llui/water/water-03.json')
       this.water = water.default
 
-      if (process.env.NODE_ENV === 'development') {
-        let waterStr = localStorage.getItem('water-OMGOMG')
-        if (waterStr) {
-          try {
-            let water = JSON.parse(waterStr)
-            this.water = water
-          } catch (e) {
-            console.log(e)
-          }
-        } else {
+      // if (process.env.NODE_ENV === 'development') {
+      //   let waterStr = localStorage.getItem('water-OMGOMG')
+      //   if (waterStr) {
+      //     try {
+      //       let water = JSON.parse(waterStr)
+      //       this.water = water
+      //     } catch (e) {
+      //       console.log(e)
+      //     }
+      //   } else {
 
-        }
-        // apple //
-        this.autoSaveTimer = setInterval(() => {
-          console.log('.... saving .....')
-          localStorage.setItem('water-OMGOMG', JSON.stringify(window.getWater()))
-        }, 2000)
-        // orange //
-      }
+      //   }
+      //   // apple //
+      //   this.autoSaveTimer = setInterval(() => {
+      //     console.log('.... saving .....')
+      //     localStorage.setItem('water-OMGOMG', JSON.stringify(window.getWater()))
+      //   }, 2000)
+      //   // orange //
+      // }
     }
   },
   beforeDestroy () {

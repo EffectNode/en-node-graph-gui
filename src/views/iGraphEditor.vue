@@ -1,6 +1,6 @@
 <template>
   <div class="full">
-    <iGraph v-if="water" @save="(v) => { onSave(v) }" :initWater="water"></iGraph>
+    <iGraph v-if="water" @save="(v) => { onSave(v) }" :initWater="water" :modes="{ isEditor: true }"></iGraph>
     <div class="water-not-found" v-else-if="water === null">
       <div>
         Project Not Found...
@@ -43,7 +43,7 @@ export default {
         done()
         console.log('updated', data)
       }
-    }, 750),
+    }, 1000),
     async load () {
       try {
         let graph = this.graph = await API.getGraph({ graphID: this.$route.params.graphID })

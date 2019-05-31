@@ -202,7 +202,7 @@ export default {
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: rgba(201, 120, 120, 0.925);
+  background-color: rgba(172, 172, 172, 0.925);
   z-index: 11;
 }
 .ll-welcome-section{

@@ -64,13 +64,16 @@
 
     <div class="section-block">
       <div class="section-title">Recycle Bin</div>
-      <button class="inspector-btn" v-if="!node.trashed && !node.preventDelete" @click="recycleNode({ node, nodes })">Recycle Node and SubTree</button>
+
+      <button class="inspector-btn" v-if="!node.trashed && !node.preventDelete && !node.confirmRecylce" @click="node.confirmRecylce = true; $forceUpdate()">Recycle Node and SubTree</button>
+      <button class="inspector-btn" v-if="!node.trashed && !node.preventDelete && node.confirmRecylce" @click="recycleNode({ node, nodes })">Confirm Recycle</button>
+
       <div class="checkbox-item" v-if="!node.trashed && node.type !== 'root'">
         Prevent Delete
         <input type="checkbox" v-model="node.preventDelete">
       </div>
       <div class="checkbox-item" v-if="node.type === 'root'">
-        App Item is cannot be deleted.
+        Cannot Delete App Engine
       </div>
 
       <button class="inspector-btn" v-if="node.trashed" @click="restoreNode({ node, nodes })">Restore Item</button>
@@ -153,7 +156,7 @@ export default {
     }
   },
   mounted () {
-
+    this.otherType = this.node.type
   },
   methods: {
     getTrackTitle ({ trackID }) {
