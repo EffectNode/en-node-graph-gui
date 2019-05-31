@@ -67,6 +67,17 @@ export default {
       open: false,
       items: [
         {
+          label: 'Home',
+          show: ({ isMenu }) => isMenu,
+          class: { 'll-in-desktop-only': true },
+          action: () => {
+            this.open = false
+            this.$router.push({
+              path: '/'
+            })
+          }
+        },
+        {
           label: 'Github',
           show: () => true,
           class: {
@@ -77,8 +88,9 @@ export default {
             window.open('https://github.com/EffectNode/en-node-graph-gui')
           }
         },
+
         {
-          label: 'My Home',
+          label: 'My Projects',
           show: ({ isMenu }) => isMenu,
           class: { 'll-in-desktop-only': true },
           action: () => {

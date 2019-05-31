@@ -35,9 +35,8 @@
                     <img src="../icons/trash-red.svg" @click="delGraph({ water: w })" v-if="w.trashed" title="remove" alt="remove movie">
                   </div>
                   <div class="p-btn-icon">
-                    <img src="../icons/edit-dark.svg" @click="$router.push(`/iGraph-Editor/${w._id}`)" v-if="!w.trashed" title="edit" alt="edit movie">
+                    <img src="../icons/edit-dark.svg" @click="$router.push(`/iGraph-Editor/${w._id}`)" title="edit" alt="edit movie">
                   </div>
-
                 </div>
               </div>
             </div>
@@ -54,7 +53,7 @@
           <div class="action-entry">
             <img class="icon" src="../icons/add-circle.svg" alt=""  @click="addIGraphs()">
             <div class="action-sub-item">
-              <input type="text" @keydown.enter="addIGraphs()" class="newtitleinput" v-model="newTitle">
+              <input type="text" @keydown.enter="addIGraphs()" placeholder="a new Project..."  class="newtitleinput" v-model="newTitle">
             </div>
           </div>
         </div>
