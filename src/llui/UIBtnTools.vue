@@ -3,24 +3,30 @@
     <div v-if="modes.isEditor" class="uit-icon" @click="$router.push('/myhome')">
       <img src="../icons/circle-close.svg" title="media view" alt="media view">
     </div>
+
     <div v-if="!isAtRecycle()" class="uit-icon" :class="{ isActivated: show === 'trashed' }">
       <img  @click="onGoHome()" src="../icons/home.svg" title="Go Home" alt="Go Home">
     </div>
+
     <div v-if="isAtRecycle()"  class="uit-icon" :class="{ isActivated: show === 'trashed' }">
       <img  @click="() => { onToggleRecycleView() }" class="isActivated" src="../icons/back.svg" title="Back view" alt="Back view">
     </div>
+
     <div class="uit-icon" @click="zoomIn()">
       <img src="../icons/magnify-add.svg" title="Zoom In" alt="Zoom In">
     </div>
-    <div class="uit-icon" @click="zoomRestore()">
+
+    <!-- <div class="uit-icon" @click="zoomRestore()">
       <img src="../icons/magnify.svg" title="Zoom Restore" alt="Zoom Restore">
-    </div>
+    </div> -->
+
     <div class="uit-icon" @click="zoomOut()">
       <img src="../icons/magnify-minus.svg" title="Zoom Out" alt="Zoom Out">
     </div>
-    <div v-if="modes.isEditor" class="uit-icon" @click="toggleMedia()">
+    <!-- <div v-if="modes.isEditor" class="uit-icon" @click="toggleMedia()">
       <img src="../icons/folder.svg" title="media view" alt="media view">
-    </div>
+    </div> -->
+
     <!-- <div class="uit-icon" @click="toggleTimeline()">
       <img src="../icons/timer.svg" title="map view" alt="map view">
     </div> -->
@@ -28,6 +34,7 @@
     <div class="uit-icon" @click="$emit('download')">
       <img src="../icons/cloud-download.svg" title="Download" alt="Download">
     </div>
+
     <div class="uit-icon" @click="$emit('codepen')">
       <img src="../icons/code.svg" title="Download" alt="Download">
     </div>

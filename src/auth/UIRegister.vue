@@ -94,7 +94,7 @@ export default {
           console.log('ok')
         }, (err) => {
           this.errmsg = err.message
-          if (err.message[0] && typeof err.message === 'object') {
+          if (err.message[0] && typeof err.message[0] !== 'string') {
             this.errmsg = err.message[0]
           }
           if (this.errmsg === 'Email is already taken.') {

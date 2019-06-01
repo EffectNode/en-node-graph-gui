@@ -42,17 +42,16 @@ export default {
       deep: true,
       handler (oldV, newV) {
         if (this.open.fullpreview) {
+          this.$nextTick(() => {
+            window.dispatchEvent(new Event('full-resize'))
+          })
           this.$emit('addOnClose', () => {
             this.open.fullpreview = false
           })
-        } else {
-          // if (window.innerWidth < 1921) {
-          //   this.run()
-          // }
+        } else if (this.open.fullpreview === false) {
           this.$nextTick(() => {
-            window.dispatchEvent(new Event('resize'))
+            window.dispatchEvent(new Event('full-resize'))
           })
-          // window.dispatchEvent(new Event('reload'))
         }
       }
     }

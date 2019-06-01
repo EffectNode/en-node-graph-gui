@@ -81,7 +81,7 @@ export default {
         }, (err) => {
           this.errmsg = err.message
           console.log(err.message)
-          if (err.message[0]) {
+          if (err.message[0] && typeof err.message[0] !== 'string') {
             this.errmsg = err.message[0]
           }
           this.$emit('bad')

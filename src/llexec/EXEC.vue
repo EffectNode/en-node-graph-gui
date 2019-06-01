@@ -99,8 +99,8 @@ export default {
       // isProd: process.env.NODE_ENV === 'production',
 
       iframe: {
-        width: 1,
-        height: 1
+        width: 100,
+        height: 100
       },
       src: 'about:blank'
     }
@@ -128,16 +128,14 @@ export default {
 
     let dimension = () => {
       let rect = this.$el.getBoundingClientRect()
-      if (this.iframe.width < rect.width) {
-        this.reload()
-        return
-      }
       this.iframe.width = Number(rect.width.toFixed(0))
       this.iframe.height = Number(rect.height.toFixed(0))
-      this.$forceUpdate()
     }
     window.addEventListener('resize', dimension, true)
     dimension()
+    window.addEventListener('full-resize', () => {
+      dimension()
+    })
 
     function doOnOrientationChange () {
       dimension()
@@ -217,9 +215,5 @@ export default {
   position: absolute;
   top: 0px;
   left: 0px;
-  width: 100%;
-  height: 100%;
-  max-width: 100%;
-  height: 100%;
 }
 </style>
