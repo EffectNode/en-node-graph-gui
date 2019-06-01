@@ -138,7 +138,7 @@ export default {
     async addIGraphs () {
       let myself = this.myself || await API.getMyself()
       this.myself = myself
-      let water = await import('../llui/water/water-03-stable.json')
+      let water = await import('../llui/water/poster-dome-spikes.json')
       let base64gzip = await API.ZIP(JSON.stringify(water.default))
       let data = {
         userID: myself._id,
