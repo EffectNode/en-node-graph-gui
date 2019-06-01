@@ -135,11 +135,12 @@ export default {
         let duration = end - start
         let wrap = {
           ...track,
+          clock: currentSecond,
           now: currentSecond / totalTime,
           progress: (currentSecond - start) / duration
         }
         if (currentSecond < start) {
-          wrap.progress = 0.000001
+          wrap.progress = 0.0
         }
         if (currentSecond > end) {
           wrap.progress = 1
