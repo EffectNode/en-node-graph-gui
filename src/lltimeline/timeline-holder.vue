@@ -35,10 +35,10 @@
               <div slot="dragger">
                 <div class="">
                   <div class="nameme">
-                    <!-- <input type="text" class="text-bucket" v-model="tr.title" style=""> -->
-                    <select type="text" class="text-bucket" v-model="tr.title" style="">
+                    <select type="text" class="text-bucket-choices" v-model="tr.title" style="">
                       <option :key="no._id" v-for="no in nodes.filter(timeable).sort(sortType).slice().reverse()" :value="no.title">{{ no.title }}</option>
                     </select>
+                    <input type="text" class="text-bucket" v-model="tr.title" style="">
                     <div class="remove-spread" :class="{ confirm: tr.trashed }" @click="tryRemoveTrack(tracks, tr)">
                       <span v-if="!tr.trashed">X</span>
                       <span v-if="tr.trashed">X</span>
@@ -537,7 +537,7 @@ export default {
   cursor: move;
   position: absolute;
   top: 0px;
-  left: 0px;
+  left: 25px;
   width: calc(100% - 25px - 5px);
   height: 25px;
   padding: 0px;
@@ -552,6 +552,29 @@ export default {
   color: white;
   font-size: 12px;
 }
+
+.text-bucket-choices{
+  cursor: s-resize;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: calc(25px);
+  height: 25px;
+  padding: 0px;
+  padding-left: 5px;
+
+  line-height: 12px;
+  box-shadow: none;
+  border: none;
+  appearance: none;
+  outline: none;
+  background-color: transparent;
+  color: orange;
+  background-color: orange;
+  font-size: 12px;
+  border-radius: 0px;
+}
+
 /* .inpill-input-box{
   display: inline-block;
   width: 20px;
