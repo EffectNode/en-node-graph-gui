@@ -20,6 +20,14 @@
         </div>
       </div>
     </transition>
+    <div class="forking" v-if="overlays.isForking">
+      <div v-if="fork === 'ing'">
+        Cloning to a new Project
+      </div>
+      <div v-if="fork === 'done'">
+        Project Cloned
+      </div>
+    </div>
   </div>
 </template>
 
@@ -32,6 +40,10 @@ export default {
   },
   data () {
     return {
+      fork: 'ing', // or done
+      overlays: {
+        isForking: false
+      },
       myself: false,
       graph: false,
       water: false
@@ -69,18 +81,22 @@ export default {
       }
     },
     async onCodeFork ({ water }) {
+      this.overlays.isForking = true
+      this.fork = 'ing'
       let base64gzip = await API.ZIP(JSON.stringify(water))
       let data = {
         userID: this.myself._id,
-        title: this.graph.title,
+        title: this.graph.title + 'Cloned',
         fromGraphID: this.graph._id,
         fromUserID: this.graph.userID,
         base64gzip
       }
 
       let newGraph = await API.createIGraph({ data })
-      window.alert('You just forked the project')
-      window.location.assign(`/iGraph-Editor/${newGraph._id}`)
+      this.fork = 'done'
+      setTimeout(() => {
+        window.location.assign(`/iGraph-Editor/${newGraph._id}`)
+      }, 500)
     }
   },
   beforeDestroy () {
@@ -117,5 +133,20 @@ export default {
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;
+}
+.forking{
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  font-size: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  color: white;
+  background-color: rgba(0, 0, 0, 0.801);
+  z-index: 1000;
 }
 </style>
