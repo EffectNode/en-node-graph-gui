@@ -19,6 +19,7 @@ export default {
     }
   },
   mounted () {
+    //
     let dom = this.$el
     let md = false
 
@@ -30,6 +31,7 @@ export default {
       dx: 0,
       ax: 0
     }
+
     dom.addEventListener('touchstart', (evt) => {
       if (evt.touches[0]) {
         md = true

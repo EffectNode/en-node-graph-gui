@@ -35,7 +35,10 @@
               <div slot="dragger">
                 <div class="">
                   <div class="nameme">
-                    <input type="text" class="text-bucket" v-model="tr.title" style="">
+                    <!-- <input type="text" class="text-bucket" v-model="tr.title" style=""> -->
+                    <select type="text" class="text-bucket" v-model="tr.title" style="">
+                      <option :key="no._id" v-for="no in nodes.filter(timeable).sort(sortType).slice().reverse()" :value="no.title">{{ no.title }}</option>
+                    </select>
                     <div class="remove-spread" :class="{ confirm: tr.trashed }" @click="tryRemoveTrack(tracks, tr)">
                       <span v-if="!tr.trashed">X</span>
                       <span v-if="tr.trashed">X</span>
@@ -63,6 +66,7 @@
 <script>
 export default {
   props: {
+    nodes: {},
     title: {
       default: 'Timeline Control'
     },
@@ -197,6 +201,19 @@ export default {
     cancelAnimationFrame(this.rAFIDTick)
   },
   methods: {
+    timeable (n) {
+      let ttype = n.type.toLowerCase()
+      return !n.trashed && ttype !== 'root' && ttype !== 'organiser'
+    },
+    sortType (a, b) {
+      if (a.type < b.type) {
+        return -1
+      }
+      if (a.type > b.type) {
+        return 1
+      }
+      return 0
+    },
     syncRect () {
       // this.rect = {
       //   ...this.rect,

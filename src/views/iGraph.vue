@@ -12,7 +12,7 @@
     </UIPreviewBox>
 
     <UITimeline :order="order" :style="{ zIndex: 20 }" :open="open" v-if="water && !open.fullpreview" @close="open.timeline = false; $forceUpdate()">
-      <UITimelineHolder @reload="onReload({ timeout: 0 })" :timeline="water.timeline" :doSync="syncToFrame" :editor="water.timeinfo" :timeinfo="water.timeinfo"></UITimelineHolder>
+      <UITimelineHolder v-if="nodes" :nodes="nodes" @reload="onReload({ timeout: 0 })" :timeline="water.timeline" :doSync="syncToFrame" :editor="water.timeinfo" :timeinfo="water.timeinfo"></UITimelineHolder>
     </UITimeline>
 
     <UIInspector :order="order" :style="{ zIndex: order.indexOf('inspector') + 20 }" :open="open" @close="onClose">
