@@ -1,14 +1,25 @@
 <template>
   <div class="full">
-    <iGraph v-if="water" @save="(v) => { onSave(v) }" :initWater="water" :modes="{ isEditor: true }"></iGraph>
-    <div class="water-not-found" v-else-if="water === null">
-      <div>
-        Project Not Found...
+    <transition v-if="water" name="fade">
+      <iGraph v-if="water" @codefork="onCodeFork" @save="(v) => { onSave(v) }" :initWater="water" :modes="{ isEditor: true }"></iGraph>
+    </transition>
+    <transition name="fade" v-else-if="water === false">
+      <div class="water-is-loading" v-if="water === false">
+        <div>
+          Loading Editor....
+        </div>
       </div>
-      <div>
-        <router-link to="/">Home</router-link>
+    </transition>
+    <transition name="fade" v-else-if="water === null">
+      <div class="water-not-found" v-if="water === null">
+        <div>
+          Project Not Found...
+        </div>
+        <div>
+          <router-link to="/">Home</router-link>
+        </div>
       </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -21,6 +32,7 @@ export default {
   },
   data () {
     return {
+      myself: false,
       graph: false,
       water: false
     }
@@ -30,7 +42,7 @@ export default {
   },
   methods: {
     onSave: _.debounce(async function ({ obj, done }) {
-      if (this.graph) {
+      if (this.graph && this.graph._id === this.myself._id) {
         let water = obj
         let base64gzip = await API.ZIP(JSON.stringify(water))
 
@@ -45,6 +57,7 @@ export default {
       }
     }, 1000),
     async load () {
+      this.myself = await API.getMyself()
       try {
         let graph = this.graph = await API.getGraph({ graphID: this.$route.params.graphID })
         if (graph) {
@@ -54,6 +67,20 @@ export default {
         this.water = null
         console.log(e)
       }
+    },
+    async onCodeFork ({ water }) {
+      let base64gzip = await API.ZIP(JSON.stringify(water))
+      let data = {
+        userID: this.myself._id,
+        title: this.graph.title,
+        fromGraphID: this.graph._id,
+        fromUserID: this.graph.userID,
+        base64gzip
+      }
+
+      let newGraph = await API.createIGraph({ data })
+      window.alert('You just forked the project')
+      window.location.assign(`/iGraph-Editor/${newGraph._id}`)
     }
   },
   beforeDestroy () {
@@ -76,5 +103,19 @@ export default {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+}
+.water-is-loading{
+  height: 100%;
+  font-size: 45px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

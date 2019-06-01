@@ -23,6 +23,7 @@
     <div class="uit-icon" @click="zoomOut()">
       <img src="../icons/magnify-minus.svg" title="Zoom Out" alt="Zoom Out">
     </div>
+
     <!-- <div v-if="modes.isEditor" class="uit-icon" @click="toggleMedia()">
       <img src="../icons/folder.svg" title="media view" alt="media view">
     </div> -->
@@ -31,12 +32,16 @@
       <img src="../icons/timer.svg" title="map view" alt="map view">
     </div> -->
 
-    <div class="uit-icon" @click="$emit('download')">
+    <div v-if="modes.isEditor" class="uit-icon" @click="$emit('codefork')">
+      <img src="../icons/code-fork.svg" title="Download" alt="Download">
+    </div>
+
+    <div v-if="modes.isEditor" class="uit-icon" @click="$emit('download')">
       <img src="../icons/cloud-download.svg" title="Download" alt="Download">
     </div>
 
     <div class="uit-icon" @click="$emit('codepen')">
-      <img src="../icons/code.svg" title="Download" alt="Download">
+      <img src="../icons/cloud-upload.svg" title="CodePen" alt="CodePen">
     </div>
 
     <div class="uit-icon" v-if="!isAtRecycle() && nodes.some(n => n.trashed)" @click="() => { onToggleRecycleView() }">

@@ -46,7 +46,7 @@
     </div>
     <div class="row">
       <div class="center-text cute-10-phone cute-1-phone-offset cute-3-tablet-offset left cute-6-tablet">
-        Switch to <router-link to="/register">Register</router-link>
+        Switch to <router-link :to="getRegistration()">Register</router-link>
       </div>
     </div>
 
@@ -68,6 +68,14 @@ export default {
   mounted () {
   },
   methods: {
+    getRegistration () {
+      let redir = ''
+      if (this.$route.query && this.$route.query.redirect) {
+        redir = `?redirect=${this.$route.query.redirect}`
+      }
+      let link = `/register${redir}`
+      return link
+    },
     submit () {
       this.errmsg = ''
       API.login({ ...this.auth })

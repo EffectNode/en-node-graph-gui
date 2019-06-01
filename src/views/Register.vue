@@ -1,7 +1,7 @@
 <template>
   <div class="auth">
     <StickyNav at="auth"></StickyNav>
-    <UIRegister @ok="$router.push('/myhome');"></UIRegister>
+    <UIRegister @ok="onOK"></UIRegister>
   </div>
 </template>
 
@@ -16,6 +16,15 @@ export default {
   },
   beforeDestroy () {
     document.body.style.backgroundColor = 'unset'
+  },
+  methods: {
+    onOK () {
+      if (this.$route.query && this.$route.query.redirect) {
+        this.$router.push(this.$route.query.redirect)
+      } else {
+        this.$router.push('/myhome')
+      }
+    }
   }
 }
 </script>

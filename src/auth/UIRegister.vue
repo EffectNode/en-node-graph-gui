@@ -58,7 +58,7 @@
     </div>
     <div class="row">
       <div class="center-text cute-10-phone cute-1-phone-offset cute-3-tablet-offset left cute-6-tablet">
-        Switch to <router-link to="/login">Login</router-link>
+        Switch to <router-link :to="getLogin()">Login</router-link>
       </div>
     </div>
 
@@ -80,6 +80,14 @@ export default {
     }
   },
   methods: {
+    getLogin () {
+      let redir = ''
+      if (this.$route.query && this.$route.query.redirect) {
+        redir = `?redirect=${this.$route.query.redirect}`
+      }
+      let link = `/login${redir}`
+      return link
+    },
     submit () {
       this.tryLogin = false
       let { username, email, password } = this.auth

@@ -5,7 +5,7 @@
       </NodeTree>
     </div>
 
-    <UIBtnTools :loading="loading" @codepen="onCodePen" @download="onDownload" :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
+    <UIBtnTools :loading="loading" @codefork="onCodeFork" @codepen="onCodePen" @download="onDownload" :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
 
     <UIPreviewBox @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('preview') + 20 }" :open="open" v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
@@ -410,6 +410,11 @@ export default {
       this.open.inspector = true
       this.sendTop('coder')
       this.sendTop('inspector')
+    },
+    onCodeFork () {
+      this.$emit('codefork', {
+        water: this.getWater()
+      })
     }
   }
 }
