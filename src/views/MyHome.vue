@@ -51,6 +51,14 @@
                 </div>
 
                 <div class="cute-6-tablet p-btns">
+
+                  <div class="p-btn-icon">
+                    <span class="v-center" @click="$router.push(`/iGraph-Editor/${w._id}`)"> Edit
+                      <!-- <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link> -->
+                      <img src="../icons/edit-dark.svg" title="edit" alt="edit movie">
+                    </span>
+                  </div>
+
                   <div class="p-btn-icon nohover nohighlight" v-if="w.fromGraphID">
                     <span class="v-center">
                       <img src="../icons/shuffle.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
@@ -59,15 +67,8 @@
                   </div>
                   <div class="p-btn-icon">
                     <span class="v-center" @click="forkGraph({ graph: w, water: w.water })" >
-                      Fork
-                      <img src="../icons/code-fork-black.svg" title="edit" alt="edit movie">
-                    </span>
-                  </div>
-
-                  <div class="p-btn-icon">
-                    <span class="v-center" @click="$router.push(`/iGraph-Editor/${w._id}`)"> Edit
-                      <!-- <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link> -->
-                      <img src="../icons/edit-dark.svg" title="edit" alt="edit movie">
+                      Clone
+                      <img src="../icons/clone.svg" title="edit" alt="edit movie">
                     </span>
                   </div>
 

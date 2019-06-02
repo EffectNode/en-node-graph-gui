@@ -1,17 +1,13 @@
 <template>
   <div class="full">
-    <transition v-if="water" name="fade">
+    <transition name="fade">
       <iGraph v-if="water" ref="igraph" @codefork="onCodeFork" @save="(v) => { onSave(v) }" :initWater="water" :modes="modes"></iGraph>
-    </transition>
-    <transition name="fade" v-else-if="water === false">
-      <div class="water-is-loading" v-if="water === false">
+      <div class="water-is-loading" v-else-if="water === false">
         <div>
           Loading Editor....
         </div>
       </div>
-    </transition>
-    <transition name="fade" v-else-if="water === null">
-      <div class="water-not-found" v-if="water === null">
+      <div class="water-not-found" v-else-if="water === null">
         <div>
           Project Not Found...
         </div>
