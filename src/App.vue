@@ -1,8 +1,6 @@
 <template>
   <div id="enigma">
-    <transition name="fade">
-      <router-view />
-    </transition>
+    <router-view />
   </div>
 </template>
 
