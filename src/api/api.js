@@ -16,7 +16,7 @@ NProgress.configure({
   trickle: true,
   trickleRate: 0.015,
   trickleSpeed: 350,
-  showSpinner: false,
+  showSpinner: true,
   barSelector: '[role="bar"]',
   spinnerSelector: '[role="spinner"]',
   parent: 'body',
@@ -149,6 +149,7 @@ export const forkGraph = async ({ water, myself, graph }) => {
   let data = {
     userID: myself._id,
     title: graph.title,
+    isPrivate: graph.isPrivate,
     fromGraphID: graph._id,
     fromUserID: graph.userID,
     base64gzip

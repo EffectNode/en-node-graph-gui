@@ -50,20 +50,26 @@
               </div>
               <div class="row">
                 <div class="cute-6-tablet">
-                  <input type="text"  :style="{ 'text-decoration': w.trashed ? 'line-through' : '' }" @keydown="updateGraph({ water: w })" class="newtitleinput" v-model="w.title">
+                  <input type="text"  :style="{ 'text-decoration': w.trashed ? 'line-through' : '' }" @keydown="updateGraphMeta({ graph: w })" class="newtitleinput" v-model="w.title">
                 </div>
 
                 <div class="cute-6-tablet p-btns">
                   <div class="p-btn-icon nohover nohighlight" v-if="w.fromGraphID">
                     <span class="v-center">
                       Remixed<img src="../icons/code-fork-black.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
-                      <!-- <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link> -->
+                    </span>
+                  </div>
+                  <div class="p-btn-icon">
+                    <span class="v-center" v-if="!!w.isPrivate" @click="w.isPrivate = !w.isPrivate; $forceUpdate(); updateGraphMeta({ graph: w })">
+                      Private <img src="../icons/switch-on.svg" title="Project is Private" alt="Project is Private">
+                    </span>
+                    <span class="v-center" v-if="!w.isPrivate" @click="w.isPrivate = !w.isPrivate; $forceUpdate(); updateGraphMeta({ graph: w })">
+                      Private <img src="../icons/switch-off.svg" title="Project is Private" alt="Project is Private">
                     </span>
                   </div>
 
                   <div class="p-btn-icon">
                     <span class="v-center" @click="$router.push(`/iGraph-Editor/${w._id}`)"> Edit
-                      <!-- <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link> -->
                       <img src="../icons/edit-dark.svg" title="edit" alt="edit movie">
                     </span>
                   </div>
@@ -139,13 +145,14 @@ export default {
         water.trashed = false
       }
     },
-    updateGraph: _.debounce(async function ({ water }) {
-      let newWater = JSON.parse(JSON.stringify(water))
-      delete newWater.water
-      delete newWater.base64gzip
+    updateGraphMeta: _.debounce(async function ({ graph }) {
+      let newGraph = JSON.parse(JSON.stringify(graph))
+      // remove heavy signals
+      delete newGraph.water
+      delete newGraph.base64gzip
 
-      await API.updateGraph({ data: newWater })
-    }, 300),
+      await API.updateGraph({ data: newGraph })
+    }, 100),
     async loadMyGraphs () {
       let myself = this.myself || await API.getMyself()
       this.myself = myself
