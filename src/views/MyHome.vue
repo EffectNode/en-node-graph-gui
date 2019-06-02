@@ -49,16 +49,30 @@
                 </div>
               </div>
               <div class="row">
-                <div class="cute-6-tablet">
+                <div class="cute-12-tablet">
                   <input type="text"  :style="{ 'text-decoration': w.trashed ? 'line-through' : '' }" @keydown="updateGraphMeta({ graph: w })" class="newtitleinput" v-model="w.title">
                 </div>
-
-                <div class="cute-6-tablet p-btns">
+              </div>
+              <div class="row">
+                <div class="cute-12-tablet"  style="display: flex; justify-content: flex-end;">
                   <div class="p-btn-icon nohover nohighlight" v-if="w.fromGraphID">
                     <span class="v-center">
-                      Remixed<img src="../icons/code-fork-black.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
+                      Remixed Project<img src="../icons/code-fork-black.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
                     </span>
                   </div>
+                  <div class="p-btn-icon nohover nohighlight">
+                    <span class="v-center">
+                      <span>Edited {{ moment(w.updatedAt).fromNow() }} </span>
+                      <span>, Created At</span>
+                      <span>: {{ moment(w.createdAt).format('YYYY-MM-DD') }}</span>
+                      <img src="../icons/clock.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="cute-12-tablet p-btns">
+
                   <div class="p-btn-icon">
                     <span class="v-center" v-if="!!w.isPrivate" @click="w.isPrivate = !w.isPrivate; $forceUpdate(); updateGraphMeta({ graph: w })">
                       Private <img src="../icons/switch-on.svg" title="Project is Private" alt="Project is Private">
@@ -106,6 +120,7 @@
 <script>
 import * as API from '../api/api'
 import _ from 'lodash'
+import moment from 'moment'
 export default {
   components: {
     StickyNav: () => import(/* webpackChunkName: "landing" */ '../components/StickyNav.vue'),
@@ -113,6 +128,7 @@ export default {
   },
   data () {
     return {
+      moment,
       newTitle: '',
       water: false,
       myself: false,
@@ -168,6 +184,10 @@ export default {
       this.list.forEach(l => {
         l.playing = false
       })
+      if (this.list[0]) {
+        this.list[0].playing = true
+      }
+
       this.$forceUpdate()
       console.log(this.list)
       console.log(myself)
@@ -255,7 +275,7 @@ export default {
 .movie{
   width: 100%;
   height: 270px;
-  border: #eee solid 1px;
+  border: rgb(179, 179, 179) solid 1px;
   cursor: pointer;
   margin-bottom: 15px;
 }

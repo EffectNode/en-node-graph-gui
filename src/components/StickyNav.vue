@@ -90,6 +90,18 @@ export default {
         },
 
         {
+          label: 'Contact',
+          show: () => true,
+          class: {
+            'll-in-desktop-only': true
+          },
+          action: () => {
+            this.open = false
+            window.open('https://twitter.com/wonglok831')
+          }
+        },
+
+        {
           label: 'My Projects',
           show: ({ isMenu }) => isMenu,
           class: { 'll-in-desktop-only': true },
