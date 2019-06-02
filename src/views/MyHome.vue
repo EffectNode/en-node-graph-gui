@@ -51,10 +51,10 @@
                 </div>
 
                 <div class="cute-6-tablet p-btns">
-                  <div class="p-btn-icon" v-if="w.fromGraphID">
-                    <span class="v-center" @click="$router.push({ path: `/iGraph-Editor/${w.fromGraphID}` })"> Original
+                  <div class="p-btn-icon nohover nohighlight" v-if="w.fromGraphID">
+                    <span class="v-center">
+                      <img src="../icons/shuffle.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
                       <!-- <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link> -->
-                      <img src="../icons/share.svg" title="edit" alt="edit movie">
                     </span>
                   </div>
                   <div class="p-btn-icon">
@@ -260,19 +260,27 @@ export default {
   width: 400px;
   justify-content: flex-end;
 }
-.p-btn-icon > img{
-  height: 30px;
-  cursor: pointer;
-}
-.v-center{
-  transition: transform 0.1s;
+.p-btn-icon{
   padding: 7px 7px;
   border-radius: 30px;
-  background-color: #eee;
-}
-.v-center:hover{
-  transform: scale(1.2);
   box-shadow: 0px 0px 30px 0px #eee;
+  background-color: #eee;
+  transition: transform 0.1s;
+}
+.p-btn-icon:hover{
+  cursor: pointer;
+  transform: scale(1.2);
+}
+.p-btn-icon.nohover{
+  cursor: auto;
+  transform: scale(1);
+}
+.nohighlight{
+  box-shadow: none;
+  background-color: transparent;
+}
+.p-btn-icon > img{
+  height: 30px;
 }
 .movie-ctrl{
   display: flex;
@@ -295,7 +303,6 @@ export default {
   display: inline-flex;
   justify-content: center;
   align-items: center;
-  cursor: pointer;
 }
 .v-center.confirm{
   color: red;
