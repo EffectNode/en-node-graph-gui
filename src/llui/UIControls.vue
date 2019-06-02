@@ -51,6 +51,24 @@
 
     <div v-if="showDeveloper && !node.trashed">
       <div class="section-block">
+        <div class="section-title">Custom Code</div>
+        <button class="inspector-btn" v-if="node" @click="$emit('openCoder', { node, nodes })">Edit Code</button>
+      </div>
+      <div class="section-block">
+        <div class="section-title">Add Library</div>
+        <div v-bind="node.library = node.library || []">
+          <div>
+            <input type="text" class="textinput" placeholder="New Library URL...." v-model="adderLib" style="width: calc(80% - 40px)">
+            <button class="inspector-btn" @click="addLib({ libs: node.library, add: adderLib })" style="width: calc(20%)">Add</button>
+          </div>
+        </div>
+        <div :key="ii" v-for="(lib, ii) in node.library">
+          <input class="textinput" type="text" v-model="lib.url" style="width: calc(80% - 40px)">
+          <button class="inspector-btn small" @click="removeLib({ libs: node.library, lib, idx: ii })" style="width: calc(20%)">X</button>
+        </div>
+      </div>
+
+      <div class="section-block">
         <div class="section-title">Protection</div>
         <div>
           <div class="checkbox-item" v-if="!node.trashed && node.type !== 'root'">
@@ -79,24 +97,6 @@
           <option :value="otherType">Others: {{ otherType }}</option>
         </select>
         <input v-if="node.type !== 'root'" class="textinput" placeholder="Other types..." type="text" v-model="otherType" @change="(v) => { node.type = v.target.value }">
-      </div>
-
-      <div class="section-block">
-        <div class="section-title">Custom Code</div>
-        <button class="inspector-btn" v-if="node" @click="$emit('openCoder', { node, nodes })">Edit Code</button>
-      </div>
-      <div class="section-block">
-        <div class="section-title">Add Library</div>
-        <div v-bind="node.library = node.library || []">
-          <div>
-            <input type="text" class="textinput" placeholder="New Library URL...." v-model="adderLib" style="width: calc(80% - 40px)">
-            <button class="inspector-btn" @click="addLib({ libs: node.library, add: adderLib })" style="width: calc(20%)">Add</button>
-          </div>
-        </div>
-        <div :key="ii" v-for="(lib, ii) in node.library">
-          <input class="textinput" type="text" v-model="lib.url" style="width: calc(80% - 40px)">
-          <button class="inspector-btn small" @click="removeLib({ libs: node.library, lib, idx: ii })" style="width: calc(20%)">X</button>
-        </div>
       </div>
 
       <div class="section-block">
