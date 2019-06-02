@@ -12,7 +12,9 @@ export default {
     isRootNode: {},
 
     nodes: {},
-    components: {}
+    components: {},
+    timename: {},
+    timetracks: {}
   },
   data () {
     return {
@@ -22,24 +24,25 @@ export default {
   methods: {
     init () {
       let fov = 75
-      let aspect = 9 / 18
+      let rect = this.$parent.$el.getBoundingClientRect()
+      let aspect = rect.width / rect.height
       let near = 0.1
       let far = 100000000000000
 
       this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
       this.camera.position.z = 500
       this.camera.lookAt(0,0,0)
-
-      // this.$emit('exec', () => {
-      //   let time = window.performance.now() * 0.001
-      //   this.camera.position.x = 100 * Math.sin(time)
-      //   this.camera.position.y = 100 * Math.cos(time)
-      // })
     }
   },
   mounted () {
     this.init()
     this.$emit('ready', this)
+    this.$emit('exec', () => {
+      let item = this.timetracks.find(t => t.title === this.node.title && t.progress > 0.001 && t.progress < 1)
+      if (item) {
+        this.camera.position.z = item.progress * -200 + 500
+      }
+    });
   },
   created () {
     this.$on('addToParent', ({ parent }) => {
@@ -49,10 +52,10 @@ export default {
       console.log(this.node.title, 'addChild', child.node.title)
     })
     this.$on('removeFromParent', ({ parent }) => {
-      console.log(this.node.title, 'removeFromParent', parent.node.title)
+      // console.log(this.node.title, 'removeFromParent', parent.node.title)
     })
     this.$on('removeChild', ({ child }) => {
-      console.log(this.node.title, 'removeChild', child.node.title)
+      // console.log(this.node.title, 'removeChild', child.node.title)
     })
   },
   beforeDestory () {
