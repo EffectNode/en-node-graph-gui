@@ -13,7 +13,7 @@
       "to": null,
       "pos": {
         "x": 80,
-        "y": 410
+        "y": 520
       },
       "size": {
         "width": 60,
@@ -60,7 +60,7 @@
       "to": "_29338",
       "pos": {
         "x": 440,
-        "y": 575
+        "y": 520
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      scene: false\n    }\n  },\n  methods: {\n    init () {\n      this.scene = new THREE.Scene()\n      this.scene.background = new THREE.Color(`#000000`)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      this.components[this.node.to].$emit('addChild', { child })\n      \n      // add here\n      if (child.node.type === 'object3D') {\n        this.scene.add(child.object3D)\n      }\n      if (child.node.type === 'drawable') {\n        this.scene.add(child.drawable)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -127,7 +127,7 @@
       "to": "root",
       "pos": {
         "x": 260,
-        "y": 575
+        "y": 520
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      this.components[this.node.to].$emit('addChild', { child })\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -172,7 +172,7 @@
       "to": "_29338",
       "pos": {
         "x": 440,
-        "y": 740
+        "y": 630
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      scene: false\n    }\n  },\n  methods: {\n    init () {\n      this.scene = new THREE.Scene()\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      this.components[this.node.to].$emit('addChild', { child })\n      \n      // add here\n      if (child.node.type === 'object3D') {\n        this.scene.add(child.object3D)\n      }\n      if (child.node.type === 'drawable') {\n        this.scene.add(child.drawable)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -194,7 +194,7 @@
       "to": "_871971",
       "pos": {
         "x": 620,
-        "y": 740
+        "y": 630
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      geo: false,\n      mat: false,\n      drawable: false\n    }\n  },\n  methods: {\n    init () {\n      // let geo = new THREE.BoxBufferGeometry(100, 100, 100, 20, 20);\n      // let mat = new THREE.MeshBasicMaterial({ color: 0xffff00, opacity: 0.1 });\n      let map = new THREE.TextureLoader().load(`https://res.cloudinary.com/hslkngave/image/upload/v1559309484/a8uctpsnyjsdnampbmva.png`)\n      this.drawable = new THREE.Mesh()\n      this.drawable.geometry = new THREE.PlaneBufferGeometry(500, 500, 2, 2);\n      this.drawable.material = new THREE.MeshBasicMaterial({ color: new THREE.Color(0xffffff),  map })\n      this.drawable.visible = true\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'material') {\n        this.drawable.material = child.material\n        this.material = child.material\n      }\n      if (child.node.type === 'geometry') {\n        this.drawable.geometry = child.geometry\n        this.geometry = child.geometry\n      }\n      if (this.geometry && this.material) {\n        this.drawable.visible = true\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -287,8 +287,8 @@
       "title": "Composers",
       "to": "root",
       "pos": {
-        "x": 260,
-        "y": 630
+        "x": 260.00001,
+        "y": 630.00001
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      this.components[this.node.to].$emit('addChild', { child })\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -306,11 +306,11 @@
     },
     {
       "_id": "_257968",
-      "title": "Glowing Composer",
-      "to": "_317698",
+      "title": "Glowing Effect",
+      "to": "_822493",
       "pos": {
-        "x": 620,
-        "y": 630
+        "x": 440,
+        "y": 740
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      bloomPass: false,\n      composer: false\n    }\n  },\n  mounted () {\n    this.init()\n  },\n  methods: {\n    init () {\n      let waitGetByType = (getter = () => {}) => {\n        return new Promise((resolve) => {\n          let tt = setInterval(() => {\n            if (getter()) {\n              clearInterval(tt)\n              resolve(getter())\n            }\n          })\n        })\n      }\n      \n      let getStuff = async () => {\n        let self = this\n        return {\n          root: await waitGetByType(() => {\n            let node = this.nodes.find(no => no.type === 'root')\n            if (node) {\n              return this.components[node._id]\n            }\n          }),\n          getCamera: () => {\n            return waitGetByType(() => {\n              let node = self.nodes.find(no => no.type === 'root')\n              let root = self.components[node._id]\n              if (root) {\n                return root.cameras[root.cameraID]\n              }\n            })\n          },\n          getScene: () => {\n            return waitGetByType(() => {\n              let node = this.nodes.find(no => no.type === 'root')\n              let root = this.components[node._id]\n              if (root) {\n                return root.scenes[root.sceneID]\n              }\n            })\n          } \n        }\n      }\n      \n      getStuff()\n        .then((args) => {\n          this.setup(args)\n        })\n        .then(() => {\n          this.$emit('ready', this)\n        })\n      \n      // Promise.all([\n      //   getRoot(),\n      //   findSceneCompo()\n      // ])\n      //   .then((res) => {\n      //     return {\n      //       root: res[0],\n      //       scene: res[1].compo.scene\n      //     }\n      //   })\n      //   .then(({ root, scene }) => {\n      //     this.$emit('exec', () => {\n      //       \n            \n      //       this.setup({ root, scene })\n      //       this.$emit('ready', this)\n      //     });\n      //   })\n      \n    },\n    async setup ({ root, getScene, getCamera }) {\n      let rootnode = this.nodes.find(no => no.type === 'root')\n      let rootCompo = this.components[rootnode._id]\n      \n      let composer = this.composer = new THREE.EffectComposer(root.renderer)\n      \n      // let scripts = [\n      //   '/threejs/examples/js/postprocessing/EffectComposer.js',\n      //   '/threejs/examples/js/postprocessing/RenderPass.js',\n      //   '/threejs/examples/js/postprocessing/MaskPass.js',\n      //   '/threejs/examples/js/postprocessing/ShaderPass.js',\n      //   '/threejs/examples/js/shaders/CopyShader.js',\n      //   '/threejs/examples/js/shaders/FXAAShader.js',\n      //   '/threejs/examples/js/shaders/ConvolutionShader.js',\n      //   '/threejs/examples/js/shaders/LuminosityHighPassShader.js',\n      //   '/threejs/examples/js/postprocessing/UnrealBloomPass.js'\n      // ]\n      \n      // this.$on('addToParent', ({ parent }) => {\n      //   console.log(this.node.title, 'addToParent', parent.node.title)\n      // })\n      \n      let dpi = 2\n      let size = rootCompo.size\n      \n      let renderBG = new THREE.RenderPass(new THREE.Scene(), await getCamera())\n      composer.addPass(renderBG)\n      \n      let bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(size.width * dpi, size.height * dpi), 1.5, 0.4, 0.85)\n      bloomPass.renderToScreen = true\n      \n      this.$emit('exec', async () => {\n        renderBG.scene = await getScene()\n        renderBG.camera = await getCamera()\n      })\n      \n      this.bloomPass = bloomPass\n      \n      window.addEventListener('resize', () => {\n        composer.setSize(size.width * dpi, size.height * dpi)\n      })\n      \n      let glow = {\n        threshold: 0.0846740050804403,\n        strength: 0.9551227773073666,\n        radius: 1.0343776460626588,\n        exposure: 1\n      }\n      this.bloomPass.threshold = glow.threshold\n      this.bloomPass.strength = glow.strength\n      this.bloomPass.radius = glow.radius\n  \n      composer.addPass(bloomPass)\n    }\n  },\n  created () {\n    this.$on('addChild', ({ child }) => {\n      // if (child.node.type === 'drawable') {\n      //   this.object3D.add(child.drawable)\n      // }\n      // if (child.node.type === 'object3D') {\n      //   this.object3D.add(child.object3D)\n      // }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    // this.$on('removeFromParent', ({ parent }) => {\n    //   console.log(this.node.title, 'removeFromParent', parent.node.title)\n    // })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n\n",
       "library": [
@@ -368,8 +368,8 @@
       "to": "_257968",
       "trashed": true,
       "pos": {
-        "x": 620.00001,
-        "y": 740.00001
+        "x": 620.00002,
+        "y": 740.00002
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -382,6 +382,27 @@
       "isOverlappingWith": false,
       "isActive": false,
       "hasFound": false,
+      "confirmRecylce": false
+    },
+    {
+      "_id": "_822493",
+      "title": "Composers",
+      "to": "root",
+      "pos": {
+        "x": 260,
+        "y": 740
+      },
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      this.components[this.node.to].$emit('addChild', { child })\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "library": [],
+      "type": "organiser.composer",
+      "size": {
+        "width": 60,
+        "height": 60
+      },
+      "isOverlapping": false,
+      "isOverlappingWith": false,
+      "hasFound": false,
+      "isActive": false,
       "confirmRecylce": false
     }
   ],
@@ -425,9 +446,9 @@
       },
       {
         "_id": "_78321284422",
-        "start": 7.452372052796363e-15,
-        "end": 21.290697674418634,
-        "title": "Glowing Composer",
+        "start": 8.146261443187086e-15,
+        "end": 21.081395348837308,
+        "title": "Glowing Effect",
         "trashed": false
       }
     ]
