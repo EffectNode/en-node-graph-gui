@@ -61,17 +61,17 @@ export default new Router({
     {
       path: '/iGraph-Editor/:graphID',
       name: 'iGraphEditor',
-      beforeEnter: (to, from, next) => {
-        if (API.check()) {
-          API.getMyself().then(() => {
-            next()
-          }, () => {
-            next(`/login?redirect=${to.path}`)
-          })
-        } else {
-          next(`/login?redirect=${to.path}`)
-        }
-      },
+      // beforeEnter: (to, from, next) => {
+      //   if (API.check()) {
+      //     API.getMyself().then(() => {
+      //       next()
+      //     }, () => {
+      //       next(`/login?redirect=${to.path}`)
+      //     })
+      //   } else {
+      //     next(`/login?redirect=${to.path}`)
+      //   }
+      // },
       component: () => import(/* webpackChunkName: "editor" */ './views/iGraphEditor.vue')
     }
   ]

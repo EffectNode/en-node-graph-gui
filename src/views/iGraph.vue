@@ -5,7 +5,7 @@
       </NodeTree>
     </div>
 
-    <UIBtnTools :loading="loading" @codefork="onCodeFork" @codepen="onCodePen" @download="onDownload" :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
+    <UIBtnTools :loading="loading" @login="onLogin" @codefork="onCodeFork" @codepen="onCodePen" @download="onDownload" :modes="modes" v-if="nodes" :open="open" :show="show" @show="show = $event" :nodes="nodes" @onChangeView="$emit('onChangeView', $event)" :node="node" ></UIBtnTools>
 
     <UIPreviewBox @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('preview') + 20 }" :open="open" v-if="water && nodes.length > 0" @run="onReload({ timeout: 0 })">
       <EXEC ref="exec" mode="preview" :water="water"></EXEC>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import NProgress from 'nprogress'
+// import NProgress from 'nprogress'
 import(/* webpackChunkName: "igraph-coder" */'../llui/UICodeControl.vue')
 export default {
   props: {
@@ -202,13 +202,13 @@ export default {
       this.autoChecker = setInterval(() => {
         let water2 = JSON.stringify(this.getWater())
         if (water2 !== water1) {
-          NProgress.start()
+          // NProgress.start()
           // this.loading = true
           // this.$refs.igraph.classList.add('loading')
           this.$emit('save', {
             obj: this.getWater(),
             done: () => {
-              NProgress.done()
+              // NProgress.done()
               // this.$refs.igraph.classList.remove('loading')
               // this.loading = false
             }
@@ -274,6 +274,14 @@ export default {
     cancelAnimationFrame(this.clearTimer)
   },
   methods: {
+    onLogin () {
+      this.$router.push({
+        path: '/login',
+        query: {
+          redirect: this.$route.path
+        }
+      })
+    },
     async onDownload () {
       /* eslint-disable */
       let download = await import(/* webpackChunkName: "igraph-export" */'raw-loader!../fragments/download.fragment.html')

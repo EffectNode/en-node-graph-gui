@@ -144,6 +144,19 @@ export const delGraph = ({ data }) => {
   return SDK.request('DELETE', `/igraphs/${data._id}?userID=${data.userID}`)
 }
 
+export const forkGraph = async ({ water, myself, graph }) => {
+  let base64gzip = await ZIP(JSON.stringify(water))
+  let data = {
+    userID: myself._id,
+    title: graph.title,
+    fromGraphID: graph._id,
+    fromUserID: graph.userID,
+    base64gzip
+  }
+  let newGraph = await createIGraph({ data })
+  return newGraph
+}
+
 // ---- UPLOAD ------
 
 export const getDimension = ({ file, maxDimension = 1080 }) => {

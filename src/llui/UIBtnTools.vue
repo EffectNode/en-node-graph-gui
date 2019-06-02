@@ -1,11 +1,11 @@
 <template>
   <div class="corner-layer">
-    <div v-if="modes.isEditor" class="uit-icon" @click="$router.push('/myhome')">
-      <img src="../icons/circle-close.svg" title="media view" alt="media view">
+    <div v-if="modes.isEditor && modes.isLoggedIn" class="uit-icon" @click="$router.push('/myhome')">
+      <img src="../icons/home.svg" title="media view" alt="media view">
     </div>
 
     <div v-if="!isAtRecycle()" class="uit-icon" :class="{ isActivated: show === 'trashed' }">
-      <img  @click="onGoHome()" src="../icons/home.svg" title="Go Home" alt="Go Home">
+      <img  @click="onGoHome()" src="../icons/node-home.svg" title="Go Home" alt="Go Home">
     </div>
 
     <div v-if="isAtRecycle()"  class="uit-icon" :class="{ isActivated: show === 'trashed' }">
@@ -33,15 +33,15 @@
     </div> -->
 
     <div v-if="modes.isEditor" class="uit-icon" @click="$emit('codefork')">
-      <img src="../icons/code-fork.svg" title="Download" alt="Download">
+      <img src="../icons/code-fork.svg" title="Clone" alt="Clone">
     </div>
 
     <div v-if="modes.isEditor" class="uit-icon" @click="$emit('download')">
-      <img src="../icons/cloud-download.svg" title="Download" alt="Download">
+      <img src="../icons/save-to-drive.svg" title="Save to Hard Drive" alt="Save to Hard Drive">
     </div>
 
     <div class="uit-icon" @click="$emit('codepen')">
-      <img src="../icons/cloud-upload.svg" title="CodePen" alt="CodePen">
+      <img src="../icons/code.svg" title="Deploy to CodePen" alt="Deploy to CodePen">
     </div>
 
     <div class="uit-icon" v-if="!isAtRecycle() && nodes.some(n => n.trashed)" @click="() => { onToggleRecycleView() }">
@@ -49,8 +49,16 @@
       <img src="../icons/trashcan.svg" title="Recycle view" alt="Recycle view">
     </div>
 
-    <div class="uit-icon" v-if="modes.isEditor" v-show="loading">
-      <img src="../icons/refresh.svg" class="spin" title="Recycle view" alt="Recycle view">
+    <div class="uit-icon" v-if="modes.isEditor && !modes.viewOnly" v-show="loading">
+      <img src="../icons/refresh.svg" class="spin" title="Refreshing" alt="Refreshing">
+    </div>
+
+    <div class="uit-icon no-click" v-if="modes.viewOnly">
+      <img src="../icons/offline.svg" title="Cannot Save, View Only" alt="Cannot Save, View Only">
+    </div>
+
+    <div v-if="modes.viewOnly && !modes.isLoggedIn" class="uit-icon" @click="$emit('login')">
+      <img src="../icons/code-fork-blue.svg" title="Login and Clone" alt="Login and Clone">
     </div>
 
   </div>
@@ -177,10 +185,14 @@ export default {
   justify-content: center;
   align-items: center;
 }
+
 .uit-icon img{
   width: 30px;
   height: 30px;
   cursor: pointer;
+}
+.no-click img{
+  cursor: auto;
 }
 
 @keyframes isActivated {

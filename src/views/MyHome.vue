@@ -1,11 +1,15 @@
 <template>
   <div class="myhome">
-    <StickyNav  :at="'secure'"></StickyNav>
+    <StickyNav  :at="'secure'">
+    </StickyNav>
     <div class="row">
       <div class="cute-100">
         <div class="welcomehome">
           Welcome Home.
         </div>
+        <p v-if="myself">
+          @{{ myself.username }}
+        </p>
       </div>
     </div>
     <div class="row">
@@ -38,18 +42,32 @@
               <div class="movie" ref="movie" @click="list.forEach(w => w.playing = false); w.playing = true;">
                 <EXEC v-if="w.water && w.playing" :water="w.water"></EXEC>
                 <div class="clicktoplay" v-show="!w.playing">
-                  Click to Play
+                  Click to Run 3D Animation
                 </div>
               </div>
-              <div class="movie-ctrl">
-                <div class="p-name">
+              <div class="row">
+                <div class="cute-6-tablet">
                   <input type="text"  :style="{ 'text-decoration': w.trashed ? 'line-through' : '' }" @keydown="updateGraph({ water: w })" class="newtitleinput" v-model="w.title">
                 </div>
-                <div class="p-btns">
+
+                <div class="cute-6-tablet p-btns">
+                  <div class="p-btn-icon" v-if="w.fromGraphID">
+                    <span class="v-center" @click="$router.push({ path: `/iGraph-Editor/${w.fromGraphID}` })"> Original
+                      <!-- <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link> -->
+                      <img src="../icons/share.svg" title="edit" alt="edit movie">
+                    </span>
+                  </div>
                   <div class="p-btn-icon">
-                    <span class="v-center">
-                      <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link>
-                      <img src="../icons/edit-dark.svg" @click="$router.push(`/iGraph-Editor/${w._id}`)" title="edit" alt="edit movie">
+                    <span class="v-center" @click="forkGraph({ graph: w, water: w.water })" >
+                      Fork
+                      <img src="../icons/code-fork-black.svg" title="edit" alt="edit movie">
+                    </span>
+                  </div>
+
+                  <div class="p-btn-icon">
+                    <span class="v-center" @click="$router.push(`/iGraph-Editor/${w._id}`)"> Edit
+                      <!-- <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link> -->
+                      <img src="../icons/edit-dark.svg" title="edit" alt="edit movie">
                     </span>
                   </div>
 
@@ -64,6 +82,7 @@
 
                 </div>
               </div>
+
             </div>
           </div>
         </div>
@@ -99,6 +118,13 @@ export default {
     logout () {
       API.logout()
       this.$router.push('/')
+    },
+    async forkGraph ({ graph, water }) {
+      let myself = this.myself || await API.getMyself()
+      this.myself = myself
+
+      await API.forkGraph({ water, graph, myself })
+      this.loadMyGraphs()
     },
     async delGraph ({ water }) {
       if (water.title === window.prompt(`Please copy and paste "${water.title}" to delete.`)) {
@@ -216,28 +242,41 @@ export default {
 .movie{
   width: 100%;
   height: 270px;
-  margin-bottom: 15px;
   border: #eee solid 1px;
   cursor: pointer;
+  margin-bottom: 15px;
 }
 
-.p-name{
-  display: inline-block;
-  width: 60%;
+.project-item{
+  margin-bottom: 50px;
 }
+
+/* .p-name{
+  display: inline-block;
+  width: calc(100% - 400px);
+} */
 .p-btns{
   display: inline-flex;
-  width: 40%;
+  width: 400px;
   justify-content: flex-end;
 }
 .p-btn-icon > img{
   height: 30px;
   cursor: pointer;
 }
+.v-center{
+  transition: transform 0.1s;
+  padding: 7px 7px;
+  border-radius: 30px;
+  background-color: #eee;
+}
+.v-center:hover{
+  transform: scale(1.2);
+  box-shadow: 0px 0px 30px 0px #eee;
+}
 .movie-ctrl{
   display: flex;
   align-items: center;
-  margin-bottom: 50px;
 }
 .clicktoplay{
   height: 100%;
@@ -273,5 +312,12 @@ export default {
 .v-center:hover > a{
   color: black;
   text-decoration: underline;
+}
+.p-cloned{
+  display: inline-block;
+  width: 40px;
+}
+.orig-ico{
+  height: 20px;
 }
 </style>
