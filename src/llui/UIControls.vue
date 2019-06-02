@@ -9,16 +9,17 @@
       <div v-if="(node.type === 'scene' || node.type === 'object3D')">
         <div class="section-title">Add Scene Item</div>
         <div>
-          <button class="inspector-btn left-align" v-if="!node.trashed" @click="addWireFrameExample({ node, nodes })">+ Sample Ball</button>
+          <button class="inspector-btn left-align" v-if="!node.trashed" @click="addSampleBall({ node, nodes })">+ Sample Ball</button>
+          <button class="inspector-btn left-align" v-if="!node.trashed" @click="addObject3DBall({ node, nodes })">+ Object3D</button>
         </div>
       </div>
-      <div v-if="(node.type === 'organiser.camera')">
+      <div v-if="(node.title === 'Cameras' || node.type === 'organiser.camera')">
         <div class="section-title">Add Camera</div>
         <div>
           <button class="inspector-btn left-align" v-if="!node.trashed" @click="addCamera({ node, nodes })">+ Camera</button>
         </div>
       </div>
-      <div v-if="(node.type === 'organiser.scene')">
+      <div v-if="(node.title === 'Scenes' || node.type === 'organiser.scene')">
         <div class="section-title">Add Scene</div>
         <div>
           <button class="inspector-btn left-align" v-if="!node.trashed" @click="addScene({ node, nodes })">+ Scene</button>
@@ -109,7 +110,7 @@
           <button class="inspector-btn left-align" v-if="!node.trashed" @click="addCamera({ node, nodes })">+ Camera</button>
         </div>
         <div>
-          <button class="inspector-btn left-align" v-if="!node.trashed" @click="addObject3DChildTo({ node, nodes })">+ Object3D</button>
+          <button class="inspector-btn left-align" v-if="!node.trashed" @click="addObject3DBall({ node, nodes })">+ Object3D</button>
         </div>
         <br />
 
@@ -403,7 +404,7 @@ export default {
       }
       return this.addChildTo({ node, nodes, args, returnNode })
     },
-    addWireFrameExample ({ node, nodes, returnNode }) {
+    addSampleBall ({ node, nodes, returnNode }) {
       let meshNode = this.addMesh({ node, nodes, returnNode: true })
       let matNode = this.addMatCapMaterial({ node, nodes, returnNode: true })
       let geoNode = this.addSphereGeometry({ node, nodes, returnNode: true })
@@ -412,7 +413,7 @@ export default {
 
       this.doLayoutAndReload({ node, nodes })
     },
-    addObject3DChildTo ({ node, nodes }) {
+    addObject3DBall ({ node, nodes }) {
       let args = {
         title: `Object 3D`,
         type: `object3D`,
