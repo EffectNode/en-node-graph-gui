@@ -42,15 +42,22 @@ export default {
       deep: true,
       handler (oldV, newV) {
         if (this.open.fullpreview) {
+          this.sync()
           this.$nextTick(() => {
-            window.dispatchEvent(new Event('full-resize'))
-          })
-          this.$emit('addOnClose', () => {
-            this.open.fullpreview = false
+            this.$nextTick(() => {
+              window.dispatchEvent(new Event('full-resize'))
+            })
+            this.$emit('addOnClose', () => {
+              this.open.fullpreview = false
+            })
           })
         } else if (this.open.fullpreview === false) {
+          this.sync()
           this.$nextTick(() => {
             window.dispatchEvent(new Event('full-resize'))
+            this.$nextTick(() => {
+              window.dispatchEvent(new Event('reload'))
+            })
           })
         }
       }
@@ -63,8 +70,8 @@ export default {
     sizer()
     // this.handle()
     this.$on('move', ({ dx, dy }) => {
-      this.anchor.x -= dx
-      this.anchor.y -= -dy
+      // this.anchor.x -= dx
+      // this.anchor.y -= -dy
       this.sync()
     })
     window.addEventListener('resize', sizer)
@@ -132,31 +139,47 @@ export default {
       }
     },
     sync () {
-      if (window.innerWidth > 767) {
+      if (this.open.fullpreview) {
+        this.boxStyle = {
+          position: 'absolute',
+          top: `${this.anchor.y}px`,
+          right: `${this.anchor.x}px`,
+          width: `100%`,
+          height: `calc(100% + 45px)`
+        }
+      } else {
         this.boxStyle = {
           position: 'absolute',
           top: `${this.anchor.y}px`,
           right: `${this.anchor.x}px`
         }
-        this.titleStyle = {
-        }
-        this.contentStyle = {
-        }
-      } else {
-        this.boxStyle = {
-          position: 'absolute',
-          bottom: `0px`,
-          left: `0px`,
-          width: `100%`,
-          height: `40%`
-        }
-        this.titleStyle = {
-          display: `none`
-        }
-        this.contentStyle = {
-          height: `100%`
-        }
       }
+
+      // if (window.innerWidth > 767) {
+      //   this.boxStyle = {
+      //     position: 'absolute',
+      //     top: `${this.anchor.y}px`,
+      //     right: `${this.anchor.x}px`
+      //   }
+      //   this.titleStyle = {
+      //   }
+      //   this.contentStyle = {
+      //   }
+      // } else {
+      //   this.boxStyle = {
+      //     position: 'absolute',
+      //     bottom: `0px`,
+      //     left: `0px`,
+      //     width: `100%`,
+      //     height: `40%`
+      //   }
+      //   this.titleStyle = {
+      //     display: `none`
+      //   }
+      //   this.contentStyle = {
+      //     height: `100%`
+      //   }
+      // }
     }
   }
 }
@@ -175,11 +198,11 @@ export default {
   z-index: 10;
   background: white;
 }
-.box.full{
+/* .box.full{
   width: calc(100%);
   height: calc(100%);
   border: none;
-}
+} */
 
 /* @media screen and (min-width: 1441px) {
   .box{

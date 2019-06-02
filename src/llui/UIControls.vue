@@ -502,6 +502,7 @@ select.selsel:disabled{
   padding: 5px 10px;
   text-overflow: ellipsis;
   white-space: nowrap;
+  background-color: rgba(255,255,255,1.0);
   width: calc(100% - 20px * 2);
 }
 

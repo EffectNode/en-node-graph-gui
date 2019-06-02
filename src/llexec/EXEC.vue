@@ -130,12 +130,21 @@ export default {
       let rect = this.$el.getBoundingClientRect()
       this.iframe.width = Number(rect.width.toFixed(0))
       this.iframe.height = Number(rect.height.toFixed(0))
+      let iframeDom = this.$refs['iframe']
+      if (iframeDom) {
+        iframeDom.width = Number(`${this.iframe.width}`)
+        iframeDom.height = Number(`${this.iframe.height}`)
+        iframeDom.style.width = `${this.iframe.width}px`
+        iframeDom.style.height = `${this.iframe.height}px`
+      }
     }
+    this.$emit('el', this.$el)
+
     window.addEventListener('resize', dimension, true)
     dimension()
     window.addEventListener('full-resize', () => {
       dimension()
-    })
+    }, false)
 
     function doOnOrientationChange () {
       dimension()
