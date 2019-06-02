@@ -68,9 +68,9 @@ export default {
       water: false
     }
   },
-  mounted () {
+  async mounted () {
+    await this.loadMyself()
     this.load()
-    this.loadMyself()
   },
   methods: {
     onSave: _.debounce(async function ({ obj, done }) {
@@ -105,6 +105,7 @@ export default {
       try {
         this.myself = await API.getMyself()
         this.modes.isLoggedIn = true
+        this.modes.viewOnly = false
       } catch (e) {
         this.modes.isLoggedIn = false
         this.modes.viewOnly = true
