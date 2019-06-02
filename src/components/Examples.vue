@@ -1,5 +1,5 @@
 <template>
-  <div class="oo-container">
+  <div class="oo-container hide">
     <div class="oo-section-title">
       <h1>
         Essential How to...
@@ -70,7 +70,9 @@ export default {
 
 <style scoped>
 @import url(./columns.css);
-
+.oo-container.hide{
+  display: none;
+}
 .oo-content-title{
   border-top: white solid 1px;
 }
