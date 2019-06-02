@@ -52,6 +52,9 @@
         <button class="inspector-btn left-align" v-if="!node.trashed" @click="addObject3DChildTo({ node, nodes })">+ Object3D</button>
       </div>
       <div>
+        <button class="inspector-btn left-align" v-if="!node.trashed" @click="addMesh({ node, nodes })">+ Mesh</button>
+      </div>
+      <div>
         <button class="inspector-btn left-align" v-if="!node.trashed" @click="addMatCapMaterial({ node, nodes })">+ MatCap Material</button>
       </div>
       <div>

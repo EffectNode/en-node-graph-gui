@@ -2,82 +2,25 @@
   <div class="oo-container">
     <div class="oo-section-title">
       <h1>
-        Essential Example
+        Essential How to...
       </h1>
+    </div>
+
+    <div class="oo-section-title">
       <h2>
-        How to make my own scene and direct it with timeline?
+        How do I add an item?
       </h2>
     </div>
     <div class="oo-row">
       <div class="oo-div">
         <div class="oo-wrap">
           <div class="oo-content">
-            <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/add-scene.png')})` }"></div>
+            <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/homscene.png')})` }"></div>
             <div class="oo-content-title">
-              1. Click "Scenes" Ball
+              1. Click the "Home Scene"
             </div>
             <div class="oo-content-body">
-              Every App has multiple scene supported. Click the "Scenes" to add more scene
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Scene -->
-
-      <div class="oo-div">
-        <div class="oo-wrap">
-          <div class="oo-content">
-            <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/inspector.png')})` }"></div>
-            <div class="oo-content-title">
-              2. Go To Inspector Box
-            </div>
-            <div class="oo-content-body">
-              We can use Inspector to add Example Items. It's at the screen's bottom left hand corner.
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Inspector -->
-
-      <div class="oo-div">
-        <div class="oo-wrap">
-          <div class="oo-content">
-            <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/addScene.png')})` }"></div>
-            <div class="oo-content-title">
-              3. Click "+ Scene" Button
-            </div>
-            <div class="oo-content-body">
-              After clicking + Scene, please click the newly added Scene Ball
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Scene -->
-
-      <div class="oo-div">
-        <div class="oo-wrap">
-          <div class="oo-content">
-            <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/clickNewScene.png')})` }"></div>
-            <div class="oo-content-title">
-              4. Click the new "Scene" Ball
-            </div>
-            <div class="oo-content-body">
-              You can select it by clicking it in the balls area.
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Ball -->
-
-      <div class="oo-div">
-        <div class="oo-wrap">
-          <div class="oo-content">
-            <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/editSceneTitle.png')})` }"></div>
-            <div class="oo-content-title">
-              5. Change Title
-            </div>
-            <div class="oo-content-body">
-              Change title to "My New Scene" Please make sure the text is case sensitive, capital and lower letter are different.
+              Home Scene is your first scene.
             </div>
           </div>
         </div>
@@ -89,40 +32,10 @@
           <div class="oo-content">
             <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/addSampleBall.png')})` }"></div>
             <div class="oo-content-title">
-              6. Click "+ Sample Ball"
+              2. Click "+ Sample Ball"
             </div>
             <div class="oo-content-body">
-              You can click the Sample Ball.
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Ball -->
-
-      <div class="oo-div">
-        <div class="oo-wrap">
-          <div class="oo-content">
-            <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/addTimeTrack.png')})` }"></div>
-            <div class="oo-content-title">
-              7. Add "Timeline Track"
-            </div>
-            <div class="oo-content-body">
-              You can click that button to add a timeline track for your new scene.
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Ball -->
-
-      <div class="oo-div">
-        <div class="oo-wrap">
-          <div class="oo-content">
-            <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/renameTrack.png')})` }"></div>
-            <div class="oo-content-title">
-              8. Rename Timeline Track
-            </div>
-            <div class="oo-content-body">
-              Rename the timeline track to "My New Scene". You can just copy and paste the title inside the newly added Scene in step 5.
+              Go to "Inspector" box, scroll down to "Add Example Item" and then click "+ Sample Ball".
             </div>
           </div>
         </div>
@@ -134,10 +47,10 @@
           <div class="oo-content">
             <div class="oo-content-image" :style="{ backgroundImage: `url(${require('../assets/screenshot/done.png')})` }"></div>
             <div class="oo-content-title">
-              9. Done!
+              3. Done!
             </div>
             <div class="oo-content-body">
-              You just created a new scene with a new item.
+              You just created a ball!
             </div>
           </div>
         </div>
