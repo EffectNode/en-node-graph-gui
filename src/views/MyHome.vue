@@ -34,10 +34,13 @@
           <h2 class="myprojects">
             My Projects:
           </h2>
-          <h3 v-if="list.length === 0">
+          <h3 v-if="!list">
+            Loading Projects...
+          </h3>
+          <h3 v-if="list && list.length === 0">
             The Space is Empty. Let's get creative. :D
           </h3>
-          <div class="projectlist">
+          <div v-if="list" class="projectlist">
             <div class="project-item" ref="boxes" :key="w._id" v-for="(w) in list">
               <div class="movie" ref="movie" @click="list.forEach(w => w.playing = false); w.playing = true;">
                 <EXEC v-if="w.water && w.playing" :water="w.water"></EXEC>
@@ -51,6 +54,12 @@
                 </div>
 
                 <div class="cute-6-tablet p-btns">
+                  <div class="p-btn-icon nohover nohighlight" v-if="w.fromGraphID">
+                    <span class="v-center">
+                      <img src="../icons/shuffle.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
+                      <!-- <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link> -->
+                    </span>
+                  </div>
 
                   <div class="p-btn-icon">
                     <span class="v-center" @click="$router.push(`/iGraph-Editor/${w._id}`)"> Edit
@@ -59,12 +68,6 @@
                     </span>
                   </div>
 
-                  <div class="p-btn-icon nohover nohighlight" v-if="w.fromGraphID">
-                    <span class="v-center">
-                      <img src="../icons/shuffle.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
-                      <!-- <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link> -->
-                    </span>
-                  </div>
                   <div class="p-btn-icon">
                     <span class="v-center" @click="forkGraph({ graph: w, water: w.water })" >
                       Clone
@@ -107,7 +110,7 @@ export default {
       newTitle: '',
       water: false,
       myself: false,
-      list: [],
+      list: false,
       pageAt: 0,
       perPage: 4
     }
