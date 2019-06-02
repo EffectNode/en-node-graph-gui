@@ -8,7 +8,7 @@
 
 <script>
 import * as CodeGen from '../llexec/code-generator.js'
-import * as Node from '../llsvg/node'
+// import * as Node from '../llsvg/node'
 export default {
   props: {
     // playing: {
@@ -59,14 +59,14 @@ export default {
     //     return v
     //   }
     // },
-    activeNodes () {
-      return (this.nodes || []).filter(n => {
-        return !n.trashed
-      })
-    },
-    links () {
-      return (Node.getLinks({ nodes: this.nodes }))
-    }
+    // activeNodes () {
+    //   return (this.nodes || []).filter(n => {
+    //     return !n.trashed
+    //   })
+    // },
+    // links () {
+    //   return (Node.getLinks({ nodes: this.nodes }))
+    // }
   },
   watch: {
     // playing () {

@@ -9,7 +9,7 @@
     "github": "git add .; git commit -am \"front-end-deploy\"; git push -u origin master;",
     "netlify-lib": "netlify deploy -s REPLACE_ME_NETLIFY_LIB_UUID --dir=dist --prod",
     "dev-lib": "nodemon --exec \"npm run build-lib\" --watch ./src/llexec -e js,vue --watch ./src/llexec",
-    "build-lib": "vue-cli-service build --target lib --name effectnodegraph ./src/llexec/SandBox.vue --dest ./public/lib;",
+    "build-lib": "vue-cli-service build --target lib --name effectnodegraph ./src/llexec/SandBox.vue --dest ./public/lib; cp ./public/lib/effectnodegraph.umd.min.js ./public/raw-lib/effectnodegraph.umd.min.js.txt",
     "build-vue-lib": "vue-cli-service build --target lib --name enigraph ./src/llexec/EXEC.vue --dest ./public/iframelib;",
     "netlify": "netlify deploy --dir=\"./dist\" --prod",
     "dev-web": "vue-cli-service serve",

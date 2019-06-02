@@ -5,7 +5,9 @@ export const injector = ({ water = {} }) => {
   const JSON_ID = `_JSON_${Number(Math.random() * 100000).toFixed(0)}`
   const APPID_REPLACER = `____APPID____`
   const ENGRAPH_WATER_REPLACER = `____ENGRAPH_WATER____`
-  const BASEURL_REPLACER = `<!--BASE_URL-->`
+  const BASEURL_REPLACER = `/*BASE_URL*/`
+  const VUE_ENGINE_REPLACER = `/*VUE_ENGINE*/`
+  const SANDBOX_ENGINE_REPLACER = `/*SANDBOX_ENGINE*/`
   const APPJSON_REPLACER = `____APPJSON____`
 
   // eslint-disable-next-line import/no-webpack-loader-syntax
@@ -16,8 +18,12 @@ export const injector = ({ water = {} }) => {
   let body = require('raw-loader!../../public/body.fragment.html').default
 
   // eslint-disable-next-line import/no-webpack-loader-syntax
-  // let enigraph = require('raw-loader!../../public/lib/effectnodegraph.umd.min.js').default
-  // console.log(enigraph)
+  let vueEngine = require('raw-loader!../../public/raw-lib/vue.min.js.txt').default
+  // eslint-disable-next-line import/no-webpack-loader-syntax
+  let sandboxEngine = require('raw-loader!../../public/raw-lib/effectnodegraph.umd.min.js.txt').default
+
+  head = head.replace(VUE_ENGINE_REPLACER, vueEngine)
+  head = head.replace(SANDBOX_ENGINE_REPLACER, sandboxEngine)
 
   // this can let other domain use this...
   if (process.env.NODE_ENV === 'production') {
