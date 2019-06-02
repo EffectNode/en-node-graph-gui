@@ -208,7 +208,7 @@ export default {
   cursor: pointer;
   display: block;
   position: absolute;
-  animation: zoomin 0.3s 0s ease-in-out;
+  animation: zoomin 0.3s 0.1s ease-in-out;
   top: 20px;
   right: 20px;
   width: 50px;
@@ -277,7 +277,7 @@ export default {
   justify-content: center;
   align-items: center;
   -webkit-tap-highlight-color: transparent;
-  animation: fadeinMove 1.3s 0s ease-in-out;
+  animation: fadeinMove 1.3s 0.1s ease-in-out;
 }
 
 .ll-menu-item.title{
