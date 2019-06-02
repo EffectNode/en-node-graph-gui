@@ -72,15 +72,14 @@
               </div>
               <div class="row">
                 <div class="cute-12-tablet p-btns">
-
-                  <div class="p-btn-icon">
+                  <!-- <div class="p-btn-icon">
                     <span class="v-center" v-if="!!w.isPrivate" @click="w.isPrivate = !w.isPrivate; $forceUpdate(); updateGraphMeta({ graph: w })">
                       Private <img src="../icons/switch-on.svg" title="Project is Private" alt="Project is Private">
                     </span>
                     <span class="v-center" v-if="!w.isPrivate" @click="w.isPrivate = !w.isPrivate; $forceUpdate(); updateGraphMeta({ graph: w })">
                       Private <img src="../icons/switch-off.svg" title="Project is Private" alt="Project is Private">
                     </span>
-                  </div>
+                  </div> -->
 
                   <div class="p-btn-icon">
                     <span class="v-center" @click="$router.push(`/iGraph-Editor/${w._id}`)"> Edit

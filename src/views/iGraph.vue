@@ -302,7 +302,13 @@ export default {
       let anchor = document.createElement('a')
       anchor.target = '_blank'
       anchor.href = `data:text/html;charset=utf-8,${encodeURIComponent(str)}`
-      anchor.download = 'My Demo.html'
+
+      let filename = 'My Work'
+      if (this.$parent && this.$parent.graph && this.$parent.graph.title) {
+        filename = this.$parent.graph.title
+      }
+
+      anchor.download = `${filename}.html`
       anchor.click()
     },
     async onCodePen () {
