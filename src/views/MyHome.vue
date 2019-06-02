@@ -56,7 +56,7 @@
                 <div class="cute-6-tablet p-btns">
                   <div class="p-btn-icon nohover nohighlight" v-if="w.fromGraphID">
                     <span class="v-center">
-                      <img src="../icons/shuffle.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
+                      Remixed<img src="../icons/code-fork-black.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
                       <!-- <router-link :to="`/iGraph-Editor/${w._id}`">Edit</router-link> -->
                     </span>
                   </div>
