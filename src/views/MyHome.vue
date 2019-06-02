@@ -226,8 +226,8 @@ export default {
 .newtitleinput{
   appearance: none;
   border: 1px solid transparent;
-  border-bottom: 3px solid rgb(0, 0, 0);
-  color: rgb(43, 43, 43);
+  border-bottom: 1px solid rgb(20, 20, 20);
+  color: rgb(20, 20, 20);
   font-size: inherit;
   margin-left: 0px;
   overflow: hidden;
@@ -238,7 +238,9 @@ export default {
   margin-bottom: 5px;
   border-radius: 0px;
 }
-
+.newtitleinput:focus{
+  outline: transparent solid 0px;
+}
 .newtitleinput::-webkit-input-placeholder{
   color: rgb(43, 43, 43);
 }
