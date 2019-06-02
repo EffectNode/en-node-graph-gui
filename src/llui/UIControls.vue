@@ -50,7 +50,6 @@
     </div>
 
     <div v-if="showDeveloper && !node.trashed">
-
       <div class="section-block">
         <div class="section-title">Protection</div>
         <div>
@@ -207,6 +206,7 @@ export default {
     this.otherType = this.node.type
   },
   methods: {
+
     focus ({ node, nodes }) {
       nodes.forEach(n => {
         n.isActive = false
@@ -388,7 +388,9 @@ export default {
         /* eslitnt-enable */
         library: []
       }
-      return this.addChildTo({ node, nodes, args, returnNode })
+      let ans = this.addChildTo({ node, nodes, args, returnNode: true })
+      this.focus({ node: ans, nodes })
+      return ans
     },
     addMesh ({ node, nodes, returnNode }) {
       let args = {

@@ -16,7 +16,7 @@
     </UITimeline>
 
     <UIInspector :order="order" :style="{ zIndex: order.indexOf('inspector') + 20 }" :open="open" @close="onClose">
-      <UIControls v-if="open.inspector && timeline"  @onNodeClick="onNodeClick" :timeline="water.timeline" @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
+      <UIControls v-if="open.inspector && timeline" ref="uicontrols" @onNodeClick="onNodeClick" :timeline="water.timeline" @reload="onReload({ timeout: 0 })" @openCoder="openCoder" :nodes="nodes" @onLayout="$emit('onLayout', $event)" @close="onClose" :node="node" @nodes="nodes = $event" @show="show = $event"></UIControls>
     </UIInspector>
 
     <UICoder @addOnClose="(v) => { onCloseList.push(v) }" :order="order" :style="{ zIndex: order.indexOf('coder') + 20 }" :open="open" v-if="open.coder" @close="open.coder = false; $forceUpdate()">
@@ -274,6 +274,15 @@ export default {
     cancelAnimationFrame(this.clearTimer)
   },
   methods: {
+    // async onClearTrash () {
+    //   let uicontrols = await this.$options.components.UIControls()
+    //   if (uicontrols) {
+    //     // console.log(uicontrols.default.methods)
+    //     uicontrols.default.methods.clearTrash({ nodes: this.nodes })
+    //     this.show = 'normal'
+    //     // window.alert('Successfully Clears Trash')
+    //   }
+    // },
     onLogin () {
       this.$router.push({
         path: '/login',

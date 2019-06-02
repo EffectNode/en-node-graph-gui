@@ -61,6 +61,10 @@
       <img src="../icons/code-fork-blue.svg" title="Login and Clone" alt="Login and Clone">
     </div>
 
+    <div v-if="isAtRecycle()"  class="uit-icon">
+      <img  @click="clearTrash({ nodes })" src="../icons/trash-clear.svg" title="Clean Recylce Bin" alt="Clean Recylce Bin">
+    </div>
+
   </div>
 </template>
 
@@ -79,6 +83,16 @@ export default {
   mounted () {
   },
   methods: {
+    clearTrash ({ nodes }) {
+      let cmd = `clear trash forever`
+      if ((window.prompt(`type "${cmd}" to clear trash`) || '').toLowerCase() === cmd.toLowerCase()) {
+        nodes.filter(n => n.trashed).forEach(n => {
+          let idx = nodes.findIndex(no => no._id === n._id)
+          nodes.splice(idx, 1)
+        })
+        this.$emit('show', 'normal')
+      }
+    },
     toggleMedia () {
       this.open.mediabox = !this.open.mediabox
     },

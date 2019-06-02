@@ -51,7 +51,8 @@
       "isActive": false,
       "library": [],
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      scene: false\n    }\n  },\n  methods: {\n    init () {\n      this.scene = new THREE.Scene()\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'camera') {\n        this.components[this.node.to].$emit('addChild', { child })\n      }\n      // add here\n      if (child.node.type === 'object3D') {\n        this.scene.add(child.object3D)\n      }\n      if (child.node.type === 'drawable') {\n        this.scene.add(child.drawable)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
-      "confirmRecylce": false
+      "confirmRecylce": false,
+      "showDeveloper": true
     },
     {
       "_id": "_317698",
@@ -106,7 +107,7 @@
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      this.components[this.node.to].$emit('addChild', { child })\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
-      "type": "organiser",
+      "type": "organiser.camera",
       "size": {
         "width": 60,
         "height": 60
@@ -116,7 +117,9 @@
       "isActive": false,
       "hasFound": false,
       "preventDelete": true,
-      "confirmRecylce": false
+      "confirmRecylce": false,
+      "hideRecycle": true,
+      "cannotChangeTitle": true
     },
     {
       "_id": "_29338",
@@ -128,7 +131,7 @@
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      this.components[this.node.to].$emit('addChild', { child })\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
-      "type": "organiser",
+      "type": "organiser.scene",
       "size": {
         "width": 60,
         "height": 60
@@ -138,7 +141,9 @@
       "hasFound": false,
       "isActive": false,
       "preventDelete": true,
-      "confirmRecylce": false
+      "confirmRecylce": false,
+      "hideRecycle": true,
+      "cannotChangeTitle": true
     },
     {
       "_id": "_247335",
@@ -202,7 +207,8 @@
       "isOverlappingWith": false,
       "hasFound": false,
       "isActive": false,
-      "confirmRecylce": false
+      "confirmRecylce": false,
+      "preventDelete": false
     },
     {
       "_id": "_967525",
@@ -228,7 +234,9 @@
       "isOverlappingWith": false,
       "isActive": false,
       "hasFound": false,
-      "confirmRecylce": false
+      "confirmRecylce": false,
+      "preventDelete": false,
+      "showDeveloper": false
     },
     {
       "_id": "_692",
@@ -250,7 +258,8 @@
       "isOverlappingWith": false,
       "hasFound": false,
       "isActive": false,
-      "confirmRecylce": false
+      "confirmRecylce": false,
+      "preventDelete": false
     }
   ],
   "timeline": {
