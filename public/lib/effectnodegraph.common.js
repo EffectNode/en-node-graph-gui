@@ -54401,10 +54401,10 @@ function () {
 
           case 14:
             /* eslint-disable */
-            runner = new Function('Vue', 'THREE', 'window', output);
+            runner = new Function('Vue', 'THREE', 'window', 'loadJS', output);
             /* eslint-enable */
 
-            result = runner(external_commonjs_vue_commonjs2_vue_root_Vue_default.a, three_module_namespaceObject, window); // console.log(result)
+            result = runner(external_commonjs_vue_commonjs2_vue_root_Vue_default.a, three_module_namespaceObject, window, load_js_default.a); // console.log(result)
 
             return _context.abrupt("return", result);
 

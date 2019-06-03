@@ -1,0 +1,238 @@
+<template>
+  <div class="full" ref="mounter">
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    node: {},
+    nodes: {},
+
+    components: {},
+    timename: {},
+    timetracks: {}
+  },
+  data () {
+    return {
+      screen: false,
+      syncAll: {},
+
+      composers: {},
+      cameras: {},
+      scenes: {},
+
+      sceneID: '',
+      composerID: '',
+      cameraID: '',
+
+      mouse: { x: 0, y: 0 },
+      renderer: false
+    }
+  },
+  watch: {
+    cameraID () {
+      window.dispatchEvent(new Event('resize'))
+      this.getSizeInfo()
+      this.syncAll()
+      this.syncScreen()
+    }
+  },
+  created () {
+    this.$on('addToParent', ({ parent }) => {
+      // console.log(this.node.title, 'addToParent', parent)
+    })
+    this.$on('addChild', ({ child }) => {
+      if (child.node.type === 'camera') {
+        this.cameras[child.node._id] = child.camera
+        window.dispatchEvent(new Event('resize'))
+      }
+      if (child.node.type === 'scene') {
+        this.scenes[child.node._id] = child.scene
+      }
+      if (child.node.type === 'composer') {
+        this.composers[child.node._id] = child.composer
+        console.log(child.composer, '-------')
+      }
+      console.log(this.node.title, 'addChild', child.node.title)
+    })
+    this.$on('removeFromParent', ({ parent }) => {
+      console.log(this.node.title, 'removeFromParent', parent)
+    })
+    this.$on('removeChild', ({ child }) => {
+      console.log(this.node.title, 'removeChild', child.node.title)
+    })
+  },
+  beforeDestroy () {
+    this.stop()
+    this.$emit('remove', this)
+  },
+  mounted () {
+    // let sceneIDs = this.nodes.filter(t => t.type === 'scene').map(t => t._id)
+    // let cameraIDs = this.nodes.filter(t => t.type === 'camera').map(t => t._id)
+    // this.cameraID = cameraIDs[0]
+    // this.sceneID = sceneIDs[0]
+    this.init()
+  },
+  methods: {
+    init () {
+      this.setupRenderer()
+      this.getSizeInfo()
+      this.setupSizer()
+      this.syncSize()
+      this.start()
+      this.$emit('ready', this)
+    },
+    syncScreen () {
+      let camera = this.cameras[this.cameraID]
+      if (camera) {
+        let depth = 0
+        var aspect = camera.aspect
+        var dist = camera.position.z - (depth) // item
+        var vFOV = THREE.Math.degToRad(camera.fov) // convert vertical fov to radians
+        var screenHeight = 2 * Math.tan(vFOV / 2) * dist // visible height
+        var screenWidth = screenHeight * aspect // visible width
+        this.screen = {
+          aspect,
+          dist,
+          vFOV,
+          screenWidth,
+          screenHeight
+        }
+      }
+    },
+    setupRenderer () {
+      this.renderer = new THREE.WebGLRenderer({
+        antialias: true,
+        alpha: true,
+        preserveDrawingBuffer: true
+      })
+      this.renderer.domElement.style.marginBottom = '-6px'
+      this.$refs['mounter'].appendChild(this.renderer.domElement)
+    },
+    setupSizer () {
+      this.getSizeInfo()
+      window.addEventListener('resize', this.getSizeInfo, false)
+    },
+    getSizeInfo () {
+      if (!this.$refs['mounter']) {
+        return
+      }
+      var rect = this.$refs['mounter'].getBoundingClientRect()
+      this.rect = rect
+      this.size = {
+        width: rect.width,
+        height: rect.height,
+        aspect: rect.width / rect.height
+      }
+      this.dpi = 2.0 // window.devicePixelRatio || 1.0
+    },
+    syncSize () {
+      let sync = () => {
+        let { composer, cameras, renderer, size, dpi, control } = this
+        let camera = cameras[this.cameraID]
+        if (control) {
+          control.update()
+        }
+        if (composer) {
+          composer.setSize(size.width * dpi, size.height * dpi)
+        }
+
+        renderer.setPixelRatio(dpi)
+        renderer.setSize(size.width, size.height)
+        if (camera) {
+          camera.aspect = size.width / size.height
+          camera.updateProjectionMatrix()
+        }
+        this.syncScreen()
+      }
+
+      sync()
+      this.syncAll = () => {
+        sync()
+      }
+      window.addEventListener('resize', sync, false)
+
+      this.$refs['mounter'].addEventListener('mousemove', (evt) => {
+        this.mouse.x = evt.pageX
+        this.mouse.y = evt.pageY
+      }, false)
+    },
+    stop () {
+      window.cancelAnimationFrame(this.rAFID)
+    },
+    start () {
+      let rAF = () => {
+        this.rAFID = window.requestAnimationFrame(rAF)
+        this.render()
+      }
+      this.rAFID = window.requestAnimationFrame(rAF)
+    },
+    resolveSwitchableArray () {
+      this.timetracks.filter(track => track.progress > 0.0001 && track.progress < 1).forEach((track) => {
+        let item = this.nodes.find(n => n.title === track.title)
+
+        if (item && item._id) {
+          if (item.type === 'camera') {
+            this.cameraID = item._id
+          } else if (item.type === 'scene') {
+            this.sceneID = item._id
+          } else if (item.type === 'composer') {
+            this.composerID = item._id
+          }
+        }
+      })
+
+      // disable composer when it's not here.
+      this.timetracks.filter((track, i, arr) => track.progress >= 1 && i === arr.length - 1).forEach((track) => {
+        let item = this.nodes.find(n => n.title === track.title)
+        if (item && item._id) {
+          if (item.type === 'composer') {
+            this.composerID = ''
+          }
+        }
+      })
+    },
+    // resolveSwitchable () {
+    // for (var kn in this.timename) {
+    //     if (this.timename[kn] > 0.001 && this.timename[kn] < 1) {
+    //       let item = this.nodes.find(n => n.title === kn)
+    //       if (item && item._id) {
+    //         if (item.type === 'camera') {
+    //           this.cameraID = item._id
+    //           // console.log('use cam ->', item.title)
+    //           // if (this.cameraID !== item._id) {
+    //           //   // window.dispatchEvent(new Event('resize'))
+    //           // }
+    //         } else if (item.type === 'scene') {
+    //           this.sceneID = item._id
+    //           // if (this.sceneID !== item._id) {
+    //           //   // console.log('use scene ->', item.title)
+    //           // }
+    //         }
+    //       }
+    //     }
+    //   }
+    // },
+    render () {
+      let { scenes, cameras, composers, renderer } = this
+      // this.resolveSwitchable()
+      this.resolveSwitchableArray()
+
+      let scene = scenes[this.sceneID]
+      let camera = cameras[this.cameraID]
+      let composer = composers[this.composerID]
+
+      if (scene && camera && renderer && composer) {
+        composer.render()
+      } else if (scene && camera && renderer) {
+        renderer.render(scene, camera)
+      }
+    }
+  }
+}
+</script>
+
+<style>
+
+</style>

@@ -1,0 +1,190 @@
+<template>
+  <div>
+
+  </div>
+</template>
+
+<script>
+export default {
+  props: {
+    node: {},
+    parentNode: {},
+    isRootNode: {},
+
+    nodes: {},
+    components: {}
+  },
+  data () {
+    return {
+      bloomPass: false,
+      composer: false
+    }
+  },
+  mounted () {
+    this.init()
+  },
+  methods: {
+    init () {
+      let waitGetByType = (getter = () => {}) => {
+        return new Promise((resolve) => {
+          let tt = setInterval(() => {
+            if (getter()) {
+              clearInterval(tt)
+              resolve(getter())
+            }
+          })
+        })
+      }
+
+      let getStuff = async () => {
+        let self = this
+        return {
+          root: await waitGetByType(() => {
+            let node = this.nodes.find(no => no.type === 'root')
+            if (node) {
+              return this.components[node._id]
+            }
+          }),
+          getCamera: () => {
+            return waitGetByType(() => {
+              let node = self.nodes.find(no => no.type === 'root')
+              let root = self.components[node._id]
+              if (root) {
+                return root.cameras[root.cameraID]
+              }
+            })
+          },
+          getScene: () => {
+            return waitGetByType(() => {
+              let node = this.nodes.find(no => no.type === 'root')
+              let root = this.components[node._id]
+              if (root) {
+                return root.scenes[root.sceneID]
+              }
+            })
+          }
+        }
+      }
+      /*
+      '/threejs/examples/js/shaders/CopyShader.js',
+  		'/threejs/examples/js/shaders/AfterimageShader.js',
+  		'/threejs/examples/js/postprocessing/EffectComposer.js',
+  		'/threejs/examples/js/postprocessing/RenderPass.js',
+  		'/threejs/examples/js/postprocessing/MaskPass.js',
+  		'/threejs/examples/js/postprocessing/ShaderPass.js',
+  		'/threejs/examples/js/postprocessing/AfterimagePass.js'
+      */
+      let scripts = [
+        '/threejs/examples/js/postprocessing/EffectComposer.js',
+        '/threejs/examples/js/postprocessing/RenderPass.js',
+        '/threejs/examples/js/postprocessing/MaskPass.js',
+        '/threejs/examples/js/postprocessing/ShaderPass.js',
+        '/threejs/examples/js/shaders/CopyShader.js',
+        '/threejs/examples/js/shaders/FXAAShader.js',
+        '/threejs/examples/js/shaders/ConvolutionShader.js',
+        '/threejs/examples/js/shaders/LuminosityHighPassShader.js',
+        '/threejs/examples/js/postprocessing/UnrealBloomPass.js'
+      ]
+
+      loadJS(scripts.map(s => {
+        return { url: `https://igraph.effectnode.com${s}` }
+      }))
+        .then(() => {
+          getStuff()
+            .then((args) => {
+              this.setup(args)
+            })
+            .then(() => {
+              this.$emit('ready', this)
+            })
+        })
+
+
+
+      // Promise.all([
+      //   getRoot(),
+      //   findSceneCompo()
+      // ])
+      //   .then((res) => {
+      //     return {
+      //       root: res[0],
+      //       scene: res[1].compo.scene
+      //     }
+      //   })
+      //   .then(({ root, scene }) => {
+      //     this.$emit('exec', () => {
+      //
+
+      //       this.setup({ root, scene })
+      //       this.$emit('ready', this)
+      //     });
+      //   })
+
+    },
+    async setup ({ root, getScene, getCamera }) {
+      let composer = this.composer = new THREE.EffectComposer(root.renderer)
+
+      // this.$on('addToParent', ({ parent }) => {
+      //   console.log(this.node.title, 'addToParent', parent.node.title)
+      // })
+
+      let dpi = 2
+      let size = root.size
+
+      let renderBG = new THREE.RenderPass(await getScene(), await getCamera())
+      composer.addPass(renderBG)
+
+      let bloomPass = new THREE.UnrealBloomPass(new THREE.Vector2(size.width * dpi, size.height * dpi), 1.5, 0.4, 0.85)
+      bloomPass.renderToScreen = true
+
+      this.$emit('exec', async () => {
+        renderBG.scene = await getScene()
+        renderBG.camera = await getCamera()
+      })
+
+      this.bloomPass = bloomPass
+
+      window.addEventListener('resize', () => {
+        composer.setSize(size.width * dpi, size.height * dpi)
+      })
+
+      let glow = {
+        threshold: 0.0846740050804403,
+        strength: 0.9551227773073666,
+        radius: 1.0343776460626588,
+        exposure: 1
+      }
+      this.bloomPass.threshold = glow.threshold
+      this.bloomPass.strength = glow.strength
+      this.bloomPass.radius = glow.radius
+
+      composer.addPass(bloomPass)
+    }
+  },
+  created () {
+    this.$on('addChild', ({ child }) => {
+      // if (child.node.type === 'drawable') {
+      //   this.object3D.add(child.drawable)
+      // }
+      // if (child.node.type === 'object3D') {
+      //   this.object3D.add(child.object3D)
+      // }
+      console.log(this.node.title, 'addChild', child.node.title)
+    })
+    // this.$on('removeFromParent', ({ parent }) => {
+    //   console.log(this.node.title, 'removeFromParent', parent.node.title)
+    // })
+    this.$on('removeChild', ({ child }) => {
+      console.log(this.node.title, 'removeChild', child.node.title)
+    })
+  },
+  beforeDestory () {
+    this.$emit('remove', this)
+  }
+}
+</script>
+
+<style>
+
+</style>
+

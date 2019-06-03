@@ -201,10 +201,12 @@ export default {
   watch: {
     node () {
       this.otherType = this.node.type
+      this.node.confirmRecylce = false
     }
   },
   mounted () {
     this.otherType = this.node.type
+    this.node.confirmRecylce = false
   },
   methods: {
 

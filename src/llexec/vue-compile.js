@@ -178,10 +178,10 @@ export const compile = async ({ src, noCSS, library = [] }) => {
   }))
 
   /* eslint-disable */
-  let runner = new Function('Vue', 'THREE', 'window', output)
+  let runner = new Function('Vue', 'THREE', 'window', 'loadJS', output)
   /* eslint-enable */
 
-  let result = runner(Vue, THREE, window)
+  let result = runner(Vue, THREE, window, loadJS)
 
   // console.log(result)
   return result
