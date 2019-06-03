@@ -269,7 +269,7 @@
         "x": 440,
         "y": 300
       },
-      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timename: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      camera: false\n    }\n  },\n  methods: {\n    init () {\n      let fov = 75\n      let rect = this.$parent.$el.getBoundingClientRect()\n      let aspect = rect.width / rect.height\n      let near = 0.1\n      let far = 100000000000000\n\n      this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far)\n      this.camera.position.z = 500\n      this.camera.lookAt(0,0,0)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n    this.$emit('exec', () => {\n      let item = this.timetracks.find(t => t.title === this.node.title && t.progress > 0.001 && t.progress < 1)\n      if (item) {\n        this.camera.position.z = item.progress * -200 + 500\n      }\n    });\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
+      "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {},\n    timename: {},\n    timetracks: {}\n  },\n  data () {\n    return {\n      camera: false\n    }\n  },\n  methods: {\n    init () {\n      let fov = 75\n      let rect = this.$parent.$el.getBoundingClientRect()\n      let aspect = rect.width / rect.height\n      let near = 0.1\n      let far = 100000000000000\n\n      this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far)\n      this.camera.position.z = 500\n      this.camera.lookAt(0,0,0)\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n    this.$emit('exec', () => {\n      let item = this.timetracks.find(t => t.title === this.node.title && t.progress > 0.001 && t.progress < 1)\n      if (item) {\n        this.camera.position.z = (1.0 - item.progress) * -300 + 500\n      }\n    });\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      // console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      // console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      // console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
       "type": "camera",
       "size": {
@@ -287,8 +287,8 @@
       "title": "Composers",
       "to": "root",
       "pos": {
-        "x": 260.00001999999995,
-        "y": 630.00002
+        "x": 80,
+        "y": 80
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      this.components[this.node.to].$emit('addChild', { child })\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -331,8 +331,8 @@
       "to": "_257968",
       "trashed": true,
       "pos": {
-        "x": 620.0000299999999,
-        "y": 740.0000299999999
+        "x": 80,
+        "y": 190
       },
       "src": "<template>\n  <div>\n\n  </div>\n</template>\n\n<script>\nexport default {\n  props: {\n    node: {},\n    parentNode: {},\n    isRootNode: {},\n\n    nodes: {},\n    components: {}\n  },\n  data () {\n    return {\n      object3D: false\n    }\n  },\n  mounted () {\n    this.init()\n    this.$emit('ready', this)\n  },\n  methods: {\n    init () {\n      this.object3D = new THREE.Object3D()\n    }\n  },\n  created () {\n    this.$on('addToParent', ({ parent }) => {\n      console.log(this.node.title, 'addToParent', parent.node.title)\n    })\n    this.$on('addChild', ({ child }) => {\n      if (child.node.type === 'drawable') {\n        this.object3D.add(child.drawable)\n      }\n      if (child.node.type === 'object3D') {\n        this.object3D.add(child.object3D)\n      }\n      console.log(this.node.title, 'addChild', child.node.title)\n    })\n    this.$on('removeFromParent', ({ parent }) => {\n      console.log(this.node.title, 'removeFromParent', parent.node.title)\n    })\n    this.$on('removeChild', ({ child }) => {\n      console.log(this.node.title, 'removeChild', child.node.title)\n    })\n  },\n  beforeDestory () {\n    this.$emit('remove', this)\n  }\n}\n</script>\n\n<style>\n\n</style>\n",
       "library": [],
@@ -417,27 +417,27 @@
       {
         "_id": "_42591864702",
         "start": 2.3175905639050143e-15,
-        "end": 21.988372093023216,
+        "end": 21.151162790697636,
         "title": "RotateView Camera",
         "trashed": false
       },
       {
         "_id": "_99870117984",
-        "start": 21.2093023255814,
-        "end": 30.08139534883721,
-        "title": "Zoom Camera",
+        "start": 21.279069767441868,
+        "end": 30.046511627907094,
+        "title": "RotateView Camera",
         "trashed": false
       },
       {
         "_id": "_78321284422",
         "start": 8.146261443187086e-15,
-        "end": 12.18604651162803,
+        "end": 16.686046511628,
         "title": "Glowing Effect",
         "trashed": false
       },
       {
         "_id": "_7896612244",
-        "start": 12.244186046511613,
+        "start": 16.534883720930203,
         "end": 29.87209302325584,
         "title": "After Image Effect",
         "trashed": false
