@@ -1,0 +1,823 @@
+<template>
+  <div>
+
+  </div>
+</template>
+
+<script>
+// camera shake is from http://brianchirls.github.io/Seriously.js/transforms/seriously.camerashake.js
+
+    /*
+mat4 matrix functions borrowed from gl-matrix by toji
+https://github.com/toji/gl-matrix
+License: https://github.com/toji/gl-matrix/blob/master/LICENSE.md
+*/
+var mat4 = {
+    /*
+ * mat4.frustum
+ * Generates a frustum matrix with the given bounds
+ *
+ * Params:
+ * left, right - scalar, left and right bounds of the frustum
+ * bottom, top - scalar, bottom and top bounds of the frustum
+ * near, far - scalar, near and far bounds of the frustum
+ * dest - Optional, mat4 frustum matrix will be written into
+ *
+ * Returns:
+ * dest if specified, a new mat4 otherwise
+ */
+    frustum: function(left, right, bottom, top, near, far, dest) {
+        if (!dest) {
+            dest = mat4.create();
+        }
+        var rl = (right - left)
+          , tb = (top - bottom)
+          , fn = (far - near);
+        dest[0] = (near * 2) / rl;
+        dest[1] = 0;
+        dest[2] = 0;
+        dest[3] = 0;
+        dest[4] = 0;
+        dest[5] = (near * 2) / tb;
+        dest[6] = 0;
+        dest[7] = 0;
+        dest[8] = (right + left) / rl;
+        dest[9] = (top + bottom) / tb;
+        dest[10] = -(far + near) / fn;
+        dest[11] = -1;
+        dest[12] = 0;
+        dest[13] = 0;
+        dest[14] = -(far * near * 2) / fn;
+        dest[15] = 0;
+        return dest;
+    },
+
+    perspective: function(fovy, aspect, near, far, dest) {
+        var top = near * Math.tan(fovy * Math.PI / 360.0)
+          , right = top * aspect;
+        return mat4.frustum(-right, right, -top, top, near, far, dest);
+    },
+    multiply: function(dest, mat, mat2) {
+        // Cache the matrix values (makes for huge speed increases!)
+        var a00 = mat[0]
+          , a01 = mat[1]
+          , a02 = mat[2]
+          , a03 = mat[3]
+          , a10 = mat[4]
+          , a11 = mat[5]
+          , a12 = mat[6]
+          , a13 = mat[7]
+          , a20 = mat[8]
+          , a21 = mat[9]
+          , a22 = mat[10]
+          , a23 = mat[11]
+          , a30 = mat[12]
+          , a31 = mat[13]
+          , a32 = mat[14]
+          , a33 = mat[15]
+          , // Cache only the current line of the second matrix
+        b0 = mat2[0]
+          , b1 = mat2[1]
+          , b2 = mat2[2]
+          , b3 = mat2[3];
+        dest[0] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+        dest[1] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+        dest[2] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+        dest[3] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+
+        b0 = mat2[4];
+        b1 = mat2[5];
+        b2 = mat2[6];
+        b3 = mat2[7];
+        dest[4] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+        dest[5] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+        dest[6] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+        dest[7] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+
+        b0 = mat2[8];
+        b1 = mat2[9];
+        b2 = mat2[10];
+        b3 = mat2[11];
+        dest[8] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+        dest[9] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+        dest[10] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+        dest[11] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+
+        b0 = mat2[12];
+        b1 = mat2[13];
+        b2 = mat2[14];
+        b3 = mat2[15];
+        dest[12] = b0 * a00 + b1 * a10 + b2 * a20 + b3 * a30;
+        dest[13] = b0 * a01 + b1 * a11 + b2 * a21 + b3 * a31;
+        dest[14] = b0 * a02 + b1 * a12 + b2 * a22 + b3 * a32;
+        dest[15] = b0 * a03 + b1 * a13 + b2 * a23 + b3 * a33;
+
+        return dest;
+    },
+    identity: function(dest) {
+        dest[0] = 1;
+        dest[1] = 0;
+        dest[2] = 0;
+        dest[3] = 0;
+        dest[4] = 0;
+        dest[5] = 1;
+        dest[6] = 0;
+        dest[7] = 0;
+        dest[8] = 0;
+        dest[9] = 0;
+        dest[10] = 1;
+        dest[11] = 0;
+        dest[12] = 0;
+        dest[13] = 0;
+        dest[14] = 0;
+        dest[15] = 1;
+        return dest;
+    },
+    copy: function(out, a) {
+        out[0] = a[0];
+        out[1] = a[1];
+        out[2] = a[2];
+        out[3] = a[3];
+        out[4] = a[4];
+        out[5] = a[5];
+        out[6] = a[6];
+        out[7] = a[7];
+        out[8] = a[8];
+        out[9] = a[9];
+        out[10] = a[10];
+        out[11] = a[11];
+        out[12] = a[12];
+        out[13] = a[13];
+        out[14] = a[14];
+        out[15] = a[15];
+        return out;
+    }
+}
+
+
+/**
+* Returns the translation vector component of a transformation
+*  matrix. If a matrix is built with fromRotationTranslation,
+*  the returned vector will be the same as the translation vector
+*  originally supplied.
+* @param  {vec3} out Vector to receive translation component
+* @param  {mat4} mat Matrix to be decomposed (input)
+* @return {vec3} out
+*/
+function getTranslation(out, mat) {
+    out[0] = mat[12];
+    out[1] = mat[13];
+    out[2] = mat[14];
+    return out;
+}
+/**
+* Returns the scaling factor component of a transformation
+*  matrix. If a matrix is built with fromRotationTranslationScale
+*  with a normalized Quaternion paramter, the returned vector will be
+*  the same as the scaling vector
+*  originally supplied.
+* @param  {vec3} out Vector to receive scaling factor component
+* @param  {mat4} mat Matrix to be decomposed (input)
+* @return {vec3} out
+*/
+function getScaling(out, mat) {
+    let m11 = mat[0];
+    let m12 = mat[1];
+    let m13 = mat[2];
+    let m21 = mat[4];
+    let m22 = mat[5];
+    let m23 = mat[6];
+    let m31 = mat[8];
+    let m32 = mat[9];
+    let m33 = mat[10];
+    out[0] = Math.hypot(m11, m12, m13);
+    out[1] = Math.hypot(m21, m22, m23);
+    out[2] = Math.hypot(m31, m32, m33);
+    return out;
+}
+/**
+* Returns a quaternion representing the rotational component
+*  of a transformation matrix. If a matrix is built with
+*  fromRotationTranslation, the returned quaternion will be the
+*  same as the quaternion originally supplied.
+* @param {quat} out Quaternion to receive the rotation component
+* @param {mat4} mat Matrix to be decomposed (input)
+* @return {quat} out
+*/
+function getRotation(out, mat) {
+    let scaling = [1, 1, 1];
+    getScaling(scaling, mat);
+    let is1 = 1 / scaling[0];
+    let is2 = 1 / scaling[1];
+    let is3 = 1 / scaling[2];
+    let sm11 = mat[0] * is1;
+    let sm12 = mat[1] * is2;
+    let sm13 = mat[2] * is3;
+    let sm21 = mat[4] * is1;
+    let sm22 = mat[5] * is2;
+    let sm23 = mat[6] * is3;
+    let sm31 = mat[8] * is1;
+    let sm32 = mat[9] * is2;
+    let sm33 = mat[10] * is3;
+    let trace = sm11 + sm22 + sm33;
+    let S = 0;
+    if (trace > 0) {
+        S = Math.sqrt(trace + 1.0) * 2;
+        out[3] = 0.25 * S;
+        out[0] = (sm23 - sm32) / S;
+        out[1] = (sm31 - sm13) / S;
+        out[2] = (sm12 - sm21) / S;
+    } else if ((sm11 > sm22) && (sm11 > sm33)) {
+        S = Math.sqrt(1.0 + sm11 - sm22 - sm33) * 2;
+        out[3] = (sm23 - sm32) / S;
+        out[0] = 0.25 * S;
+        out[1] = (sm12 + sm21) / S;
+        out[2] = (sm31 + sm13) / S;
+    } else if (sm22 > sm33) {
+        S = Math.sqrt(1.0 + sm22 - sm11 - sm33) * 2;
+        out[3] = (sm31 - sm13) / S;
+        out[0] = (sm12 + sm21) / S;
+        out[1] = 0.25 * S;
+        out[2] = (sm23 + sm32) / S;
+    } else {
+        S = Math.sqrt(1.0 + sm33 - sm11 - sm22) * 2;
+        out[3] = (sm12 - sm21) / S;
+        out[0] = (sm31 + sm13) / S;
+        out[1] = (sm23 + sm32) / S;
+        out[2] = 0.25 * S;
+    }
+    return out;
+}
+
+
+
+/*
+Camera Shake
+- amplitude (x/y)
+- rotation (degrees)
+- frequency
+- octaves
+- autoScale (true/false)
+*/
+
+/*
+Simplex Noise
+adapted from https://github.com/jwagner/simplex-noise.js
+*/
+
+var PI = Math.PI, f2 = 0.5 * (Math.sqrt(3.0) - 1.0), g2 = (3.0 - Math.sqrt(3.0)) / 6.0, random = Math.random, p, perm, permMod12, grad3, initialized = false;
+
+function initializeSimplex() {
+    //initialize simplex lookup tables
+    var i;
+    if (!initialized) {
+        p = new Uint8Array(256);
+        perm = new Uint8Array(512);
+        permMod12 = new Uint8Array(512);
+        grad3 = new Float32Array([1, 1, 0, -1, 1, 0, 1, -1, 0, -1, -1, 0, 1, 0, 1, -1, 0, 1, 1, 0, -1, -1, 0, -1, 0, 1, 1, 0, -1, 1, 0, 1, -1, 0, -1, -1]);
+
+        for (i = 0; i < 256; i++) {
+            p[i] = random() * 256;
+        }
+        for (i = 0; i < 512; i++) {
+            perm[i] = p[i & 255];
+            permMod12[i] = perm[i] % 12;
+        }
+        initialized = true;
+    }
+}
+
+function noise2D(xin, yin) {
+    var n0 = 0, // Noise contributions from the three corners
+    n1 = 0, // Skew the input space to determine which simplex cell we're in
+    n2 = 0, s = (xin + yin) * f2, // Hairy factor for 2D
+    i = Math.floor(xin + s), j = Math.floor(yin + s), t = (i + j) * g2, xx0 = i - t, // Unskew the cell origin back to (x,y) space
+    yy0 = j - t, x0 = xin - xx0, y0 = yin - yy0, /*
+    For the 2D case, the simplex shape is an equilateral triangle.
+    Determine which simplex we are in.
+
+    Offsets for second (middle) corner of simplex in (i,j) coords
+    */
+    i1 = x0 > y0 ? 1 : 0, j1 = (i1 + 1) % 2, //opposite of i1
+
+    x1 = x0 - i1 + g2, y1 = y0 - j1 + g2, x2 = x0 - 1 + 2 * g2, y2 = y0 - 1 + 2 * g2, ii = i & 255, jj = j & 255, t0 = 0.5 - x0 * x0 - y0 * y0, t1, t2, gi;
+
+    if (t0 >= 0) {
+        gi = permMod12[ii + perm[jj]] * 3;
+        t0 *= t0;
+        n0 = t0 * t0 * (grad3[gi] * x0 + grad3[gi + 1] * y0);
+        // (x,y) of grad3 used for 2D gradient
+    }
+
+    t1 = 0.5 - x1 * x1 - y1 * y1;
+    if (t1 >= 0) {
+        gi = permMod12[ii + i1 + perm[jj + j1]] * 3;
+        t1 *= t1;
+        n1 = t1 * t1 * (grad3[gi] * x1 + grad3[gi + 1] * y1);
+    }
+
+    t2 = 0.5 - x2 * x2 - y2 * y2;
+    if (t2 >= 0) {
+        gi = permMod12[ii + 1 + perm[jj + 1]] * 3;
+        t2 *= t2;
+        n2 = t2 * t2 * (grad3[gi] * x2 + grad3[gi + 1] * y2);
+    }
+
+    return 70.0 * (n0 + n1 + n2);
+}
+
+function makeAwesomeShakyItem() {
+    var me = {
+        width: 100,
+        height: 100,
+        transformed: false,
+        matrix: mat4.identity([])
+    }
+      , octaves = 1
+      , time = 0
+      , amplitudeX = 0
+      , amplitudeY = 0
+      , frequency = 1
+      , rotation = 0
+      , preScale = 0
+      , autoScale = true
+      , maxScale = 1;
+
+    function calcScale(x, y, angle) {
+        var width = me.width, height = me.height, scale = 1, x0, y0, x1, y1, x2, y2, sin, cos;
+
+        // angle mod 180
+        angle = angle - PI * Math.floor(angle / PI);
+
+        if (angle) {
+            sin = Math.sin(angle);
+            cos = Math.sqrt(1 - sin * sin);
+
+            /*
+		Take two top corner points, rotate them and find absolute value.
+		This should find the bounding box of the rotated recangle,
+		assuming it's centered at 0, 0
+		*/
+
+            // rotate point top right corner
+            x0 = width / 2;
+            y0 = height / 2;
+            x1 = Math.abs(x0 * cos - y0 * sin);
+            y1 = Math.abs(x0 * sin + y0 * cos);
+
+            // rotate point top left corner
+            x0 = -x0;
+            x2 = Math.abs(x0 * cos - y0 * sin);
+            y2 = Math.abs(x0 * sin + y0 * cos);
+
+            // find maximum scale
+            scale = 2 * Math.max(x1 / width, x2 / width, y1 / height, y2 / height);
+        }
+
+        scale *= Math.max((2 * Math.abs(x) + width) / width, (2 * Math.abs(y) + height) / height);
+
+        return scale;
+    }
+
+    function recompute() {
+        var matrix = me.matrix, s, c, t, freq, amp, adjust = 0, i, scale = 1, translateX = 0, translateY = 0, rotationZ = 0, angle = 0, m00, m01, m02, m03, m10, m11, m12, m13;
+
+        function translate(x, y) {
+            matrix[12] = matrix[0] * x + matrix[4] * y + matrix[12];
+            matrix[13] = matrix[1] * x + matrix[5] * y + matrix[13];
+            matrix[14] = matrix[2] * x + matrix[6] * y + matrix[14];
+            matrix[15] = matrix[3] * x + matrix[7] * y + matrix[15];
+        }
+
+        function rotateZ() {
+            if (!rotationZ) {
+                return;
+            }
+
+            s = Math.sin(angle);
+            c = Math.cos(angle);
+
+            m00 = matrix[0];
+            m01 = matrix[1];
+            m02 = matrix[2];
+            m03 = matrix[3];
+            m10 = matrix[4];
+            m11 = matrix[5];
+            m12 = matrix[6];
+            m13 = matrix[7];
+
+            matrix[0] = m00 * c + m10 * s;
+            matrix[1] = m01 * c + m11 * s;
+            matrix[2] = m02 * c + m12 * s;
+            matrix[3] = m03 * c + m13 * s;
+            matrix[4] = m10 * c - m00 * s;
+            matrix[5] = m11 * c - m01 * s;
+            matrix[6] = m12 * c - m02 * s;
+            matrix[7] = m13 * c - m03 * s;
+        }
+
+        if (!amplitudeX && !amplitudeY && !rotation) {
+            me.transformed = false;
+            return;
+        }
+
+        t = time * frequency;
+
+        for (i = 0; i < octaves; i++) {
+            freq = Math.pow(2, i);
+            amp = Math.pow(0.5, i);
+            adjust += amp;
+            if (rotation) {
+                rotationZ += noise2D(t * freq, 7 * freq) * amp;
+            }
+            if (amplitudeX) {
+                translateX += noise2D(t * freq, 11 * freq) * amp;
+            }
+            if (amplitudeY) {
+                translateY += noise2D(t * freq, 13 * freq) * amp;
+            }
+        }
+        rotationZ *= rotation / adjust;
+        translateX *= amplitudeX / adjust;
+        translateY *= amplitudeY / adjust;
+        angle = rotationZ * PI / 180;
+
+        //calculate transformation matrix
+        mat4.identity(matrix);
+
+        translate(translateX, translateY);
+
+        rotateZ();
+
+        if (autoScale) {
+            if (preScale === 1) {
+                scale = maxScale;
+            } else {
+                scale = calcScale(translateX, translateY, angle);
+                scale = preScale * maxScale + (1 - preScale) * scale;
+            }
+
+            //scale
+            if (scale !== 1) {
+                matrix[0] *= scale;
+                matrix[1] *= scale;
+                matrix[2] *= scale;
+                matrix[3] *= scale;
+                matrix[4] *= scale;
+                matrix[5] *= scale;
+                matrix[6] *= scale;
+                matrix[7] *= scale;
+            }
+        }
+
+        me.transformed = true;
+    }
+
+    initializeSimplex();
+
+    return {
+        me,
+        getTranslation,
+        getScaling,
+        getRotation,
+        resize: recompute,
+        inputs: {
+            time: {
+                get: function() {
+                    return time;
+                },
+                set: function(t) {
+                    if (t === time) {
+                        return false;
+                    }
+
+                    time = t;
+
+                    recompute();
+                    return true;
+                },
+                type: 'number'
+            },
+            frequency: {
+                get: function() {
+                    return frequency;
+                },
+                set: function(f) {
+                    if (f === frequency) {
+                        return false;
+                    }
+
+                    frequency = f;
+
+                    recompute();
+                    return true;
+                },
+                type: 'number'
+            },
+            octaves: {
+                get: function() {
+                    return octaves;
+                },
+                set: function(o) {
+                    o = Math.max(1, o);
+                    if (o === octaves) {
+                        return false;
+                    }
+
+                    octaves = o;
+
+                    recompute();
+                    return true;
+                },
+                type: 'number'
+            },
+            rotation: {
+                get: function() {
+                    return rotation;
+                },
+                set: function(r) {
+                    if (r === rotation) {
+                        return false;
+                    }
+
+                    rotation = r;
+
+                    maxScale = calcScale(amplitudeX, amplitudeY, rotation * PI / 180);
+                    recompute();
+                    return true;
+                },
+                type: 'number'
+            },
+            amplitudeX: {
+                get: function() {
+                    return amplitudeX;
+                },
+                set: function(x) {
+                    x = Math.max(0, x);
+                    if (x === amplitudeX) {
+                        return false;
+                    }
+
+                    amplitudeX = x;
+
+                    maxScale = calcScale(amplitudeX, amplitudeY, rotation * PI / 180);
+                    recompute();
+                    return true;
+                },
+                type: 'number'
+            },
+            amplitudeY: {
+                get: function() {
+                    return amplitudeY;
+                },
+                set: function(y) {
+                    y = Math.max(0, y);
+                    if (y === amplitudeY) {
+                        return false;
+                    }
+
+                    amplitudeY = y;
+
+                    maxScale = calcScale(amplitudeX, amplitudeY, rotation * PI / 180);
+                    recompute();
+                    return true;
+                },
+                type: 'number'
+            },
+            autoScale: {
+                get: function() {
+                    return autoScale;
+                },
+                set: function(a) {
+                    a = !!a;
+                    if (a === autoScale) {
+                        return false;
+                    }
+
+                    autoScale = a;
+
+                    recompute();
+                    return true;
+                },
+                type: 'boolean'
+            },
+            preScale: {
+                get: function() {
+                    return preScale;
+                },
+                set: function(ps) {
+                    ps = Math.max(0, Math.min(1, ps));
+                    if (ps === preScale) {
+                        return false;
+                    }
+
+                    preScale = ps;
+
+                    recompute();
+                    return true;
+                },
+                type: 'number'
+            }
+        }
+    };
+}
+
+
+/*
+let api = makeAwesomeShakyItem()
+api.inputs.amplitudeX.set(10)
+// 0-8-50
+
+api.inputs.amplitudeY.set(10)
+// 0-8-50
+
+api.inputs.rotation.set(5)
+// 0-2-20
+
+api.inputs.frequency.set(4)
+// 0-4-10 / 0.01 step
+
+api.inputs.octaves.set(1)
+// 1-1-4
+
+api.inputs.autoScale.set(false)
+// true-false
+
+api.inputs.preScale.set(1)
+// 0-0.0001-1
+
+api.inputs.time.set(window.performance.now() / 1000)
+// api.resize()
+// console.log(api.me.matrix)
+let t = api.getTranslation([0,0,0], api.me.matrix)
+let s = api.getScaling([1,1,1], api.me.matrix)
+let r = api.getRotation([0,0,0], api.me.matrix)
+
+this.object3D.rotation.x = r[0]
+this.object3D.rotation.y = r[1]
+this.object3D.rotation.z = r[2]
+
+this.object3D.scale.x = s[0]
+this.object3D.scale.y = s[1]
+this.object3D.scale.z = s[2]
+
+this.object3D.translate.x = t[0]
+this.object3D.translate.y = t[1]
+this.object3D.translate.z = t[2]
+
+*/
+
+
+export default {
+  props: {
+    node: {},
+    parentNode: {},
+    isRootNode: {},
+
+    nodes: {},
+    components: {},
+    timename: {},
+    timetracks: {}
+  },
+  data () {
+    return {
+      camera: false
+    }
+  },
+  methods: {
+    init () {
+      let fov = 75
+      let rect = this.$parent.$el.getBoundingClientRect()
+      let aspect = rect.width / rect.height
+      let near = 0.1
+      let far = 100000000000000
+
+      this.camera = new THREE.PerspectiveCamera(fov, aspect, near, far)
+      this.object3D = new THREE.Object3D()
+
+      // this.camera.position.z = 500
+      // this.camera.lookAt(0,0,0)
+
+      //-- -------
+
+      let api = makeAwesomeShakyItem()
+      api.inputs.amplitudeX.set(10)
+      // 0-8-50
+
+      api.inputs.amplitudeY.set(10)
+      // 0-8-50
+
+      api.inputs.rotation.set(5)
+      // 0-2-20
+
+      api.inputs.frequency.set(4)
+      // 0-4-10 / 0.01 step
+
+      api.inputs.octaves.set(1)
+      // 1-1-4
+
+      api.inputs.autoScale.set(false)
+      // true-false
+
+      api.inputs.preScale.set(1)
+      // 0-0.0001-1
+
+      let p = [0,0,0]
+      let s = [0,0,0]
+      let r = [0,0,0]
+
+      let waitGetByType = (getter = () => {}) => {
+        return new Promise((resolve) => {
+          let tt = setInterval(() => {
+            if (getter()) {
+              clearInterval(tt)
+              resolve(getter())
+            }
+          })
+        })
+      }
+
+      // waitGetByType({
+      //   getter: () => {
+      //     return
+      //   }
+      // }).then(() => {
+      // })
+
+      let getCurrentScene = () => {
+        return this.timetracks.filter(track => track.progress > 0.0001 && track.progress < 1).reduce((carry, track) => {
+          let node = this.nodes.find(n => n.title === track.title)
+          if (node && node.type === 'scene') {
+            if (this.components[node._id] && this.components[node._id].scene) {
+              carry = this.components[node._id].scene
+            }
+          }
+          return carry
+        }, false)
+      }
+
+      this.$emit('exec', () => {
+        let track = this.timetracks.find(t => t.title === this.node.title && t.progress > 0.001 && t.progress < 1)
+
+        api.inputs.time.set(window.performance.now() / 1000)
+
+        p = api.getTranslation(p, api.me.matrix)
+        s = api.getScaling(s, api.me.matrix)
+        r = api.getRotation(r, api.me.matrix)
+
+        let scene = getCurrentScene()
+        if (scene && track) {
+          scene.rotation.x = r[0]
+          scene.rotation.y = r[1]
+          scene.rotation.z = r[2]
+
+          scene.scale.x = s[0]
+          scene.scale.y = s[1]
+          scene.scale.z = s[2]
+
+          scene.position.x = p[0]
+          scene.position.y = p[1]
+          scene.position.z = p[2]
+
+          // let x = 100 * Math.sin(3.14159265 * 2 * track.progress)
+          // let y = 100 * Math.cos(3.14159265 * 2 * track.progress)
+
+          this.camera.position.z = 500
+        }
+      })
+    }
+  },
+  mounted () {
+    this.init()
+    this.$emit('ready', this)
+
+    // this.$emit('exec', () => {
+    //   let item = this.timetracks.find(t => t.title === this.node.title && t.progress > 0.001 && t.progress < 1)
+    //   if (item) {
+    //     this.camera.position.z = (1.0 - item.progress) * -300 + 500
+    //   }
+    // });
+  },
+  created () {
+    this.$on('addToParent', ({ parent }) => {
+      // console.log(this.node.title, 'addToParent', parent.node.title)
+    })
+    this.$on('addChild', ({ child }) => {
+      console.log(this.node.title, 'addChild', child.node.title)
+    })
+    this.$on('removeFromParent', ({ parent }) => {
+      // console.log(this.node.title, 'removeFromParent', parent.node.title)
+    })
+    this.$on('removeChild', ({ child }) => {
+      // console.log(this.node.title, 'removeChild', child.node.title)
+    })
+  },
+  beforeDestory () {
+    this.$emit('remove', this)
+  }
+}
+</script>
+
+<style>
+
+</style>
