@@ -38,7 +38,6 @@ let storeConfig = {
 let baseURL = 'https://en-node-graph-api.herokuapp.com/'
 
 if (process.env.NODE_ENV === 'production') {
-
 } else {
   baseURL = `http://${window.location.hostname}:${1337}`
 }

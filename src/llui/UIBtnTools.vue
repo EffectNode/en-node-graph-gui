@@ -33,7 +33,8 @@
     </div> -->
 
     <div v-if="modes.isEditor" class="uit-icon" @click="$emit('codefork')">
-      <img src="../icons/code-fork.svg" title="Clone" alt="Clone">
+      <!-- <img src="../icons/code-fork.svg" title="Clone" alt="Clone"> -->
+      <img src="../icons/clone-white.svg" title="Clone" alt="Clone">
     </div>
 
     <div v-if="modes.isEditor" class="uit-icon" @click="$emit('download')">
