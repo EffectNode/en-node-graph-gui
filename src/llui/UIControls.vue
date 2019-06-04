@@ -178,6 +178,7 @@
 
 <script>
 import * as Node from '../llsvg/node.js'
+
 export default {
   props: {
     node: {
@@ -209,7 +210,6 @@ export default {
     this.node.confirmRecylce = false
   },
   methods: {
-
     focus ({ node, nodes }) {
       nodes.forEach(n => {
         n.isActive = false

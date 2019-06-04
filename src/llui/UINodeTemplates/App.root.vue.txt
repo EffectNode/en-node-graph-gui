@@ -112,7 +112,9 @@ export default {
     },
     setupSizer () {
       this.getSizeInfo()
-      window.addEventListener('resize', this.getSizeInfo, false)
+      window.addEventListener('resize', () => {
+        this.getSizeInfo()
+      }, false)
     },
     getSizeInfo () {
       if (!this.$refs['mounter']) {
@@ -139,7 +141,7 @@ export default {
         }
 
         renderer.setPixelRatio(dpi)
-        renderer.setSize(size.width, size.height)
+        renderer.setSize(size.width, size.height);
         if (camera) {
           camera.aspect = size.width / size.height
           camera.updateProjectionMatrix()
@@ -184,14 +186,14 @@ export default {
       })
 
       // disable composer when it's not here.
-      this.timetracks.filter((track, i, arr) => track.progress >= 1 && i === arr.length - 1).forEach((track) => {
-        let item = this.nodes.find(n => n.title === track.title)
-        if (item && item._id) {
-          if (item.type === 'composer') {
-            this.composerID = ''
-          }
-        }
-      })
+      // this.timetracks.filter((track, i, arr) => track.progress >= 1 && i === arr.length - 1).forEach((track) => {
+      //   let item = this.nodes.find(n => n.title === track.title)
+      //   if (item && item._id) {
+      //     if (item.type === 'composer') {
+      //       this.composerID = ''
+      //     }
+      //   }
+      // })
     },
     // resolveSwitchable () {
     // for (var kn in this.timename) {
