@@ -16,7 +16,14 @@
         </div>
       </div>
     </transition>
+
     <div class="overlay overlay-fonts" v-if="overlays.isForking">
+      <div v-if="fork === 'ask'">
+        <div v-if="graph">
+          Please Add Some Note
+        </div>
+        <input type="text" v-model="graph.title">
+      </div>
       <div v-if="fork === 'ing'">
         Cloning to a Remix Project
       </div>
@@ -56,6 +63,7 @@ export default {
   data () {
     return {
       fork: 'ing', // or done
+      note: '',
       modes: {
         isAuthenticated: false,
         isEditor: true,
@@ -139,6 +147,10 @@ export default {
     },
     async onCodeFork ({ water }) {
       this.overlays.isForking = true
+      this.fork = 'ask'
+      await this.onCodeForkGoDo({ water })
+    },
+    async onCodeForkGoDo ({ water }) {
       this.fork = 'ing'
       let newGraph = await API.forkGraph({ water, myself: this.myself, graph: this.graph })
       this.fork = 'done'

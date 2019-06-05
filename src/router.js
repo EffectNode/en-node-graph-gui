@@ -73,6 +73,22 @@ export default new Router({
       //   }
       // },
       component: () => import(/* webpackChunkName: "editor" */ './views/iGraphEditor.vue')
+    },
+    {
+      path: '/iGraph-Series/:graphID',
+      name: 'iGraph Series',
+      beforeEnter: (to, from, next) => {
+        if (API.check()) {
+          API.getMyself().then(() => {
+            next()
+          }, () => {
+            next('/login')
+          })
+        } else {
+          next('/login')
+        }
+      },
+      component: () => import(/* webpackChunkName: "editor" */ './views/iGraphSeries.vue')
     }
   ]
 })

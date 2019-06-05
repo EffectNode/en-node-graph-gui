@@ -1,74 +1,63 @@
 <template>
-  <div class="myhome">
+  <div>
     <StickyNav  :at="'secure'">
     </StickyNav>
     <div class="row">
-      <div class="cute-100">
-        <div class="welcomehome">
-          <span v-if="myself">
-            @{{ myself.username }}
+      <div class="cute-12-tablet">
+        <div>
+          <span  class="movie-title" v-if="main">
+            Remixes of:  {{ main.title }}
+          </span>
+          <span v-else>
+            Remixes
           </span>
         </div>
-
+      </div>
+    </div>
+    <div class="row" v-if='main'>
+      <div class="cute-12-tablet">
       </div>
     </div>
     <div class="row">
       <div class="cute-4-tablet">
-        <div class="create-area">
-          <h2 class="letscreate">
-            Let's Create:
-          </h2>
-          <div class="newtitle">
-          </div>
-          <div class="action-entry">
-            <img class="icon" src="../icons/add-circle.svg" alt=""  @click="addIGraphs()">
-            <div class="action-sub-item">
-              <input type="text" @keydown.enter="addIGraphs()" placeholder="a new Project..."  class="newtitleinput" v-model="newTitle">
-            </div>
-          </div>
+        <div class="goback">
+          <router-link to="/myhome">Go Back to my Home</router-link>
         </div>
       </div>
-
       <div class="cute-8-tablet">
-        <div class="projects-area">
-          <h2 class="myprojects">
-            My Projects:
-          </h2>
-          <h3 v-if="!list">
-            Loading Projects...
-          </h3>
-          <h3 v-if="list && list.length === 0">
-            The Space is Empty. Let's get creative. :D
-          </h3>
-          <div v-if="list" class="projectlist">
-            <!-- w = graph -->
-            <div class="project-item" ref="boxes" :key="w._id" v-for="(w) in list">
-              <div class="movie" ref="movie" @click="list.forEach(w => w.playing = false); w.playing = true;">
-                <EXEC v-if="w.water && w.playing" :water="w.water"></EXEC>
-                <div class="clicktoplay" v-show="!w.playing">
-                  Click to Run 3D Animation
-                </div>
-              </div>
+        <h3 v-if="!series">
+          Loading Projects...
+        </h3>
+        <h3 v-if="series && series.length === 0">
+          The Space is Empty. Let's get creative. :D
+        </h3>
+        <div v-if="series && series.length > 0">
 
-              <div class="row">
-                <div class="cute-12-tablet">
-                  <input type="text"  :style="{ 'text-decoration': w.trashed ? 'line-through' : '' }" @keydown="updateGraphMeta({ graph: w })" class="newtitleinput" v-model="w.title">
-                </div>
+          <div class="project-item" :key="graph._id" v-for="graph in series">
+            <div class="movie" ref="movie" @click="series.forEach(graph => graph.playing = false); graph.playing = true;">
+              <EXEC v-if="graph.water && graph.playing" :water="graph.water"></EXEC>
+              <div class="clicktoplay" v-show="!graph.playing">
+                Click to Run 3D Animation
               </div>
-
-              <div class="row">
+            </div>
+            <div class="row">
+              <div class="cute-12-tablet">
+                <input type="text"  :style="{ 'text-decoration': graph.trashed ? 'line-through' : '' }" @keydown="updateGraphMeta({ graph })" class="newtitleinput" v-model="graph.title">
+              </div>
+            </div>
+            <div class="row">
                 <div class="cute-12-tablet"  style="display: flex; justify-content: flex-end;">
-                  <div class="p-btn-icon" @click="viewSeries({ graph: w })">
+                  <div class="p-btn-icon nohover nohighlight" v-if="graph.isRoot">
                     <span class="v-center">
-                      View Related Remixes <img src="../icons/code-fork-black.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
+                      First Project <img src="../icons/code-fork-black.svg" title="First Project" alt="First Project">
                     </span>
                   </div>
                   <div class="p-btn-icon nohover nohighlight">
                     <span class="v-center">
-                      <span>Edited {{ moment(w.updatedAt).fromNow() }} </span>
+                      <span>Edited {{ moment(graph.updatedAt).fromNow() }} </span>
                       <span>, Created At</span>
-                      <span>: {{ moment(w.createdAt).format('YYYY-MM-DD') }}</span>
-                      <img src="../icons/clock.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
+                      <span>: {{ moment(graph.createdAt).format('YYYY-MM-DD') }}</span>
+                      <img src="../icons/clock.svg" :title="moment(graph.createdAt)" :alt="moment(graph.createdAt)">
                     </span>
                   </div>
                 </div>
@@ -85,37 +74,36 @@
                   </div> -->
 
                   <div class="p-btn-icon">
-                    <span class="v-center" @click="$router.push(`/iGraph-Editor/${w._id}`)"> Edit
+                    <span class="v-center" @click="$router.push(`/iGraph-Editor/${graph._id}`)"> Edit
                       <img src="../icons/edit-dark.svg" title="edit" alt="edit movie">
                     </span>
                   </div>
 
                   <div class="p-btn-icon">
-                    <span class="v-center" @click="forkGraph({ graph: w, water: w.water })" >
+                    <span class="v-center" @click="forkGraph({ graph, water: graph.water })" >
                       Clone
                       <img src="../icons/clone.svg" title="edit" alt="edit movie">
                     </span>
                   </div>
 
                   <div class="p-btn-icon">
-                    <span class="v-center" v-if="!w.trashed" @click="w.trashed = true" >Remove
-                      <img src="../icons/trash-dark.svg" v-if="!w.trashed" title="remove" alt="remove movie">
+                    <span class="v-center" v-if="!graph.trashed" @click="graph.trashed = true" >Remove
+                      <img src="../icons/trash-dark.svg" v-if="!graph.trashed" title="remove" alt="remove movie">
                     </span>
-                    <span class="v-center confirm" v-if="w.trashed" @click="delGraph({ water: w })" >Confirm
-                      <img src="../icons/trash-red.svg" v-if="w.trashed" title="remove" alt="remove movie">
+                    <span class="v-center confirm" v-if="graph.trashed" @click="delGraph({ water: w })" >Confirm
+                      <img src="../icons/trash-red.svg" v-if="graph.trashed" title="remove" alt="remove movie">
                     </span>
                   </div>
 
                 </div>
               </div>
-
-            </div>
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
-    <!-- <EXEC v-if="water" :water="water"></EXEC> -->
+
+    <!-- <pre>{{ series }}</pre> -->
   </div>
 </template>
 
@@ -131,44 +119,21 @@ export default {
   data () {
     return {
       moment,
-      newTitle: '',
-      water: false,
+      main: false,
       myself: false,
-      list: false,
-      pageAt: 0,
-      perPage: 99
+      series: false
     }
   },
-  mounted () {
-    this.loadMyGraphs()
+  computed: {
+    sourceGraphID () {
+      return this.$route.params.graphID
+    }
+  },
+  async mounted () {
+    this.myself = await API.getMyself()
+    await this.loadSeries()
   },
   methods: {
-    viewSeries ({ graph }) {
-      this.$router.push(`/iGraph-Series/${graph.sourceGraphID}`)
-    },
-    logout () {
-      API.logout()
-      this.$router.push('/')
-    },
-    async forkGraph ({ graph, water }) {
-      let myself = this.myself || await API.getMyself()
-      this.myself = myself
-
-      let newGraph = JSON.parse(JSON.stringify(graph))
-      newGraph.title = window.prompt(`Please enter a newer title "${newGraph.title}"`) || newGraph.title || 'Cloned Project'
-
-      await API.forkGraph({ water, graph: newGraph, myself })
-      this.loadMyGraphs()
-    },
-    async delGraph ({ water }) {
-      if (water.title === window.prompt(`Please copy and paste "${water.title}" to delete.`)) {
-        let newWater = JSON.parse(JSON.stringify(water))
-        await API.delGraph({ data: newWater })
-        this.loadMyGraphs()
-      } else {
-        water.trashed = false
-      }
-    },
     updateGraphMeta: _.debounce(async function ({ graph }) {
       let newGraph = JSON.parse(JSON.stringify(graph))
       // remove heavy signals
@@ -177,11 +142,11 @@ export default {
 
       await API.updateGraph({ data: newGraph })
     }, 100),
-    async loadMyGraphs () {
+    async loadSeries () {
       let myself = this.myself || await API.getMyself()
       this.myself = myself
-      let list = await API.getMyGraphs({ userID: myself._id, pageAt: this.pageAt, perPage: this.perPage })
-      this.list = await Promise.all(list.map(async (l) => {
+      let list = await API.getMyGraphSeries({ userID: this.myself._id, sourceGraphID: this.sourceGraphID, perPage: 99, pageAt: this.pageAt })
+      this.series = await Promise.all(list.map(async (l) => {
         l.water = JSON.parse(await API.UNZIP(l.base64gzip))
         return {
           playing: null,
@@ -190,60 +155,71 @@ export default {
         }
       }))
 
-      this.list.forEach(l => {
+      this.series.forEach(l => {
         l.playing = false
       })
-      if (this.list[0]) {
-        this.list[0].playing = true
+      if (this.series[0]) {
+        this.series[0].playing = true
+      }
+      if (this.series.find(s => s.isRoot)) {
+        this.main = this.series.find(s => s.isRoot)
       }
 
       this.$forceUpdate()
-      // console.log(this.list)
-      // console.log(myself)
-    },
-    async addIGraphs () {
-      let myself = this.myself || await API.getMyself()
-      this.myself = myself
-      let water = await import('../llui/water/starter-poster-dome-spikes.json')
-      let base64gzip = await API.ZIP(JSON.stringify(water.default))
-      let data = {
-        userID: myself._id,
-        title: this.newTitle || 'my new',
-        base64gzip,
-        isRoot: true
-      }
-
-      let newGraph = await API.createIGraph({ data })
-      let patch = JSON.parse(JSON.stringify(newGraph))
-      patch.sourceGraphID = patch._id
-      patch.sourceUserID = patch.userID
-      delete patch.water
-      delete patch.base64gzip
-      API.updateGraph({ data: patch })
-
-      this.newTitle = ''
-      this.loadMyGraphs()
     }
   }
 }
 </script>
 
 <style scoped>
-.myhome{
-  width:100%;
+.movie{
+  width: 100%;
+  height: 270px;
+  border: rgb(179, 179, 179) solid 1px;
+  cursor: pointer;
+  margin-bottom: 15px;
 }
-.welcomehome{
-  font-size: 50px;
+
+.project-item{
+  margin-bottom: 50px;
 }
-.letscreate{
-  margin-bottom: 30px;
+.clicktoplay{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-.myprojects{
-  margin-bottom: 30px;
+.movie-sub-title{
+  font-size: 30px;
 }
-.logout{
+.movie-title{
+  font-size: 40px;
+  text-align: left;
+  margin-bottom: 7px;
+}
+.underline{
+  font-size: 17px;
   text-decoration: underline;
+  cursor: pointer;
 }
+.ta-right{
+  text-align: right;
+}
+.timer{
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+.timer img{
+  margin: 5px;
+}
+.goback a,
+.goback a:visited,
+.goback a:active{
+  color: black;
+}
+
 .action-entry{
   display: flex;
   align-items: center;

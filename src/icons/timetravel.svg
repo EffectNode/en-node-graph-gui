@@ -1,0 +1,11 @@
+
+<svg width="25px" height="24px" viewBox="0 0 25 24" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Desktop" transform="translate(-741.000000, -568.000000)" fill="#FFFFFF">
+            <g id="Group-Copy" transform="translate(741.000000, 567.000000)">
+                <path d="M8,10 L1,10 L1,3 L2,3 L2,8.2 C3.853,3.963 8.083,1 13,1 C19.623,1 25,6.377 25,13 C25,19.623 19.623,25 13,25 C6.714,25 1.55,20.156 1.041,14 L2.045,14 C2.551,19.603 7.266,24 13,24 C19.071,24 24,19.071 24,13 C24,6.929 19.071,2 13,2 C8.34,2 4.353,4.904 2.751,9 L8,9 L8,10 Z" id="Path" transform="translate(13.000000, 13.000000) scale(-1, -1) rotate(179.000000) translate(-13.000000, -13.000000) "></path>
+                <polygon id="Path" points="13 13 19 13 19 14 12 14 12 5 13 5"></polygon>
+            </g>
+        </g>
+    </g>
+</svg>

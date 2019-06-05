@@ -25,17 +25,17 @@ NProgress.configure({
 
 let storeConfig = {
   cookie: {
-    key: 'en-igraph',
+    key: 'en-igraph-endpoint',
     options: {
       path: '/'
     }
   },
   localStorage: {
-    key: 'en-igraph'
+    key: 'en-igraph-endpoint'
   }
 }
 
-let baseURL = 'https://en-node-graph-api.herokuapp.com/'
+let baseURL = 'https://en-node-graph-endpoint.herokuapp.com/'
 
 if (process.env.NODE_ENV === 'production') {
 } else {
@@ -131,6 +131,11 @@ export const createIGraph = ({ data }) => {
 export const getMyGraphs = ({ userID, pageAt = 0, perPage = 7 }) => {
   return SDK.request('GET', `/igraphs?userID=${userID}&_limit=${perPage}&_start=${pageAt * perPage}&_sort=updatedAt:DESC`)
 }
+
+export const getMyGraphSeries = ({ userID, sourceGraphID, pageAt = 0, perPage = 7 }) => {
+  return SDK.request('GET', `/igraphs?sourceGraphID=${sourceGraphID}&userID=${userID}&_limit=${perPage}&_start=${pageAt * perPage}&_sort=createdAt:DESC`)
+}
+
 export const getGraph = ({ graphID }) => {
   return SDK.request('GET', `/igraphs/${graphID}`)
 }
@@ -147,8 +152,11 @@ export const forkGraph = async ({ water, myself, graph }) => {
   let base64gzip = await ZIP(JSON.stringify(water))
   let data = {
     userID: myself._id,
+
     title: graph.title,
     isPrivate: graph.isPrivate,
+    sourceGraphID: graph.sourceGraphID,
+    sourceUserID: graph.sourceUserID,
     fromGraphID: graph._id,
     fromUserID: graph.userID,
     base64gzip
