@@ -31,6 +31,12 @@ export default {
 }
 </script>
 
+<style>
+#nprogress{
+ display: none;
+}
+</style>
+
 <style scoped>
 .full{
   width: 100%;

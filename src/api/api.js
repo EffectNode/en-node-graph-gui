@@ -6,6 +6,7 @@ import * as Cookies from 'js-cookie'
 import NProgress from 'nprogress'
 import './nprogress/nprogress.css'
 import downscale from 'downscale'
+
 // @.@
 
 NProgress.configure({
