@@ -208,7 +208,7 @@ export default {
   cursor: pointer;
   display: block;
   position: absolute;
-  animation: zoomin 0.3s 0.1s ease-in-out;
+  animation: zoomin 0.3s 0s ease-in-out;
   top: 20px;
   right: 20px;
   width: 50px;
@@ -219,10 +219,12 @@ export default {
 }
 .ll-welcome-section{
   width: 100%;
+
   color: white;
   background-color: rgba(0,0,0,0.8);
   /* background-image: linear-gradient(black, transparent); */
 }
+
 .ll-welcome-msg{
   display: inline-block;
 }
@@ -239,6 +241,20 @@ export default {
   justify-content: space-between;
   align-items: center;
 }
+
+/*
+.ll-row{
+  background: linear-gradient(lime, cyan, hotpink, cyan, lime);
+  background-size: 100% 300%;
+  background-position-x: 0%;
+  background-position-y: 0%;
+  transition: background-position 1s;
+}
+.ll-welcome-section:hover .ll-row{
+  background-position-x: 400%;
+  background-position-y: 400%;
+} */
+
 .ll-nav-list{
   margin: 20px;
   font-size: 18px;
@@ -277,7 +293,7 @@ export default {
   justify-content: center;
   align-items: center;
   -webkit-tap-highlight-color: transparent;
-  animation: fadeinMove 1.3s 0.1s ease-in-out;
+  animation: fadeinMove 1.3s 0s ease-in-out;
 }
 
 .ll-menu-item.title{

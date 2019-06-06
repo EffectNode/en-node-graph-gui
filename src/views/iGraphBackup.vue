@@ -5,19 +5,13 @@
     <div class="row">
       <div class="cute-12-tablet">
         <div>
-          <span  class="movie-title" v-if="main">
-            Remixes of:  {{ main.title }}
-          </span>
-          <span v-else>
+          <span>
             Remixes
           </span>
         </div>
       </div>
     </div>
-    <div class="row" v-if='main'>
-      <div class="cute-12-tablet">
-      </div>
-    </div>
+
     <div class="row">
       <div class="cute-4-tablet">
         <div class="goback">
@@ -32,10 +26,33 @@
           The Space is Empty. Let's get creative. :D
         </h3>
         <div v-if="series && series.length > 0">
-
           <div class="project-item" :key="graph._id" v-for="graph in series">
-            <div class="project-item-line"></div>
-            <div class="project-item-ball"></div>
+            <div class="project-highlight"></div>
+            <div class="project-hig`hlight-ball" :style="{ background: graph.isRoot ? `black` : 'white' }"></div>
+
+            <div class="row">
+              <div class="cute-12-tablet"  style="display: flex; justify-content: flex-start;">
+                <div class="p-btn-icon nohover nohighlight" v-if="graph.isRoot">
+                  <span class="v-center">
+                    Current Project <img src="../icons/code-fork-black.svg" title="Current Project" alt="Current Project">
+                  </span>
+                </div>
+                <div class="p-btn-icon nohover nohighlight" v-if="!graph.isRoot">
+                  <span class="v-center">
+                    Backup Project <img src="../icons/code-fork-black.svg" title="Backup Project" alt="Backup Project">
+                  </span>
+                </div>
+                <div class="p-btn-icon nohover nohighlight">
+                  <span class="v-center">
+                    <span>Created {{ moment(graph.createdAt).fromNow() }} </span>
+                    <span>, Created At</span>
+                    <span>: {{ moment(graph.createdAt).format('YYYY-MM-DD') }}</span>
+                    <img src="../icons/clock.svg" :title="moment(graph.createdAt)" :alt="moment(graph.createdAt)">
+                  </span>
+                </div>
+              </div>
+            </div>
+
             <div class="movie" ref="movie" @click="series.forEach(graph => graph.playing = false); graph.playing = true;">
               <EXEC v-if="graph.water && graph.playing" :water="graph.water"></EXEC>
               <div class="clicktoplay" v-show="!graph.playing">
@@ -48,22 +65,8 @@
               </div>
             </div>
             <div class="row">
-                <div class="cute-12-tablet"  style="display: flex; justify-content: flex-end;">
-                  <div class="p-btn-icon nohover nohighlight" v-if="graph.isRoot">
-                    <span class="v-center">
-                      First Project <img src="../icons/code-fork-black.svg" title="First Project" alt="First Project">
-                    </span>
-                  </div>
-                  <div class="p-btn-icon nohover nohighlight">
-                    <span class="v-center">
-                      <span>Edited {{ moment(graph.updatedAt).fromNow() }} </span>
-                      <span>, Created At</span>
-                      <span>: {{ moment(graph.createdAt).format('YYYY-MM-DD') }}</span>
-                      <img src="../icons/clock.svg" :title="moment(graph.createdAt)" :alt="moment(graph.createdAt)">
-                    </span>
-                  </div>
-                </div>
-              </div>
+
+            </div>
               <div class="row">
                 <div class="cute-12-tablet p-btns">
                   <!-- <div class="p-btn-icon">
@@ -92,7 +95,7 @@
                     <span class="v-center" v-if="!graph.trashed" @click="graph.trashed = true" >Remove
                       <img src="../icons/trash-dark.svg" v-if="!graph.trashed" title="remove" alt="remove movie">
                     </span>
-                    <span class="v-center confirm" v-if="graph.trashed" @click="delGraph({ water: w })" >Confirm
+                    <span class="v-center confirm" v-if="graph.trashed" @click="delGraph({ graph })" >Confirm
                       <img src="../icons/trash-red.svg" v-if="graph.trashed" title="remove" alt="remove movie">
                     </span>
                   </div>
@@ -121,7 +124,6 @@ export default {
   data () {
     return {
       moment,
-      main: false,
       myself: false,
       series: false
     }
@@ -133,9 +135,28 @@ export default {
   },
   async mounted () {
     this.myself = await API.getMyself()
-    await this.loadSeries()
+    await this.loadAll()
   },
   methods: {
+    async forkGraph ({ graph, water }) {
+      let myself = this.myself || await API.getMyself()
+      this.myself = myself
+
+      let newGraph = JSON.parse(JSON.stringify(graph))
+      newGraph.title = window.prompt(`Please enter a newer title "${newGraph.title}"`) || newGraph.title || 'Cloned Project'
+
+      await API.forkGraph({ water, graph: newGraph, myself })
+      this.loadAll()
+    },
+    async delGraph ({ graph }) {
+      if (graph.title === window.prompt(`Please copy and paste "${graph.title}" to delete.`)) {
+        let newWater = JSON.parse(JSON.stringify(graph))
+        await API.delGraph({ data: graph })
+        this.loadAll()
+      } else {
+        graph.trashed = false
+      }
+    },
     updateGraphMeta: _.debounce(async function ({ graph }) {
       let newGraph = JSON.parse(JSON.stringify(graph))
       // remove heavy signals
@@ -157,17 +178,37 @@ export default {
         }
       }))
 
-      this.series.forEach(l => {
-        l.playing = false
+      this.series.forEach((l, i) => {
+        l.playing = i === 0 ? true : false
       })
-      if (this.series[0]) {
-        this.series[0].playing = true
-      }
-      if (this.series.find(s => s.isRoot)) {
-        this.main = this.series.find(s => s.isRoot)
-      }
 
       this.$forceUpdate()
+    },
+    async loadAll () {
+      await this.loadSeries()
+      await this.loadMain()
+    },
+    async loadMain () {
+      let myself = this.myself || await API.getMyself()
+      this.myself = myself
+      let item = await API.getGraph({ graphID: this.sourceGraphID })
+      if (item) {
+        let list = [item]
+        list = await Promise.all([item].map(async (l) => {
+          l.water = JSON.parse(await API.UNZIP(l.base64gzip))
+          return {
+            playing: null,
+            trashed: false,
+            ...l
+          }
+        }))
+
+        this.series.unshift(list[0])
+
+        this.series.forEach((l, i) => {
+          l.playing = i === 0 ? true : false
+        })
+      }
     }
   }
 }
@@ -358,57 +399,22 @@ export default {
 .project-item{
   position: relative;
 }
-
-.project-item-line{
+.project-highlight{
   position: absolute;
   top: 0px;
-  left: -50px;
-  width: 3px;
-  height: calc(100% + 50px + 5px);
-  background-color: black;
-  background: linear-gradient(black, white, black);
-  background-size: 100% 300%;
-  background-position-y: 0%;
-  transition: background-position 1s;
+  left: calc(-30px - 25.1px);
+  height: calc(100% + 50px + 10px);
+  width: 4px;
+  background: black;
 }
-.project-item:hover .project-item-line{
-  background-position-y: -300%;
-}
-.project-item-ball{
+.project-highlight-ball{
+  width: 60.123px;
+  height: 60.123px;
+  background-color: white;
+  border-radius: 60.123px;
+  border: black solid 4px;
   position: absolute;
   top: 0px;
-  left: calc(-50px - 50px / 2 + 1.5px);
-  width: 50px;
-  height: 50px;
-  background-color: black;
-  /* background: linear-gradient(180deg, black, white, hotpink, white, black, white); */
-
-  /* background: linear-gradient(90deg, cyan, lime,  cyan, hotpink, cyan, lime, cyan); */
-  border-radius: 50%;
-  background-size: 400% 400%;
-  background-position-x: 0%;
-  transition: background-position 1s;
-}
-.project-item-ball{
-  transition: background-position 1s;
-}
-.project-item:hover .project-item-ball{
-  background-position-y: 400%;
-}
-.project-item-ball:before{
-  content: '';
-  display: block;
-  position: absolute;
-  width: 42px;
-  height: 42px;
-  background: white;
-  border-radius: 50%;
-  top: 4px;
-  left: 4px;
-  transition: opacity 1s;
-  opacity: 1;
-}
-.project-item:hover .project-item-ball:before{
-  opacity: 0.0;
+  left: calc(-60.123px - 25.1px);
 }
 </style>

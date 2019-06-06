@@ -60,7 +60,7 @@
                 <div class="cute-12-tablet"  style="display: flex; justify-content: flex-end;">
                   <div class="p-btn-icon" @click="viewSeries({ graph: w })">
                     <span class="v-center">
-                      View Related Remixes <img src="../icons/code-fork-black.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
+                      Related Remixes <img src="../icons/code-fork-black.svg" title="This is a Cloned and Remixed Project" alt="This is a Cloned and Remixed Project">
                     </span>
                   </div>
                   <div class="p-btn-icon nohover nohighlight">
@@ -92,7 +92,7 @@
 
                   <div class="p-btn-icon">
                     <span class="v-center" @click="forkGraph({ graph: w, water: w.water })" >
-                      Clone
+                      Clone / Remix
                       <img src="../icons/clone.svg" title="edit" alt="edit movie">
                     </span>
                   </div>
@@ -136,7 +136,7 @@ export default {
       myself: false,
       list: false,
       pageAt: 0,
-      perPage: 99
+      perPage: 25
     }
   },
   mounted () {
