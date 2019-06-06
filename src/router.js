@@ -59,6 +59,22 @@ export default new Router({
       component: () => import(/* webpackChunkName: "landing" */ './views/Register.vue')
     },
     {
+      path: '/embed/:graphID',
+      name: 'embed',
+      // beforeEnter: (to, from, next) => {
+      //   if (API.check()) {
+      //     API.getMyself().then(() => {
+      //       next()
+      //     }, () => {
+      //       next(`/login?redirect=${to.path}`)
+      //     })
+      //   } else {
+      //     next(`/login?redirect=${to.path}`)
+      //   }
+      // },
+      component: () => import(/* webpackChunkName: "editor" */ './views/Embed.vue')
+    },
+    {
       path: '/iGraph-Editor/:graphID',
       name: 'iGraphEditor',
       // beforeEnter: (to, from, next) => {
