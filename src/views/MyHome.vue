@@ -377,4 +377,7 @@ export default {
 .orig-ico{
   height: 20px;
 }
+
+@import url(./css/idot.css);
+
 </style>

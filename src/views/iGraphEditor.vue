@@ -20,9 +20,12 @@
     <div class="overlay overlay-fonts" v-if="overlays.isForking">
       <div v-if="fork === 'ask'">
         <div v-if="graph">
-          Please Add Some Note
+          Please name your remix
         </div>
-        <input type="text" v-model="graph.title">
+        <input class="input" autofocus type="text" v-model="graph.title" @keydown.enter="onSubmitForkName()">
+        <div>
+          <button class="input" @click="onSubmitForkName()">Submit</button>
+        </div>
       </div>
       <div v-if="fork === 'ing'">
         Cloning to a Remix Project
@@ -75,7 +78,8 @@ export default {
       },
       myself: false,
       graph: false,
-      water: false
+      water: false,
+      onSubmitForkName () {}
     }
   },
   async mounted () {
@@ -148,7 +152,9 @@ export default {
     async onCodeFork ({ water }) {
       this.overlays.isForking = true
       this.fork = 'ask'
-      await this.onCodeForkGoDo({ water })
+      this.onSubmitForkName = async () => {
+        await this.onCodeForkGoDo({ water })
+      }
     },
     async onCodeForkGoDo ({ water }) {
       this.fork = 'ing'
@@ -222,5 +228,22 @@ export default {
   margin: 10px;
   border: white solid 1px;
   padding: 20px;
+}
+.input{
+  color: white;
+  padding: 10px;
+  font-size: 32px;
+  appearance: none;
+  box-shadow: none;
+  background: none;
+  background-color: transparent;
+  border: white solid 1px;
+  outline: none;
+  margin: 10px;
+  margin-left: 0px;
+}
+button.input:hover{
+  color: black;
+  background-color: white;
 }
 </style>

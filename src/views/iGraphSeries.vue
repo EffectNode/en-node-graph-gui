@@ -4,11 +4,8 @@
     </StickyNav>
     <div class="row">
       <div class="cute-12-tablet">
-        <div>
-          <span  class="movie-title" v-if="main">
-            Remixes of:  {{ main.title }}
-          </span>
-          <span v-else>
+        <div class="main-title">
+          <span>
             Remixes
           </span>
         </div>
@@ -20,8 +17,11 @@
     </div>
     <div class="row">
       <div class="cute-4-tablet">
+        <h2 class="letscreate">
+          Go Back to
+        </h2>
         <div class="goback">
-          <router-link to="/myhome">Go Back to my Home</router-link>
+          <router-link to="/myhome">My Home</router-link>
         </div>
       </div>
       <div class="cute-8-tablet">
@@ -355,60 +355,6 @@ export default {
 .orig-ico{
   height: 20px;
 }
-.project-item{
-  position: relative;
-}
 
-.project-item-line{
-  position: absolute;
-  top: 0px;
-  left: -50px;
-  width: 3px;
-  height: calc(100% + 50px + 5px);
-  background-color: black;
-  background: linear-gradient(black, white, black);
-  background-size: 100% 300%;
-  background-position-y: 0%;
-  transition: background-position 1s;
-}
-.project-item:hover .project-item-line{
-  background-position-y: -300%;
-}
-.project-item-ball{
-  position: absolute;
-  top: 0px;
-  left: calc(-50px - 50px / 2 + 1.5px);
-  width: 50px;
-  height: 50px;
-  background-color: black;
-  /* background: linear-gradient(180deg, black, white, hotpink, white, black, white); */
-
-  /* background: linear-gradient(90deg, cyan, lime,  cyan, hotpink, cyan, lime, cyan); */
-  border-radius: 50%;
-  background-size: 400% 400%;
-  background-position-x: 0%;
-  transition: background-position 1s;
-}
-.project-item-ball{
-  transition: background-position 1s;
-}
-.project-item:hover .project-item-ball{
-  background-position-y: 400%;
-}
-.project-item-ball:before{
-  content: '';
-  display: block;
-  position: absolute;
-  width: 42px;
-  height: 42px;
-  background: white;
-  border-radius: 50%;
-  top: 4px;
-  left: 4px;
-  transition: opacity 1s;
-  opacity: 1;
-}
-.project-item:hover .project-item-ball:before{
-  opacity: 0.0;
-}
+@import url(./css/idot.css);
 </style>
