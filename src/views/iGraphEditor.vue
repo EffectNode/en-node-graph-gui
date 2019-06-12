@@ -35,7 +35,8 @@
       </div>
     </div>
 
-    <!-- <div class="overlay" v-if="overlays.cannotSave">
+    <!--
+    <div class="overlay" v-if="overlays.cannotSave">
       <div class="overlay-fonts">
         You cannot edit this project.
       </div>
@@ -50,7 +51,8 @@
           No, I want to view only.
         </div>
       </div>
-    </div> -->
+    </div>
+    -->
 
   </div>
 </template>
