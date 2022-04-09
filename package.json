@@ -27,7 +27,7 @@
     "downscale": "^1.0.6",
     "js-cookie": "^2.2.0",
     "load-js": "^3.0.3",
-    "moment": "^2.24.0",
+    "moment": "^2.29.2",
     "nprogress": "^0.2.0",
     "pako": "^1.0.10",
     "raw-loader": "^2.0.0",
